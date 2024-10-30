@@ -1,0 +1,25 @@
+mat-toolbar {
+  position: relative;
+  z-index: 5;
+  justify-content: space-between;
+  --mat-toolbar-container-background-color: var(--sys-primary);
+  color: var(--sys-on-primary);
+}
+
+mat-icon {
+  color: var(--sys-on-primary);
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.notification-icon {
+  color: var(--sys-error-container);
+}
+
+.extended-button-container {
+  display: flex;
+  justify-content: center;
+  --mdc-fab-container-color: transparent;
+}

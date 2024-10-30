@@ -1,0 +1,33 @@
+mat-toolbar {
+    position: relative;
+    z-index: 5;
+}
+
+.second-toolbar {
+    background-color: var(--sys-secondary-container);
+    color: var(--sys-on-secondary-container);
+    width:100%;
+    padding: 0;
+    margin:0;
+}
+
+.content {
+    padding: 24px;
+}
+
+mat-sidenav {
+    background-color: var(--sys-surface-container-low);
+    color: var(--sys-on-surface);
+    border-radius: 0px;
+}
+
+
+mat-sidenav-container {
+    background-color: var(--sys-surface-container-lowest);
+    height: calc(100vh - 64px);
+}
+
+
+mat-sidenav, mat-sidenav-container {
+    transition: all 500ms ease-in-out;
+}

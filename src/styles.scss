@@ -1,1 +1,138 @@
-/* You can add global styles to this file, and also import other style files */
+@use "@angular/material" as mat;
+
+@include mat.core();
+
+// Define the theme object.
+$eclinic-theme: mat.define-theme(
+  (
+    color: (
+      use-system-variables: true,
+    ),
+  )
+);
+
+:root {
+  @include mat.all-component-themes($eclinic-theme);
+}
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+html {
+  /* Primary colors */
+  --sys-primary: #1976d2;
+  --sys-on-primary: #ffffff;
+  --sys-primary-container: #e3f2fd;
+  --sys-on-primary-container: #1976d2;
+
+  /* Secondary colors */
+  --sys-secondary: #757575; /* Medium gray as secondary color */
+  --sys-on-secondary: #ffffff;
+  --sys-secondary-container: #e0e0e0; /* Light gray container */
+  --sys-on-secondary-container: #424242;
+
+  /* Tertiary colors */
+  --sys-tertiary: #ffb300;
+  --sys-on-tertiary: #000000;
+  --sys-tertiary-container: #fff8e1;
+  --sys-on-tertiary-container: #ffb300;
+
+  /* Error colors */
+  --sys-error: #d32f2f;
+  --sys-on-error: #ffffff;
+  --sys-error-container: #ffcdd2;
+  --sys-on-error-container: #b71c1c;
+
+  /* Neutral colors */
+  --sys-background: #ffffff;
+  --sys-on-background: #000000;
+  --sys-surface: #f5f5f5;
+  --sys-on-surface: #000000;
+  --sys-surface-variant: #eeeeee;
+  --sys-on-surface-variant: #424242;
+  --sys-outline: #bdbdbd;
+
+  /* Inverse colors */
+  --sys-inverse-surface: #424242;
+  --sys-inverse-on-surface: #ffffff;
+  --sys-inverse-primary: #1565c0;
+
+  /* Shadow and scrim */
+  --sys-shadow: rgba(0, 0, 0, 0.2);
+  --sys-scrim: rgba(0, 0, 0, 0.5);
+
+  /* Surface tint */
+  --sys-surface-tint: #1976d2;
+
+  /* Additional tonal levels */
+  --sys-surface-container-highest: #e0e0e0;
+  --sys-surface-container-high: #eeeeee;
+  --sys-surface-container: #f5f5f5;
+  --sys-surface-container-low: #fafafa;
+  --sys-surface-container-lowest: #ffffff;
+  --sys-surface-bright: #ffffff;
+  --sys-surface-dim: #eeeeee;
+}
+
+.dark {
+  /* Primary colors */
+  --sys-primary: #90caf9;
+  --sys-on-primary: #0d47a1;
+  --sys-primary-container: #1e3a5f;
+  --sys-on-primary-container: #bbdefb;
+
+  /* Secondary colors */
+ /* Secondary colors (Gray) */
+ --sys-secondary: #BDBDBD;            /* Light gray as secondary color */
+ --sys-on-secondary: #424242;
+ --sys-secondary-container: #424242;   /* Dark gray container */
+ --sys-on-secondary-container: #E0E0E0;
+
+  /* Tertiary colors */
+  --sys-tertiary: #ffb74d;
+  --sys-on-tertiary: #3e2723;
+  --sys-tertiary-container: #4e342e;
+  --sys-on-tertiary-container: #ffe0b2;
+
+  /* Error colors */
+  --sys-error: #ef9a9a;
+  --sys-on-error: #b71c1c;
+  --sys-error-container: #d32f2f;
+  --sys-on-error-container: #ffcdd2;
+
+  /* Neutral colors */
+  --sys-background: #121212;
+  --sys-on-background: #ffffff;
+  --sys-surface: #1e1e1e;
+  --sys-on-surface: #e0e0e0;
+  --sys-surface-variant: #333333;
+  --sys-on-surface-variant: #bdbdbd;
+  --sys-outline: #757575;
+
+  /* Inverse colors */
+  --sys-inverse-surface: #f5f5f5;
+  --sys-inverse-on-surface: #212121;
+  --sys-inverse-primary: #1976d2;
+
+  /* Shadow and scrim */
+  --sys-shadow: rgba(0, 0, 0, 0.6);
+  --sys-scrim: rgba(0, 0, 0, 0.8);
+
+  /* Surface tint */
+  --sys-surface-tint: #90caf9;
+
+  /* Additional tonal levels */
+  --sys-surface-container-highest: #333333;
+  --sys-surface-container-high: #2a2a2a;
+  --sys-surface-container: #1e1e1e;
+  --sys-surface-container-low: #141414;
+  --sys-surface-container-lowest: #121212;
+  --sys-surface-bright: #1e1e1e;
+  --sys-surface-dim: #333333;
+}
