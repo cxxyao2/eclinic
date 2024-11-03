@@ -1,14 +1,15 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { MenuItem } from './../custom-sidenav/custom-sidenav.component';
 import { Component, input, signal } from '@angular/core';
-import { MatIcon } from '@angular/material/icon';
+import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-menu-item',
   standalone: true,
-  imports: [MatListModule, RouterModule, MatIcon],
+  imports: [MatListModule, RouterModule, MatIconModule, MatTooltipModule],
   templateUrl: './menu-item.component.html',
   styleUrl: './menu-item.component.scss',
   animations: [

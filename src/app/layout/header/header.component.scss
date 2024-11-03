@@ -1,9 +1,31 @@
 mat-toolbar {
-  position: relative;
-  z-index: 5;
-  justify-content: space-between;
-  --mat-toolbar-container-background-color: var(--sys-primary);
-  color: var(--sys-on-primary);
+  position: sticky;
+  mat-toolbar-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .first-row {
+    position: relative;
+    z-index: 5;
+    color: var(--sys-on-primary);
+    background-color: var(--sys-primary);
+  }
+
+  .second-row {
+    position: static;
+    z-index: 5;
+    background-color: var(--sys-inverse-surface);
+    color: var(--sys-inverse-on-surface);
+    height: 32px;
+    font-size: small;
+    button {
+      border-radius: 4px;
+      background-color: transparent;
+      color: var(--sys-on-primary);
+    }
+  }
 }
 
 mat-icon {
@@ -21,5 +43,10 @@ mat-icon {
 .extended-button-container {
   display: flex;
   justify-content: center;
-  --mdc-fab-container-color: transparent;
+  align-items: center;
+  .mat-mdc-unelevated-button {
+    --mdc-filled-button-container-color: var(--sys-primary);
+    --mdc-filled-button-label-text-color: var(--sys-on-primary);
+    --mdc-filled-button-label-text-size: 1rem;
+  }
 }

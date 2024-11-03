@@ -3,24 +3,25 @@ export const MENU_STRUCTURE = [
   {
     name: 'Reception',
     subMenus: [
-      { name: 'Book Appointment' },
-      { name: 'Check-In' },
-      { name: 'Patient Registration' },
-      { name: 'Waiting List' },
-      { name: 'Consultation' },
-      { name: 'Lab Results'},
-      { name: 'MRI Images'},
-      { name: 'Appointment History' },
+      { name: 'okBook Appointment' },
+      { name: 'okCheck-In' },
+      { name: 'okPatient Registration' },
+      { name: 'okWaiting List' },
+      { name: 'okConsultation' },
+      { name: 'okLab Results' },
+      { name: 'okMRI Images' },
+      { name: 'okAppointment History' },
+      { name: 'okvirtual group consultation' },
       { name: 'Billing & Payments' }
     ]
   },
   {
     name: 'Pharmacy',
     subMenus: [
-     
+
       { name: 'Medicine Inventory' },
       { name: 'Purchase Requests' },
-      { name: 'Dispense Medication' },
+      { name: 'okDispense Medication' },
       { name: 'Prescription History' },
       { name: 'Stock Management' },
       { name: 'Supplier Information' }
@@ -29,7 +30,7 @@ export const MENU_STRUCTURE = [
   {
     name: 'In-Hospital',
     subMenus: [
-      { name: 'Patient Admission' },
+      { name: 'okPatient Admission' },
       { name: 'Ward Management' },
       { name: 'Bed Allocation' },
       { name: 'Inpatient Records' },
@@ -51,35 +52,22 @@ export const MENU_STRUCTURE = [
     ]
   },
   {
-    name: 'Emergency Services',
-    subMenus: [
-      { name: 'Emergency Intake' },
-      { name: 'Triage Management' },
-      { name: 'Ambulance Dispatch' },
-      { name: 'Critical Care Units' },
-      { name: 'Emergency Contacts' }
-    ]
-  },
-  {
     name: 'Medical Staff',
     subMenus: [
       { name: 'Doctor Schedules' },
-      { name: 'On-Call Staff' },
-      { name: 'Specialist Directory' },
       { name: 'Nursing Assignments' },
-      { name: 'Training & Certifications' },
-      { name: 'Staff Availability' }
+      { name: 'okStaff Authorization' }
     ]
   },
   {
     name: 'Reports & Analytics',
     subMenus: [
-      { name: 'Daily Reports' },
-      { name: 'Patient Statistics' },
-      { name: 'Financial Reports' },
-      { name: 'Medication Usage' },
-      { name: 'Treatment Success Rates' },
-      { name: 'Staff Performance' }
+      { name: 'okDaily Reports' },
+      { name: 'okPatient Statistics' },
+      { name: 'okFinancial Reports' },
+      { name: 'okMedication Usage' },
+      { name: 'okTreatment Success Rates' },
+      { name: 'okStaff Performance' }
     ]
   }
 ];

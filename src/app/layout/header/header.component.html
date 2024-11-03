@@ -1,34 +1,57 @@
-<mat-toolbar class="mat-elevation-z3">
-    <button mat-icon-button aria-label="Toggle menu" (click)="collapsed.set(!collapsed())">
-        <mat-icon>menu</mat-icon>
-    </button>
-    <span>EClinic</span>
-    <span class="spacer"></span>
-    <div class="extended-button-container">
-        <button mat-fab extended class="icon">
-            <mat-icon>search</mat-icon>
-            <span>Search</span>
+<mat-toolbar>
+    <mat-toolbar-row class="first-row">
+        @if(isLargeScreen()) {
+        <button mat-icon-button aria-label="Toggle menu" (click)="collapsed.set(!collapsed())">
+            <mat-icon>menu</mat-icon>
         </button>
-    </div>
+        }@else {
+        <button mat-icon-button aria-label="Toggle menu" (click)="toggleDrawer.emit()">
+            <mat-icon>menu</mat-icon>
+        </button>
+        }
+        <span>EClinic</span>
+        <span class="spacer"></span>
 
-    <div class="extended-button-container">
-        <button mat-fab extended (click)="darkMode.set(!darkMode())" aria-label="Toggle Theme">
-            @if(darkMode()) {
-            <mat-icon>light_mode</mat-icon>
-            } @else {
-            <mat-icon>dark_mode</mat-icon>
-            }
-            Theme
+        <div class="extended-button-container">
+            <button mat-icon-button aria-label="search" matTooltip="Search">
+                <mat-icon>search</mat-icon>
+            </button>
+            <button mat-icon-button (click)="darkMode.set(!darkMode())" aria-label="Toggle Theme"
+                matTooltip="Toggle Theme">
+                @if(darkMode()) {
+                <mat-icon>light_mode</mat-icon>
+                } @else {
+                <mat-icon>dark_mode</mat-icon>
+                }
+            </button>
+            <!-- todo: need add unread notification numbers -->
+            <button mat-icon-button (click)="showNotifications()" aria-label="Show Notifications"
+                matTooltip="Show Notifications">
+                <mat-icon class="notification-icon">notifications</mat-icon>
+            </button>
+
+            <button mat-flat-button routerLink="/login">
+                <mat-icon>account_circle</mat-icon>
+                Login
+            </button>
+
+        </div>
+
+    </mat-toolbar-row>
+
+    <mat-toolbar-row class="second-row mat-elevation-z3">
+        <span>Register&nbsp;&gt;&nbsp;Appointment</span>
+        <span class="spacer"></span>
+        <button mat-flat-button [matMenuTriggerFor]="beforeMenu">
+            <mat-icon>language</mat-icon>
+            {{currentLanguage()}}
         </button>
-    </div>
-    <!-- todo: need add unread notification numbers -->
-    <button mat-icon-button>
-        <mat-icon class="notification-icon">notifications</mat-icon>
-    </button>
-    <div class="extended-button-container">
-        <button mat-fab extended>
-            <mat-icon>account_circle</mat-icon>
-            <span>Login</span>
-        </button>
-    </div>
+        <mat-menu #beforeMenu="matMenu" xPosition="before">
+            <button mat-menu-item (click)="toggleLanguage('en')" type="button">English</button>
+            <button mat-menu-item (click)="toggleLanguage('fr')" type="button">French</button>
+            <button mat-menu-item (click)="toggleLanguage('ch')" type="button" disabled>Chinese</button>
+            <button mat-menu-item (click)="toggleLanguage('jp')" type="button" disabled>Japanese</button>
+        </mat-menu>
+
+    </mat-toolbar-row>
 </mat-toolbar>

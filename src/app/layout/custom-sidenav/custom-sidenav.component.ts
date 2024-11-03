@@ -37,6 +37,11 @@ export class CustomSidenavComponent {
       route: 'dashboard',
     },
     {
+      icon: "calendar_month",
+      label: 'Check in',
+      route: 'checkin'
+    },
+    {
       icon: 'video_library',
       label: 'Content',
       route: 'content',

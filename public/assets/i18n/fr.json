@@ -1,0 +1,8 @@
+{
+  "foo": "Foo",
+  "bar": "Bar",
+  "dashboard": {
+    "title": "Titre du tableau",
+    "desc": "Description du tableau"
+  }
+}

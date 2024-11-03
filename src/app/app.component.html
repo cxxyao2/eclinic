@@ -1,10 +1,10 @@
-<app-header [(collapsed)]="collapsed" />
+<app-header [(collapsed)]="collapsed" (toggleDrawer)="drawer.toggle()" [isLargeScreen]="responseService.largeWidth()" />
 <mat-sidenav-container>
-  <mat-sidenav [(opened)]="sidenavOpend" [mode]="sidenavMode()" [style.width]="sidenavWidth()">
+  <mat-sidenav #drawer [opened]="responseService.largeWidth()" [mode]="sidenavMode()" [style.width]="sidenavWidth()"
+    [fixedInViewport]="!responseService.largeWidth()" fixedTopGap="64">
     <app-custom-sidenav [collapsed]="collapsed()"></app-custom-sidenav>
   </mat-sidenav>
-  <mat-sidenav-content class="content" [style.margin-left]="sidenavWidth()">
-    <div class="mat-elevation-z3 second-toolbar">something</div>
+  <mat-sidenav-content class="content">
     <router-outlet></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>

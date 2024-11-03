@@ -1,5 +1,7 @@
 <a mat-list-item class="menu-item" [routerLink]="item().route" routerLinkActive="selected-menu-item"
-  #rla="routerLinkActive" [activated]="rla.isActive" (click)="toggleNested()">
+  #rla="routerLinkActive" [activated]="rla.isActive" (click)="toggleNested()"
+  [matTooltip]="collapsed()?item().label:''" [attr.aria-label]="collapsed()?item().label:''"
+  >
   <mat-icon  matListItemIcon>{{ item().icon
     }}</mat-icon>
 
@@ -25,7 +27,9 @@
 <div @expandContractMenu>
   @for(subItem of item().subItems; track subItem.label){
   <a mat-list-item class="menu-item" [class.indented]="!collapsed()" [routerLink]="item().route + '/' + subItem.route"
-    routerLinkActive #rlb="routerLinkActive" [activated]="rlb.isActive">
+    routerLinkActive #rlb="routerLinkActive" [activated]="rlb.isActive"
+    [matTooltip]="collapsed()?item().label:''" [attr.aria-label]="collapsed()?item().label:''"
+    >
     <mat-icon  matListItemIcon>{{ subItem.icon
       }}
     </mat-icon>

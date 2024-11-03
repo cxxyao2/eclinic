@@ -1,11 +1,17 @@
 import { Routes } from '@angular/router';
 import { DashboardComponent } from './layout/dashboard/dashboard.component';
+import { ConsultationFormComponent } from './reception/consultation-form/consultation-form.component';
+import { CheckInComponent } from './reception/check-in/check-in.component';
 
 export const routes: Routes = [
     {
         path: '',
         pathMatch: 'full',
         redirectTo: 'dashboard'
+    },
+    {
+        path: 'checkin',
+        component: CheckInComponent
     },
     {
         path: 'dashboard',
@@ -15,12 +21,12 @@ export const routes: Routes = [
         path: 'content',
         component: DashboardComponent,
         children: [
-            {   
-                path:'videos',
-                component: DashboardComponent
+            {
+                path: 'videos',
+                component: ConsultationFormComponent
             },
             {
-                path:'playlists',
+                path: 'playlists',
                 component: DashboardComponent
             },
             {
