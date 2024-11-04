@@ -1,8 +1,9 @@
-<app-header [(collapsed)]="collapsed" (toggleDrawer)="drawer.toggle()" [isLargeScreen]="responseService.largeWidth()" />
+<app-header [(collapsed)]="collapsed" (toggleDrawer)="drawer.toggle()"
+  [isLargeScreen]="responseService.isLargeScreen()" />
 <mat-sidenav-container>
-  <mat-sidenav #drawer [opened]="responseService.largeWidth()" [mode]="sidenavMode()" [style.width]="sidenavWidth()"
-    [fixedInViewport]="!responseService.largeWidth()" fixedTopGap="64">
-    <app-custom-sidenav [collapsed]="collapsed()"></app-custom-sidenav>
+  <mat-sidenav #drawer [opened]="responseService.isLargeScreen()" [mode]="sidenavMode()" [style.width]="sidenavWidth()"
+    [fixedInViewport]="!responseService.isLargeScreen()" fixedTopGap="0">
+    <app-custom-sidenav [collapsed]="collapsed()" (toggleDrawer)="drawer.toggle()"></app-custom-sidenav>
   </mat-sidenav>
   <mat-sidenav-content class="content">
     <router-outlet></router-outlet>

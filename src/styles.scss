@@ -82,8 +82,8 @@ html {
 
 .dark {
   /* Primary colors */
-  --sys-primary: #90caf9;
-  --sys-on-primary: #0d47a1;
+  --sys-primary: rgb(20,25,33);
+  --sys-on-primary: white;
   --sys-primary-container: #1e3a5f;
   --sys-on-primary-container: #bbdefb;
 
@@ -116,8 +116,8 @@ html {
   --sys-outline: #757575;
 
   /* Inverse colors */
-  --sys-inverse-surface: #f5f5f5;
-  --sys-inverse-on-surface: #212121;
+  --sys-inverse-surface: rgb(39,48,62);
+  --sys-inverse-on-surface: white;
   --sys-inverse-primary: #1976d2;
 
   /* Shadow and scrim */

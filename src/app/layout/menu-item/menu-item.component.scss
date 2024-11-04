@@ -16,6 +16,9 @@
 .menu-item {
   border-left: 5px solid;
   border-left-color: rgba(0, 0, 0, 0);
+  mat-icon {
+    color: var(--sys-on-surface);
+  }
 }
 
 .selected-menu-item {

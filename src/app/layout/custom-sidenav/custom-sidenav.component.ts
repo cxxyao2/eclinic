@@ -1,9 +1,10 @@
-import { Component, Input, signal } from '@angular/core';
+import { Component, inject, Input, output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
 import { MenuItemComponent } from "../menu-item/menu-item.component";
+import { ResponsiveService } from '../../services/responsive.service';
 
 export type MenuItem = {
   icon: string;
@@ -23,7 +24,13 @@ export type MenuItem = {
 })
 export class CustomSidenavComponent {
 
+  toggleDrawer = output();
+
   sideNavCollapsed = signal(false);
+  responseService = inject(ResponsiveService);
+  isBigScreen = this.responseService.isLargeScreen;
+  // TODO
+  username = "Magical Manager";
 
   @Input() set collapsed(val: boolean) {
     this.sideNavCollapsed.set(val);
@@ -75,5 +82,9 @@ export class CustomSidenavComponent {
       route: 'comments',
     }
   ]);
+
+  toggleSidenav(){
+    this.toggleDrawer.emit();
+  }
 
 }

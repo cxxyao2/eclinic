@@ -24,12 +24,12 @@ export class AppComponent {
   sidenavOpend = true;
 
   sidenavMode = computed(() => {
-    if (this.responseService.largeWidth()) {
+    if (this.responseService.isLargeScreen()) {
       return 'side';
     }
     return 'over';
   });
 
-  sidenavWidth = computed(() => this.responseService.largeWidth() ? ((this.collapsed() ? '65px' : '250px')) : '80%');
+  sidenavWidth = computed(() => this.responseService.isLargeScreen() ? ((this.collapsed() ? '65px' : '250px')) : '80%');
 
 }

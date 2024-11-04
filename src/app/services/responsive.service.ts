@@ -16,7 +16,7 @@ export class ResponsiveService {
   screenWidth = toSignal(this.breakpointObserver.observe([this.small, this.medium, this.large]));
 
 
-  smallWidth = computed(() => this.screenWidth()?.breakpoints[this.small]);
-  mediumWidth = computed(() => this.screenWidth()?.breakpoints[this.medium]);
-  largeWidth = computed(() => this.screenWidth()?.breakpoints[this.large]);
+  isSmallScreen = computed(() => this.screenWidth()?.breakpoints[this.small]);
+  isMediumScreen = computed(() => this.screenWidth()?.breakpoints[this.medium]);
+  isLargeScreen = computed(() => this.screenWidth()?.breakpoints[this.large]);
 }

@@ -1,4 +1,11 @@
 <mat-nav-list>
+    @if(!isBigScreen()){
+    <a mat-list-item class="hide-sidebar" (click)="toggleSidenav()">
+        <mat-icon matListItemIcon>arrow_back</mat-icon>
+        <span matListItemTitle>Hello {{username}}</span>
+    </a>
+    <mat-divider> </mat-divider>
+    }
     @for(item of menuItems(); track item.label){
     <app-menu-item [item]="item" [collapsed]="sideNavCollapsed()"></app-menu-item>
     }
