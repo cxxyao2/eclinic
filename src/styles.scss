@@ -134,4 +134,8 @@ body {
   --sys-surface-container-lowest: #121212; /* Background-level darkness */
   --sys-surface-bright: #1e1e1e; /* Same as main surface for consistency */
   --sys-surface-dim: #333333; /* Darker surface tone for variety */
+
+  .cdk-overlay-container .mat-mdc-tooltip {
+    --mdc-plain-tooltip-supporting-text-color: var(--sys-on-primary);
+  }
 }
