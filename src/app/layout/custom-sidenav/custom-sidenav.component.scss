@@ -1,5 +1,6 @@
 :host {
     transition: all 500ms ease-in-out;
+    --mdc-list-list-item-hover-state-layer-color:var(--sys-on-primary-container);
 }
 
 .dark :host {

@@ -23,14 +23,11 @@ mat-toolbar {
     button {
       border-radius: 4px;
       background-color: transparent;
-      color: var(--sys-on-primary);
     }
   }
 }
 
-mat-icon {
-  color: var(--sys-on-primary);
-}
+
 
 .spacer {
   flex: 1 1 auto;
@@ -44,9 +41,5 @@ mat-icon {
   display: flex;
   justify-content: center;
   align-items: center;
-  .mat-mdc-unelevated-button {
-    --mdc-filled-button-container-color: var(--sys-primary);
-    --mdc-filled-button-label-text-color: var(--sys-on-primary);
-    --mdc-filled-button-label-text-size: 1rem;
-  }
+ 
 }

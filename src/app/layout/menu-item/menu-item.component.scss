@@ -2,13 +2,13 @@
   transition: all 500ms ease-in-out;
 }
 
-.dark :host {
+ :host {
   --mdc-list-list-item-label-text-color: var(--sys-on-surface);
   --mdc-list-list-item-leading-icon-color: var(--sys-on-surface);
   --mat-list-active-indicator-color: var(--sys-secondary-container);
 }
 
-.dark :host:hover {
+ :host:hover {
   --mdc-list-list-item-hover-label-text-color: var(--sys-on-surface-variant);
   --mdc-list-list-item-hover-leading-icon-color: var(--sys-on-surface-variant);
 }

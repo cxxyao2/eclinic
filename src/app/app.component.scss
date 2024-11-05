@@ -2,19 +2,6 @@
     color: var(--sys-on-primary);
 }
 
-mat-toolbar {
-    position: relative;
-    z-index: 5;
-}
-
-.second-toolbar {
-    background-color: var(--sys-secondary-container);
-    color: var(--sys-on-secondary-container);
-    width:100%;
-    padding: 0;
-    margin:0;
-}
-
 .content {
     padding: 24px;
 }

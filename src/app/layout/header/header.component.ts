@@ -33,6 +33,7 @@ export class HeaderComponent implements OnInit {
 
   setDarkMode = effect(() => {
     document.body.classList.toggle('dark', this.darkMode());
+    document.body.classList.toggle('light', !this.darkMode());
   });
 
   ngOnInit() {

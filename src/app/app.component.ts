@@ -30,6 +30,6 @@ export class AppComponent {
     return 'over';
   });
 
-  sidenavWidth = computed(() => this.responseService.isLargeScreen() ? ((this.collapsed() ? '65px' : '250px')) : '80%');
+  sidenavWidth = computed(() => this.responseService.isLargeScreen() && this.collapsed() ? '65px' : '250px');
 
 }

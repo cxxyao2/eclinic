@@ -24,7 +24,7 @@ body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
-html {
+.light {
   /* Primary colors */
   --sys-primary: #1976d2;
   --sys-on-primary: #ffffff;
@@ -81,58 +81,57 @@ html {
 }
 
 .dark {
-  /* Primary colors */
-  --sys-primary: rgb(20,25,33);
-  --sys-on-primary: white;
-  --sys-primary-container: #1e3a5f;
-  --sys-on-primary-container: #bbdefb;
+  /* Primary Colors */
+  --sys-primary: rgb(20, 25, 23); /* Dark greenish black */
+  --sys-on-primary: #ffffff; /* White for contrast on dark primary color */
+  --sys-primary-container: rgb(45, 50, 48); /* Slightly lighter than primary */
+  --sys-on-primary-container: #a5d6a7; /* Light green for contrast in container */
 
-  /* Secondary colors */
- /* Secondary colors (Gray) */
- --sys-secondary: #BDBDBD;            /* Light gray as secondary color */
- --sys-on-secondary: #424242;
- --sys-secondary-container: #424242;   /* Dark gray container */
- --sys-on-secondary-container: #E0E0E0;
+  /* Secondary Colors */
+  --sys-secondary: #b0bec5; /* Light slate gray as secondary color */
+  --sys-on-secondary: #1c313a; /* Dark blue-gray for contrast on secondary */
+  --sys-secondary-container: #37474f; /* Darker slate-gray container */
+  --sys-on-secondary-container: #eceff1; /* Light gray for readability */
 
-  /* Tertiary colors */
-  --sys-tertiary: #ffb74d;
-  --sys-on-tertiary: #3e2723;
-  --sys-tertiary-container: #4e342e;
-  --sys-on-tertiary-container: #ffe0b2;
+  /* Tertiary Colors */
+  --sys-tertiary: #ffb74d; /* Warm amber as an accent color */
+  --sys-on-tertiary: #3e2723; /* Dark brown for readability on amber */
+  --sys-tertiary-container: #4e342e; /* Deep brown container */
+  --sys-on-tertiary-container: #ffecb3; /* Pale amber for contrast */
 
-  /* Error colors */
-  --sys-error: #ef9a9a;
-  --sys-on-error: #b71c1c;
-  --sys-error-container: #d32f2f;
-  --sys-on-error-container: #ffcdd2;
+  /* Error Colors */
+  --sys-error: #cf6679; /* Muted pinkish red */
+  --sys-on-error: #ffffff; /* White for contrast */
+  --sys-error-container: #8e2c2b; /* Deep red for container */
+  --sys-on-error-container: #ffcdd2; /* Soft pink for contrast */
 
-  /* Neutral colors */
-  --sys-background: #121212;
-  --sys-on-background: #ffffff;
-  --sys-surface: #1e1e1e;
-  --sys-on-surface: #e0e0e0;
-  --sys-surface-variant: #333333;
-  --sys-on-surface-variant: #bdbdbd;
-  --sys-outline: #757575;
+  /* Neutral Colors */
+  --sys-background: #121212; /* Very dark gray for background */
+  --sys-on-background: #e0e0e0; /* Light gray text on dark background */
+  --sys-surface: #1e1e1e; /* Slightly lighter than background for surface */
+  --sys-on-surface: #e0e0e0; /* Light gray for contrast on surface */
+  --sys-surface-variant: #333333; /* Medium gray surface variant */
+  --sys-on-surface-variant: #bdbdbd; /* Lighter gray for text on surface variant */
+  --sys-outline: #757575; /* Mid-gray outline color */
 
-  /* Inverse colors */
-  --sys-inverse-surface: rgb(39,48,62);
-  --sys-inverse-on-surface: white;
-  --sys-inverse-primary: #1976d2;
+  /* Inverse Colors */
+  --sys-inverse-surface: #e0e0e0; /* Light background for inverse contrast */
+  --sys-inverse-on-surface: #121212; /* Dark text on light inverse surface */
+  --sys-inverse-primary: #64b5f6; /* Light blue for inverse primary */
 
-  /* Shadow and scrim */
-  --sys-shadow: rgba(0, 0, 0, 0.6);
-  --sys-scrim: rgba(0, 0, 0, 0.8);
+  /* Shadow and Scrim */
+  --sys-shadow: rgba(0, 0, 0, 0.6); /* Dark shadow for depth */
+  --sys-scrim: rgba(0, 0, 0, 0.8); /* Even darker overlay */
 
-  /* Surface tint */
-  --sys-surface-tint: #90caf9;
+  /* Surface Tint */
+  --sys-surface-tint: rgb(50, 70, 68); /* Dark greenish tint for accent */
 
-  /* Additional tonal levels */
-  --sys-surface-container-highest: #333333;
-  --sys-surface-container-high: #2a2a2a;
-  --sys-surface-container: #1e1e1e;
-  --sys-surface-container-low: #141414;
-  --sys-surface-container-lowest: #121212;
-  --sys-surface-bright: #1e1e1e;
-  --sys-surface-dim: #333333;
+  /* Additional Tonal Levels */
+  --sys-surface-container-highest: #333333; /* Dark gray for highest surface level */
+  --sys-surface-container-high: #2a2a2a; /* Slightly lighter dark gray */
+  --sys-surface-container: #1e1e1e; /* Main surface container color */
+  --sys-surface-container-low: #141414; /* Near background-level darkness */
+  --sys-surface-container-lowest: #121212; /* Background-level darkness */
+  --sys-surface-bright: #1e1e1e; /* Same as main surface for consistency */
+  --sys-surface-dim: #333333; /* Darker surface tone for variety */
 }
