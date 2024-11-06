@@ -1,6 +1,3 @@
-:host {
-    color: var(--sys-on-primary);
-}
 
 .content {
     padding: 24px;
@@ -15,6 +12,7 @@ mat-sidenav {
 
 mat-sidenav-container {
     background-color: var(--sys-surface-container-lowest);
+    color: var(--sys-on-surface);
     height: calc(100vh - 64px);
 }
 

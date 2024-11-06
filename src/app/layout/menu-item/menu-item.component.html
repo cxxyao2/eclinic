@@ -1,10 +1,7 @@
-<a mat-list-item class="menu-item" [routerLink]="item().route" routerLinkActive="selected-menu-item"
-  #rla="routerLinkActive" [activated]="rla.isActive" (click)="toggleNested()"
-  [matTooltip]="collapsed()?item().label:''"
-  [matTooltipPosition]="'right'"
-  [attr.aria-label]="collapsed()?item().label:''"
-  >
-  <mat-icon  matListItemIcon>{{ item().icon
+<!-- <a mat-list-item class="menu-item" [routerLink]="item().route" routerLinkActive="selected-menu-item"
+  #rla="routerLinkActive" [activated]="rla.isActive" (click)="toggleNested()" [matTooltip]="collapsed()?item().label:''"
+  [matTooltipPosition]="'right'" [attr.aria-label]="collapsed()?item().label:''">
+  <mat-icon matListItemIcon>{{ item().icon
     }}</mat-icon>
 
   @if (!collapsed()) {
@@ -29,10 +26,9 @@
 <div @expandContractMenu>
   @for(subItem of item().subItems; track subItem.label){
   <a mat-list-item class="menu-item" [class.indented]="!collapsed()" [routerLink]="item().route + '/' + subItem.route"
-    routerLinkActive #rlb="routerLinkActive" [activated]="rlb.isActive"
-    [matTooltip]="collapsed()?item().label:''" [attr.aria-label]="collapsed()?item().label:''"
-    >
-    <mat-icon  matListItemIcon>{{ subItem.icon
+    routerLinkActive #rlb="routerLinkActive" [activated]="rlb.isActive" [matTooltip]="collapsed()?item().label:''"
+    [attr.aria-label]="collapsed()?item().label:''">
+    <mat-icon matListItemIcon>{{ subItem.icon
       }}
     </mat-icon>
     @if (!collapsed()){
@@ -41,4 +37,32 @@
   </a>
   }
 </div>
+} -->
+
+
+<a class="menu-item" mat-list-item [ngStyle]="{ 'padding-left': ((depth === undefined || collapsed() ) ? 0 : depth) * 12 + 'px' }"
+  (click)="onItemSelected(item())" [ngClass]="{
+    active: item().route ? router.isActive(item().route??'', true) : false,
+    expanded: expanded
+  }" [matTooltip]="collapsed()?item().label:''" [matTooltipPosition]="'right'"
+  [attr.aria-label]="collapsed()?item().label:''">
+  <mat-icon matListItemIcon>{{ item().icon }}</mat-icon>
+  @if (!collapsed()) {
+  <span matListItemTitle>{{ item().label }}
+  </span>
+  }
+  @if (item().subItems?.length??0 > 0)
+  {
+  <span matListItemMeta>
+    <mat-icon [@expandCollapseMenu]="expanded() ? 'expanded' : 'collapsed'">expand_more</mat-icon>
+  </span>
+  }
+</a>
+@if (expanded()) {
+<ng-container>
+  @for(child of item().subItems; track child.label) {
+  <app-menu-item [item]="child" [depth]="(depth === undefined ? 0 : depth) + 1" [collapsed]="collapsed()">
+  </app-menu-item>
+  }
+</ng-container>
 }

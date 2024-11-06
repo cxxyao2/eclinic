@@ -2,14 +2,14 @@ import { Component, inject, Input, output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
-import { RouterModule } from '@angular/router';
+import { RouterModule, UrlTree } from '@angular/router';
 import { MenuItemComponent } from "../menu-item/menu-item.component";
 import { ResponsiveService } from '../../services/responsive.service';
 
 export type MenuItem = {
   icon: string;
   label: string;
-  route?: string;
+  route?: string | UrlTree;
   subItems?: MenuItem[
   ]
 }
@@ -57,17 +57,17 @@ export class CustomSidenavComponent {
 
           icon: 'play_circle',
           label: 'Videos',
-          route: 'videos'
+          route: 'content/videos'
         },
         {
           icon: 'playlist_play',
           label: 'Playlists',
-          route: 'playlists'
+          route: 'content/playlists'
         },
         {
           icon: 'post_add',
           label: 'Posts',
-          route: 'posts'
+          route: 'content/posts'
         }
       ]
     },
@@ -83,7 +83,7 @@ export class CustomSidenavComponent {
     }
   ]);
 
-  toggleSidenav(){
+  toggleSidenav() {
     this.toggleDrawer.emit();
   }
 

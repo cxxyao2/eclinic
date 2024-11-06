@@ -3,7 +3,7 @@ export const MENU_STRUCTURE = [
   {
     name: 'Reception',
     subMenus: [
-      { name: 'okBook Appointment' },
+      { name: 'ok...Book Appointment' },
       { name: 'okCheck-In' },
       { name: 'okPatient Registration' },
       { name: 'okWaiting List' },
