@@ -6,11 +6,12 @@ import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
 import { ResponsiveService } from './services/responsive.service';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { NavService } from './services/nav.service';
+import { PractitionerScheduleComponent } from "./practitioner-schedule/practitioner-schedule.component";
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, MatToolbarModule, MatSidenavModule, HeaderComponent, CustomSidenavComponent],
+  imports: [RouterOutlet, MatToolbarModule, MatSidenavModule, HeaderComponent, CustomSidenavComponent, PractitionerScheduleComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })

@@ -1,0 +1,37 @@
+<!-- practitioner-schedule.component.html -->
+<h2>Schedule Practitioner</h2>
+<form [formGroup]="dateForm">
+    <mat-form-field>
+        <mat-label>Enter a date range</mat-label>
+        <mat-date-range-input [rangePicker]="picker">
+            <input matStartDate formControlName="start" placeholder="Start date">
+            <input matEndDate formControlName="end" placeholder="End date">
+        </mat-date-range-input>
+        <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+
+        @if (dateForm.controls.start.hasError('matStartDateInvalid')) {
+        <mat-error>Invalid start date</mat-error>
+        }
+        @if (dateForm.controls.end.hasError('matEndDateInvalid')) {
+        <mat-error>Invalid end date</mat-error>
+        }
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Interval</mat-label>
+        <mat-select formControlName="interval">
+            <mat-option *ngFor="let int of intervals" [value]="int">{{ int }} minutes</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Practitioner</mat-label>
+        <mat-select formControlName="practitionerId">
+            <mat-option *ngFor="let prac of practitioners()" [value]="prac.id">{{ prac.name }}</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <button mat-raised-button type="submit" (click)="createSchedule()">Create Schedule</button>
+</form>
