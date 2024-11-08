@@ -1,4 +1,4 @@
-import { Component, computed, AfterViewInit,DestroyRef, effect, inject, OnInit, signal, ViewChild } from '@angular/core';
+import { Component, computed, AfterViewInit, DestroyRef, effect, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from "./layout/header/header.component";
 import { CustomSidenavComponent } from "./layout/custom-sidenav/custom-sidenav.component";
@@ -6,7 +6,7 @@ import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
 import { ResponsiveService } from './services/responsive.service';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { NavService } from './services/nav.service';
-import { PractitionerScheduleComponent } from "./practitioner-schedule/practitioner-schedule.component";
+import { PractitionerScheduleComponent } from "./staff/practitioner-schedule/practitioner-schedule.component";
 
 @Component({
   selector: 'app-root',
@@ -15,9 +15,9 @@ import { PractitionerScheduleComponent } from "./practitioner-schedule/practitio
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent  implements AfterViewInit{
+export class AppComponent implements AfterViewInit {
   @ViewChild('drawer') appDrawer!: MatSidenav;
-  
+
   title = 'eclinic';
   responseService = inject(ResponsiveService);
   private navService = inject(NavService)

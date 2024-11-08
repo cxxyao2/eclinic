@@ -1,0 +1,22 @@
+<ng-container *transloco="let t; prefix: 'dashboard'">
+  <p>{{ t('title') }}</p>
+
+  <h3>No animation</h3>
+
+  <div class="container">
+    <div>Patient Info</div>
+    <mat-tab-group animationDuration="0ms">
+      <mat-tab label="Consulation">
+        <app-consultation-form></app-consultation-form>
+      </mat-tab>
+      <mat-tab label="Lab Results">
+        <app-lab-results></app-lab-results>
+      </mat-tab>
+      <mat-tab label="MRI Images">
+        <app-mri-images></app-mri-images>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+
+ 
+</ng-container>

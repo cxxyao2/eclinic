@@ -22,14 +22,19 @@
     <mat-form-field>
         <mat-label>Interval</mat-label>
         <mat-select formControlName="interval">
-            <mat-option *ngFor="let int of intervals" [value]="int">{{ int }} minutes</mat-option>
+            @for (int of intervals; track int) {
+            <mat-option [value]="int">{{ int }}minutes</mat-option>
+            }
         </mat-select>
     </mat-form-field>
 
     <mat-form-field>
         <mat-label>Practitioner</mat-label>
         <mat-select formControlName="practitionerId">
-            <mat-option *ngFor="let prac of practitioners()" [value]="prac.id">{{ prac.name }}</mat-option>
+            @for (prac of practitioners(); track prac) {
+            <mat-option [value]="prac.practitionerId">{{ prac.firstName + ' ' + prac.lastName }}</mat-option>
+            }
+
         </mat-select>
     </mat-form-field>
 

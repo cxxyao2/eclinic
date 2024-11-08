@@ -1,0 +1,13 @@
+.container {
+  display: grid;
+  grid-template-columns: auto 1fr; /* First column auto-sizes, second takes the rest */
+  gap: 10px; /* Optional: Adds space between the child divs */
+}
+
+/* Media query for smaller screens */
+@media (max-width: 1000px) {
+  /* Adjust 768px to your preferred breakpoint */
+  .container {
+    grid-template-columns: 1fr; /* Switch to a single column on smaller screens */
+  }
+}

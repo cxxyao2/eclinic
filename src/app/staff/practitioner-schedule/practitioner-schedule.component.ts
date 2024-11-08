@@ -1,14 +1,14 @@
 import { toSignal } from '@angular/core/rxjs-interop';
-import { ChangeDetectionStrategy, Component, inject} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { provideNativeDateAdapter } from '@angular/material/core';
-import { AppointmentService } from '../services/appointment.service';
-import { Practitioner } from '../models/practitioner.model';
-import { PractitionerService } from '../services/practitioner.service';
+import { AppointmentService } from '../../services/appointment.service';
+import { Practitioner } from '../../models/practitioner.model';
+import { PractitionerService } from '../../services/practitioner.service';
 
 @Component({
   selector: 'app-practitioner-schedule',
@@ -19,9 +19,9 @@ import { PractitionerService } from '../services/practitioner.service';
   styleUrl: './practitioner-schedule.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PractitionerScheduleComponent  {
+export class PractitionerScheduleComponent {
   private practitionerService = inject(PractitionerService);
-  practitioners = toSignal(this.practitionerService.getMockPractitioners(), {initialValue: []});
+  practitioners = toSignal(this.practitionerService.getMockPractitioners(), { initialValue: [] });
 
   // @Input() practitioners: any[] = []; todo: route, resolve,
   private appointmentServce = inject(AppointmentService);

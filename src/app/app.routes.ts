@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { DashboardComponent } from './layout/dashboard/dashboard.component';
-import { ConsultationFormComponent } from './reception/consultation-form/consultation-form.component';
-import { CheckInComponent } from './reception/check-in/check-in.component';
+import { ConsultationFormComponent } from './patient/consultation-form/consultation-form.component';
+import { CheckInComponent } from './patient/check-in/check-in.component';
 
 export const routes: Routes = [
     {

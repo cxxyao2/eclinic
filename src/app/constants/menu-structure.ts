@@ -3,16 +3,16 @@ export const MENU_STRUCTURE = [
   {
     name: 'Reception',
     subMenus: [
-      { name: 'ok...Book Appointment' },
+      { name: '2,Book Appointment' },
       { name: 'okCheck-In' },
-      { name: 'okPatient Registration' },
-      { name: 'okWaiting List' },
+      { name: '3,Patient Registration' },
+      { name: '5,Waiting List' },
       { name: 'okConsultation' },
       { name: 'okLab Results' },
       { name: 'okMRI Images' },
       { name: 'okAppointment History' },
       { name: 'okvirtual group consultation' },
-      { name: 'Billing & Payments' }
+      { name: 'Billing & Payments (TODO)' }
     ]
   },
   {
@@ -54,7 +54,8 @@ export const MENU_STRUCTURE = [
   {
     name: 'Medical Staff',
     subMenus: [
-      { name: 'Doctor Schedules' },
+      { name: '3,Staff Registration' },
+      { name: '1,Doctor Schedules' },
       { name: 'Nursing Assignments' },
       { name: 'okStaff Authorization' }
     ]
@@ -67,7 +68,6 @@ export const MENU_STRUCTURE = [
       { name: 'okFinancial Reports' },
       { name: 'okMedication Usage' },
       { name: 'okTreatment Success Rates' },
-      { name: 'okStaff Performance' }
     ]
   }
 ];
