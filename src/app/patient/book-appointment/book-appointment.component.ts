@@ -1,19 +1,21 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
-import {MatSelectModule} from '@angular/material/select';
-import {MatInputModule} from '@angular/material/input';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {FormsModule} from '@angular/forms';
+import { MatSelectModule } from '@angular/material/select';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-match-patient',
+  selector: 'app-book-appointment',
   standalone: true,
-  imports: [FormsModule,MatFormFieldModule, MatInputModule, MatSelectModule],
-  templateUrl: './match-patient.component.html',
-  styleUrl: './match-patient.component.scss',
+  imports: [FormsModule, MatFormFieldModule, MatInputModule, MatSelectModule],
+
+  templateUrl: './book-appointment.component.html',
+  styleUrl: './book-appointment.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MatchPatientComponent {
+export class BookAppointmentComponent {
+
 
   @Input() patients: any[] = [];
   @Input() practitioners: any[] = [];
