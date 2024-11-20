@@ -24,13 +24,14 @@
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
+              "src/env.js",
               {
                 "glob": "**/*",
                 "input": "public"
               }
             ],
             "styles": ["src/styles.scss"],
-            "scripts": ["src/env.js"]
+            "scripts": []
           },
           "configurations": {
             "production": {

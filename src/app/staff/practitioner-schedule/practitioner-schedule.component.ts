@@ -8,8 +8,8 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { AppointmentService } from '../../services/appointment.service';
 import { PractitionerService } from '../../services/practitioner.service';
-import { AvailabilityService } from 'src/app/services/availability.service';
 import { PractitionerAvailabilitiesService } from '@libs/api-client/api/practitionerAvailabilities.service';
+import { AddPractitionerAvailabilityDTO } from '@libs/api-client';
 
 
 @Component({
@@ -30,7 +30,6 @@ export class PractitionerScheduleComponent implements OnInit {
 
   // @Input() practitioners: any[] = []; todo: route, resolve,
   private appointmentServce = inject(AppointmentService);
-  private availableService = inject(AvailabilityService);
 
   readonly dateForm = new FormGroup({
     start: new FormControl<Date>(new Date(), Validators.required),
@@ -50,24 +49,35 @@ export class PractitionerScheduleComponent implements OnInit {
         complete: () => console.log('GetAll complete')
       }
     );
-    // this.availableService.GetAll().subscribe({
-    //   next: data => console.log(data),
-    //   error: err => console.error(err),
-    //   complete: () => console.log('GetAll complete')
-    // });
+
+
+
   }
 
 
   createSchedule() {
-    let start = this.dateForm.value.start;
-    let end = this.dateForm.value.end;
-    let interval = this.dateForm.value.interval;
-    let practitionId = this.dateForm.value.practitionerId;
-    if (start && end && interval && practitionId) {
-      this.appointmentServce.getAppointmentData(start, end, interval, practitionId).subscribe({
-        next: (data) => { console.log(data); },
-      });
+    const newAvail: AddPractitionerAvailabilityDTO = {
+      practitionerId: 2,
+      slotDateTime: new Date("2024-11-20T15:30:00.000Z"),
+      isAvailable: true
+
     }
+    this.availService.apiPractitionerAvailabilitiesPost(newAvail).subscribe(
+      {
+        next: data => console.log(data),
+        error: err => console.error(err),
+        complete: () => console.log('Create one new  complete')
+      }
+    );
+    // let start = this.dateForm.value.start;
+    // let end = this.dateForm.value.end;
+    // let interval = this.dateForm.value.interval;
+    // let practitionId = this.dateForm.value.practitionerId;
+    // if (start && end && interval && practitionId) {
+    //   this.appointmentServce.getAppointmentData(start, end, interval, practitionId).subscribe({
+    //     next: (data) => { console.log(data); },
+    //   });
+    // }
 
   }
 }

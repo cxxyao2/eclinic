@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { AvailabilityService } from './availability.service';
+import { MasterDataService } from './master-data.service';
 
-describe('AvailabilityService', () => {
-  let service: AvailabilityService;
+describe('MasterDataService', () => {
+  let service: MasterDataService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(AvailabilityService);
+    service = TestBed.inject(MasterDataService);
   });
 
   it('should be created', () => {
