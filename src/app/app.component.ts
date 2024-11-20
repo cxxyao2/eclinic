@@ -22,10 +22,8 @@ export class AppComponent implements AfterViewInit {
   responseService = inject(ResponsiveService);
   private navService = inject(NavService)
 
-
   collapsed = signal(false);
   sidenavOpend = true;
-
   sidenavMode = computed(() => {
     if (this.responseService.isLargeScreen()) {
       return 'side';

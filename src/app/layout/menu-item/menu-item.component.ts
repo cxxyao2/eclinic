@@ -23,7 +23,7 @@ import { NgClass, NgStyle } from '@angular/common';
     ]),
   ]
 })
-export class MenuItemComponent  implements OnInit {
+export class MenuItemComponent implements OnInit {
   expanded = signal(false);
   @HostBinding('attr.aria-expanded') ariaExpanded = this.expanded();
   item = input.required<MenuItem>();

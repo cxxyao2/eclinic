@@ -6,10 +6,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { provideNativeDateAdapter } from '@angular/material/core';
-import { AppointmentService } from '../../services/appointment.service';
-import { PractitionerService } from '../../services/practitioner.service';
 import { PractitionerAvailabilitiesService } from '@libs/api-client/api/practitionerAvailabilities.service';
-import { AddPractitionerAvailabilityDTO } from '@libs/api-client';
+import { AddPractitionerAvailabilityDTO, PractitionersService } from '@libs/api-client';
+import { MasterDataService } from 'src/app/services/master-data.service';
 
 
 @Component({
@@ -24,12 +23,8 @@ import { AddPractitionerAvailabilityDTO } from '@libs/api-client';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PractitionerScheduleComponent implements OnInit {
-  private practitionerService = inject(PractitionerService);
-  private availService = inject(PractitionerAvailabilitiesService);
-  practitioners = toSignal(this.practitionerService.getMockPractitioners(), { initialValue: [] });
-
-  // @Input() practitioners: any[] = []; todo: route, resolve,
-  private appointmentServce = inject(AppointmentService);
+  private masterDataService = inject(MasterDataService);
+  practitioners = toSignal(this.masterDataService.getPractitioners(), { initialValue: [] });
 
   readonly dateForm = new FormGroup({
     start: new FormControl<Date>(new Date(), Validators.required),
@@ -42,13 +37,7 @@ export class PractitionerScheduleComponent implements OnInit {
   intervals: number[] = [10, 20, 30];
 
   ngOnInit() {
-    this.availService.apiPractitionerAvailabilitiesGet().subscribe(
-      {
-        next: data => console.log(data),
-        error: err => console.error(err),
-        complete: () => console.log('GetAll complete')
-      }
-    );
+
 
 
 
@@ -62,13 +51,7 @@ export class PractitionerScheduleComponent implements OnInit {
       isAvailable: true
 
     }
-    this.availService.apiPractitionerAvailabilitiesPost(newAvail).subscribe(
-      {
-        next: data => console.log(data),
-        error: err => console.error(err),
-        complete: () => console.log('Create one new  complete')
-      }
-    );
+    this.masterDataService.addAvailabilities(newAvail);
     // let start = this.dateForm.value.start;
     // let end = this.dateForm.value.end;
     // let interval = this.dateForm.value.interval;

@@ -1,5 +1,5 @@
 import { DestroyRef, inject, Injectable } from '@angular/core';
-import { GetMedicationDTO, GetPatientDTO, GetPractitionerAvailabilityDTO, GetPractitionerDTO } from '@libs/api-client';
+import { AddPractitionerAvailabilityDTO, GetMedicationDTO, GetPatientDTO, GetPractitionerAvailabilityDTO, GetPractitionerDTO } from '@libs/api-client';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -68,6 +68,22 @@ export class MasterDataService {
       map((result) => this.availabilitiesSubject.next(result.data ?? [])),
       takeUntilDestroyed(this.destroyRef)
     ).subscribe();
+  }
+
+
+  addAvailabilities(newEntity: AddPractitionerAvailabilityDTO): void {
+    this.availableService.apiPractitionerAvailabilitiesPost(newEntity).pipe(
+      tap((result) => {
+        if (result.data) {
+          this.availabilitiesSubject.next([...this.availabilitiesSubject.value, result.data]);
+        }
+      }),
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
+      next: data => console.log(data),
+      error: err => console.error(err),
+      complete: () => console.log('Create one new  complete')
+    });
   }
 
   getAvailabilities(): Observable<GetPractitionerAvailabilityDTO[]> {

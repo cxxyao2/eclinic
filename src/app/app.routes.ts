@@ -2,46 +2,58 @@ import { Routes } from '@angular/router';
 import { DashboardComponent } from './layout/dashboard/dashboard.component';
 import { ConsultationFormComponent } from './patient/consultation-form/consultation-form.component';
 import { CheckInComponent } from './patient/check-in/check-in.component';
+import { PractitionerScheduleComponent } from './staff/practitioner-schedule/practitioner-schedule.component';
+import { LoginComponent } from './admin/login/login.component';
+import { InpatientAdmitComponent } from './patient/inpatient-admit/inpatient-admit.component';
+import { WaitingListComponent } from './patient/waiting-list/waiting-list.component';
+import { BookAppointmentComponent } from './patient/book-appointment/book-appointment.component';
+import { AuthorizationComponent } from './admin/authorization/authorization.component';
 
 export const routes: Routes = [
+
     {
-        path: '',
-        pathMatch: 'full',
-        redirectTo: 'dashboard'
+        path: 'available',
+        component: PractitionerScheduleComponent,
+    },
+    {
+        path: 'booking',
+        component: BookAppointmentComponent,
     },
     {
         path: 'checkin',
         component: CheckInComponent
     },
     {
-        path: 'dashboard',
-        component: DashboardComponent
+        path: 'consultation',
+        component: ConsultationFormComponent
     },
     {
-        path: 'content',
+        path: 'admin',
         component: DashboardComponent,
         children: [
             {
-                path: 'videos',
-                component: ConsultationFormComponent
+                path: 'waitlist',
+                component: WaitingListComponent
             },
             {
-                path: 'playlists',
-                component: DashboardComponent
-            },
-            {
-                path: 'posts',
-                component: DashboardComponent
+                path: 'authorize',
+                component: AuthorizationComponent
             }
         ]
     },
     {
-        path: 'analytics',
-        component: DashboardComponent
+        path: 'inpatient',
+        component: InpatientAdmitComponent,
     },
     {
-        path: 'comments',
-        component: DashboardComponent
+        path: 'login',
+        component: LoginComponent
 
-    }
+    },
+    {
+        path: '',
+        pathMatch: 'full',
+        redirectTo: 'dashboard'
+    },
+    { path: '**', redirectTo: '/dashboard' },
 ];

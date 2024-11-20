@@ -39,48 +39,53 @@ export class CustomSidenavComponent {
 
   menuItems = signal<MenuItem[]>([
     {
-      icon: 'dashboard',
-      label: 'Dashboard',
-      route: 'dashboard',
+      icon: 'event_available',
+      label: 'Available',
+      route: 'available',
     },
     {
-      icon: "calendar_month",
-      label: 'Check in',
+      icon: "book_online",
+      label: 'Booking',
+      route: 'booking'
+    },
+    {
+      icon: 'person_check',
+      label: 'Check In',
       route: 'checkin'
     },
     {
-      icon: 'video_library',
-      label: 'Content',
-      route: 'content',
+      icon: 'stethoscope',
+      label: 'Consultation',
+      route: 'consultation'
+    },
+    {
+      icon: "hub",
+      label: "Admin",
+      route: "admin",
       subItems: [
         {
 
-          icon: 'play_circle',
-          label: 'Videos',
-          route: 'content/videos'
+          icon: 'patient_list',
+          label: 'Waitlist',
+          route: 'admin/waitlist'
         },
         {
-          icon: 'playlist_play',
-          label: 'Playlists',
-          route: 'content/playlists'
+          icon: 'group',
+          label: 'authorize',
+          route: 'admin/authorize'
         },
-        {
-          icon: 'post_add',
-          label: 'Posts',
-          route: 'content/posts'
-        }
       ]
     },
     {
-      icon: 'analytics',
-      label: 'Analytics',
-      route: 'analytics',
+      icon: 'inpatient',
+      label: 'Inpatient',
+      route: 'inpatient'
     },
     {
-      icon: 'comments',
-      label: 'Comments',
-      route: 'comments',
-    }
+      icon: 'login',
+      label: 'Login',
+      route: 'login'
+    },
   ]);
 
   toggleSidenav() {
