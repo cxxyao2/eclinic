@@ -1,8 +1,0 @@
-{
-    "foo": "Foo",
-    "bar": "Bar",
-    "dashboard": {
-      "title": "Dashboard Title",
-      "desc": "Dashboard Desc"
-    }
-  }

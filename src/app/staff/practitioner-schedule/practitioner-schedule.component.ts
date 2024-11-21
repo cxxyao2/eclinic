@@ -1,6 +1,8 @@
 import { toSignal } from '@angular/core/rxjs-interop';
-import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
+import { AfterViewInit, ViewChild, ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatSort, Sort, MatSortModule } from '@angular/material/sort';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -9,7 +11,21 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 import { PractitionerAvailabilitiesService } from '@libs/api-client/api/practitionerAvailabilities.service';
 import { AddPractitionerAvailabilityDTO, PractitionersService } from '@libs/api-client';
 import { MasterDataService } from 'src/app/services/master-data.service';
+import { ProfileComponent } from "../../shared/profile/profile.component";
+import { SCHEDULE_DURATION } from '@constants/system-settings.constants';
 
+
+
+
+// table 4 columns
+// No, day(monday,tuesday), from time, enduration, available or not
+export interface ScheduleElement {
+  position: number;
+  day: string;
+  fromTime: Date;
+  endTime: Date;
+  available: boolean;
+}
 
 @Component({
   selector: 'app-practitioner-schedule',
@@ -17,12 +33,20 @@ import { MasterDataService } from 'src/app/services/master-data.service';
   providers: [provideNativeDateAdapter(),
 
   ],
-  imports: [FormsModule, ReactiveFormsModule, MatDatepickerModule, MatFormFieldModule, MatInputModule, MatSelectModule],
+  imports: [FormsModule, ReactiveFormsModule, MatTableModule, MatSortModule, MatDatepickerModule, MatFormFieldModule, MatInputModule, MatSelectModule, ProfileComponent],
   templateUrl: './practitioner-schedule.component.html',
   styleUrl: './practitioner-schedule.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PractitionerScheduleComponent implements OnInit {
+  columnHeaders: { [key: string]: string } = {
+    position: 'No.',
+    day: 'Day',
+    fromTime: 'From Time',
+    endTime: 'End Time',
+    availabe: 'Available'
+  };
+
   private masterDataService = inject(MasterDataService);
   practitioners = toSignal(this.masterDataService.getPractitioners(), { initialValue: [] });
 
@@ -34,7 +58,23 @@ export class PractitionerScheduleComponent implements OnInit {
 
   });
 
-  intervals: number[] = [10, 20, 30];
+  displayedColumns: string[] = ['position', 'day', 'fromTime', 'endTime', 'available'];
+  data: ScheduleElement[] = [{
+    position: 1,
+    day: 'Monday',
+    fromTime: new Date(),
+    endTime: new Date(),
+    available: true
+  }];
+  dataSource = new MatTableDataSource(this.data);
+
+  @ViewChild(MatSort) sort!: MatSort;
+
+  ngAfterViewInit() {
+    this.dataSource.sort = this.sort;
+  }
+
+
 
   ngOnInit() {
 

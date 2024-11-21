@@ -13,3 +13,11 @@ form {
   align-items: flex-start;
   gap: 1rem;
 }
+
+table {
+  width: 100%;
+}
+
+th.mat-sort-header-sorted {
+  color: black;
+}

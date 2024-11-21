@@ -1,42 +1,57 @@
 <!-- practitioner-schedule.component.html -->
 <h2>Schedule Practitioner</h2>
 <form [formGroup]="dateForm">
-    <mat-form-field>
-        <mat-label>Enter a date range</mat-label>
-        <mat-date-range-input [rangePicker]="picker">
-            <input matStartDate formControlName="start" placeholder="Start date">
-            <input matEndDate formControlName="end" placeholder="End date">
-        </mat-date-range-input>
-        <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
-        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-date-range-picker #picker></mat-date-range-picker>
+    <app-profile></app-profile>
+    <div>
+        <div>
 
-        @if (dateForm.controls.start.hasError('matStartDateInvalid')) {
-        <mat-error>Invalid start date</mat-error>
-        }
-        @if (dateForm.controls.end.hasError('matEndDateInvalid')) {
-        <mat-error>Invalid end date</mat-error>
-        }
-    </mat-form-field>
+            <mat-form-field>
+                <mat-label>Practitioner</mat-label>
+                <mat-select formControlName="practitionerId">
+                    @for (prac of practitioners(); track prac) {
+                    <mat-option [value]="prac.practitionerId">{{ prac.firstName + ' ' + prac.lastName }}</mat-option>
+                    }
 
-    <mat-form-field>
-        <mat-label>Interval</mat-label>
-        <mat-select formControlName="interval">
-            @for (int of intervals; track int) {
-            <mat-option [value]="int">{{ int }}minutes</mat-option>
-            }
-        </mat-select>
-    </mat-form-field>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Enter a date range</mat-label>
+                <mat-date-range-input [rangePicker]="picker">
+                    <input matStartDate formControlName="start" placeholder="Start date">
+                    <input matEndDate formControlName="end" placeholder="End date">
+                </mat-date-range-input>
+                <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-date-range-picker #picker></mat-date-range-picker>
 
-    <mat-form-field>
-        <mat-label>Practitioner</mat-label>
-        <mat-select formControlName="practitionerId">
-            @for (prac of practitioners(); track prac) {
-            <mat-option [value]="prac.practitionerId">{{ prac.firstName + ' ' + prac.lastName }}</mat-option>
-            }
+                @if (dateForm.controls.start.hasError('matStartDateInvalid')) {
+                <mat-error>Invalid start date</mat-error>
+                }
+                @if (dateForm.controls.end.hasError('matEndDateInvalid')) {
+                <mat-error>Invalid end date</mat-error>
+                }
+            </mat-form-field>
+            <button mat-raised-button type="submit" (click)="createSchedule()">Create Schedule</button>
+        </div>
+        <div>
+            <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
 
-        </mat-select>
-    </mat-form-field>
+                @for (column of displayedColumns; track column) {
+                <ng-container [matColumnDef]="column">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{ columnHeaders[column] }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{ element[column] }}
+                    </td>
+                </ng-container>
+                }
 
-    <button mat-raised-button type="submit" (click)="createSchedule()">Create Schedule</button>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+
+        </div>
+    </div>
+
 </form>

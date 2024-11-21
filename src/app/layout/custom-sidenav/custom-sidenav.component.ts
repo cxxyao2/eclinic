@@ -54,7 +54,7 @@ export class CustomSidenavComponent {
       route: 'checkin'
     },
     {
-      icon: 'stethoscope',
+      icon: 'medication',
       label: 'Consultation',
       route: 'consultation'
     },
@@ -65,19 +65,19 @@ export class CustomSidenavComponent {
       subItems: [
         {
 
-          icon: 'patient_list',
+          icon: 'list',
           label: 'Waitlist',
           route: 'admin/waitlist'
         },
         {
           icon: 'group',
-          label: 'authorize',
+          label: 'Authorize',
           route: 'admin/authorize'
         },
       ]
     },
     {
-      icon: 'inpatient',
+      icon: 'vaccines',
       label: 'Inpatient',
       route: 'inpatient'
     },

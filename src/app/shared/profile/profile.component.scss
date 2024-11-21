@@ -1,0 +1,24 @@
+.profile-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+}
+
+.image-container {
+  text-align: center;
+  width: 300px;
+  height: 200px;
+  overflow: hidden; /* Ensures content doesn't overflow */
+}
+
+.image-container img {
+  width: 100%; /* Ensures the image adjusts to container width */
+  height: 100%; /* Adjusts height to fill the container */
+  object-fit: cover; /* Crops the image to cover the container */
+}
