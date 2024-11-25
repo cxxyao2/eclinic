@@ -1,7 +1,7 @@
 import { DestroyRef, inject, Injectable } from '@angular/core';
-import { AddPractitionerAvailabilityDTO, GetMedicationDTO, GetPatientDTO, GetPractitionerAvailabilityDTO, GetPractitionerDTO } from '@libs/api-client';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { AddPractitionerAvailabilityDTO, GetMedicationDTO, GetPatientDTO, GetPractitionerAvailabilityDTO, GetPractitionerAvailabilityDTOServiceResponse, GetPractitionerDTO } from '@libs/api-client';
+import { BehaviorSubject, from, Observable } from 'rxjs';
+import { concatMap, finalize, map, tap } from 'rxjs/operators';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { ROOMS_WITH_BEDS } from '@constants/rooms-with-beds.constants';
@@ -71,19 +71,29 @@ export class MasterDataService {
   }
 
 
-  addAvailabilities(newEntity: AddPractitionerAvailabilityDTO): void {
-    this.availableService.apiPractitionerAvailabilitiesPost(newEntity).pipe(
-      tap((result) => {
-        if (result.data) {
-          this.availabilitiesSubject.next([...this.availabilitiesSubject.value, result.data]);
-        }
-      }),
-      takeUntilDestroyed(this.destroyRef)
-    ).subscribe({
-      next: data => console.log(data),
-      error: err => console.error(err),
-      complete: () => console.log('Create one new  complete')
-    });
+  addAvailabilities(newEntities: AddPractitionerAvailabilityDTO[]): void {
+    const resultArray: GetPractitionerAvailabilityDTO[] = [];
+
+    from(newEntities) // Convert array into an Observable stream
+      .pipe(
+        concatMap(data => this.availableService.apiPractitionerAvailabilitiesPost(data)), // Process each object sequentially
+        tap((returnedData: GetPractitionerAvailabilityDTOServiceResponse) => {
+          if (returnedData?.data) {
+            resultArray.push(returnedData.data);
+          }
+        }, // Add the returned object to resultArray
+          finalize(() => {
+            if (resultArray) {
+              this.availabilitiesSubject.next([...this.availabilitiesSubject.value, ...resultArray]);
+            }
+          })
+        ))
+      .subscribe({
+        next: () => console.log('Saved successfully'),
+        error: err => console.error('Error saving data:', err)
+      });
+
+
   }
 
   getAvailabilities(): Observable<GetPractitionerAvailabilityDTO[]> {

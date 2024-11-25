@@ -31,9 +31,43 @@
                 <mat-error>Invalid end date</mat-error>
                 }
             </mat-form-field>
-            <button mat-raised-button type="submit" (click)="createSchedule()">Create Schedule</button>
+            <div class="button-section">
+                <div class="button-container">
+                    <button mat-fab extended (click)="printSchedule()" aria-label="print" type="button">
+                        <mat-icon>print</mat-icon>
+                        Print
+                    </button>
+                </div>
+                @if(isCreate()) {
+                <div class="button-container">
+                    <button mat-raised-button type="button" (click)="createSchedule()">
+                        <mat-icon>
+                            add_circle
+                        </mat-icon>
+                        Create
+                    </button>
+                </div>
+                } @else {
+                <div class="button-container">
+                    <button mat-raised-button type="button" (click)="resetSchedule()">
+                        <mat-icon>restart_alt</mat-icon>
+                        Reset
+                    </button>
+                </div>
+                }
+
+                <div class="button-container">
+                    <button mat-raised-button type="submit" (click)="saveSchedule()">
+                        <mat-icon>save</mat-icon>
+                        Save
+                    </button>
+                </div>
+            </div>
+
+
         </div>
         <div>
+            @if(dataSource.data.length>0){
             <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
 
                 @for (column of displayedColumns; track column) {
@@ -50,7 +84,11 @@
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
             </table>
-
+            } @else {
+            <div class="no-data-message">
+                No data found
+            </div>
+            }
         </div>
     </div>
 

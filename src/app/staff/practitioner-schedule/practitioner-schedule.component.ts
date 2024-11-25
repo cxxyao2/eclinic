@@ -1,5 +1,5 @@
 import { toSignal } from '@angular/core/rxjs-interop';
-import { AfterViewInit, ViewChild, ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
+import { AfterViewInit, ViewChild, ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSort, Sort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -13,7 +13,11 @@ import { AddPractitionerAvailabilityDTO, PractitionersService } from '@libs/api-
 import { MasterDataService } from 'src/app/services/master-data.service';
 import { ProfileComponent } from "../../shared/profile/profile.component";
 import { SCHEDULE_DURATION } from '@constants/system-settings.constants';
+import { MatIconModule } from '@angular/material/icon';
+import { addMinutesToDate, formatDateToCustomString, getDayOfWeek, getTimeFromDate } from 'src/app/helpers/date-helpers';
 
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 
 
 
@@ -33,7 +37,7 @@ export interface ScheduleElement {
   providers: [provideNativeDateAdapter(),
 
   ],
-  imports: [FormsModule, ReactiveFormsModule, MatTableModule, MatSortModule, MatDatepickerModule, MatFormFieldModule, MatInputModule, MatSelectModule, ProfileComponent],
+  imports: [FormsModule, ReactiveFormsModule, MatIconModule, MatTableModule, MatSortModule, MatDatepickerModule, MatFormFieldModule, MatInputModule, MatSelectModule, ProfileComponent],
   templateUrl: './practitioner-schedule.component.html',
   styleUrl: './practitioner-schedule.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -47,6 +51,19 @@ export class PractitionerScheduleComponent implements OnInit {
     availabe: 'Available'
   };
 
+  displayedColumns: string[] = ['position', 'day', 'fromTime', 'endTime', 'available'];
+  // todo: need to remove the test data
+  data: ScheduleElement[] = [{
+    position: 1,
+    day: 'Monday',
+    fromTime: new Date(),
+    endTime: new Date(),
+    available: true
+  }];
+  dataSource = new MatTableDataSource(this.data);
+
+  @ViewChild(MatSort) sort!: MatSort;
+
   private masterDataService = inject(MasterDataService);
   practitioners = toSignal(this.masterDataService.getPractitioners(), { initialValue: [] });
 
@@ -58,17 +75,7 @@ export class PractitionerScheduleComponent implements OnInit {
 
   });
 
-  displayedColumns: string[] = ['position', 'day', 'fromTime', 'endTime', 'available'];
-  data: ScheduleElement[] = [{
-    position: 1,
-    day: 'Monday',
-    fromTime: new Date(),
-    endTime: new Date(),
-    available: true
-  }];
-  dataSource = new MatTableDataSource(this.data);
-
-  @ViewChild(MatSort) sort!: MatSort;
+  isCreate = signal(true);
 
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
@@ -83,24 +90,115 @@ export class PractitionerScheduleComponent implements OnInit {
 
   }
 
-
-  createSchedule() {
-    const newAvail: AddPractitionerAvailabilityDTO = {
-      practitionerId: 2,
-      slotDateTime: new Date("2024-11-20T15:30:00.000Z"),
-      isAvailable: true
-
+  createOrResetSchedule(): void {
+    if (this.isCreate()) {
+      this.createSchedule();
+    } else {
+      this.resetSchedule();
     }
-    this.masterDataService.addAvailabilities(newAvail);
-    // let start = this.dateForm.value.start;
-    // let end = this.dateForm.value.end;
-    // let interval = this.dateForm.value.interval;
-    // let practitionId = this.dateForm.value.practitionerId;
-    // if (start && end && interval && practitionId) {
-    //   this.appointmentServce.getAppointmentData(start, end, interval, practitionId).subscribe({
-    //     next: (data) => { console.log(data); },
-    //   });
-    // }
+    this.isCreate.set(!this.isCreate());
+  }
+
+
+
+  saveSchedule(): void {
+    // todo , create an array based on date and duration
 
   }
+
+  resetSchedule(): void {
+
+    this.data = [];
+  }
+
+
+  createSchedule(): void {
+
+    let start = this.dateForm.value.start || new Date();
+    let end = this.dateForm.value.end || new Date();
+    let interval = this.dateForm.value.interval || SCHEDULE_DURATION;
+    let practitionerId = this.dateForm.value.practitionerId ?? 0;
+    if (!(start && end && interval && practitionerId)) {
+      alert('Please input data.')
+    }
+
+
+    const startDate = formatDateToCustomString(start, '00:00:00');
+    const endDate = formatDateToCustomString(end, '23:30:00');
+
+    const availabilitySlots = this.generatePractitionerAvailabilitySlots(
+      startDate,
+      endDate,
+      interval,
+      practitionerId
+    );
+
+    this.dataSource.data = availabilitySlots.map((avail, index) => ({
+      position: index,
+      day: getDayOfWeek(avail.slotDateTime!, true),
+      fromTime: avail.slotDateTime!,
+      endTime: addMinutesToDate(avail.slotDateTime!, interval),
+      available: avail.isAvailable!
+    }));
+  }
+
+
+  generatePractitionerAvailabilitySlots(
+    startDate: string,
+    endDate: string,
+    duration: number,
+    practitionerId: number
+  ): AddPractitionerAvailabilityDTO[] {
+    const slots: AddPractitionerAvailabilityDTO[] = [];
+
+    let currentDate = new Date(startDate);
+    const endDateTime = new Date(endDate);
+
+    while (currentDate < endDateTime) {
+      slots.push({
+        practitionerId: practitionerId,
+        slotDateTime: new Date(currentDate),
+        isAvailable: true
+      });
+
+      // Increment the time by the specified duration in minutes
+      currentDate = new Date(currentDate.getTime() + duration * 60 * 1000);
+    }
+
+    return slots;
+  }
+
+  printSchedule(): void {
+    const users = [
+      { name: 'Alice', age: 25 },
+      { name: 'Bob', age: 30 },
+      { name: 'Charlie', age: 35 },
+    ];
+    const doc = new jsPDF('p', 'mm', 'a4'); // Portrait, millimeters, A4 size
+
+    // Title
+    doc.setFontSize(16);
+    doc.text('User List', 105, 20, { align: 'center' }); // Title centered at the top of the page
+
+    // Table
+    const columns = ['Name', 'Age']; // Table headers
+    const rows = users.map((user) => [user.name, user.age]); // Convert users to table rows
+
+    (doc as any).autoTable({
+      head: [columns],
+      body: rows,
+      startY: 30, // Start below the title
+      theme: 'grid', // Add grid lines
+    });
+
+    // Open the print dialog
+    const pdfUrl = doc.output('bloburl'); // Create a Blob URL for the PDF
+    const printWindow = window.open(pdfUrl, '_blank'); // Open it in a new tab/window
+    if (printWindow) {
+      printWindow.onload = () => printWindow.print(); // Trigger print once loaded
+    }
+  }
+
 }
+
+

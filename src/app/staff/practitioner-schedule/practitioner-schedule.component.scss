@@ -21,3 +21,22 @@ table {
 th.mat-sort-header-sorted {
   color: black;
 }
+
+.no-data-message {
+  text-align: center;
+  font-size: 16px;
+  color: gray;
+  margin: 20px 0;
+}
+
+.button-section {
+  display: flex;
+  justify-content: start;
+  gap: 1rem;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
