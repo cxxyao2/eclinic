@@ -139,3 +139,14 @@ body {
     --mdc-plain-tooltip-supporting-text-color: var(--sys-on-primary);
   }
 }
+
+.mat-datepicker-content {
+  --mat-datepicker-calendar-container-background-color: var(
+    --sys-secondary-container
+  );
+}
+
+div[role="listbox"] {
+  --mat-select-panel-background-color: var(--sys-secondary-container);
+  // --mdc-list-list-item-container-color: red; /* Set the variable */
+}

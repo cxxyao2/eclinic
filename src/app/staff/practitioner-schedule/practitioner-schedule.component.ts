@@ -1,28 +1,24 @@
-import { toSignal } from '@angular/core/rxjs-interop';
-import { AfterViewInit, ViewChild, ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatSort, Sort, MatSortModule } from '@angular/material/sort';
+import { MatButtonModule } from '@angular/material/button';
+import { ViewChild, ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
+import { MatDatepickerInputEvent, MatDatepickerModule } from '@angular/material/datepicker';
+import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { provideNativeDateAdapter } from '@angular/material/core';
-import { PractitionerAvailabilitiesService } from '@libs/api-client/api/practitionerAvailabilities.service';
-import { AddPractitionerAvailabilityDTO, PractitionersService } from '@libs/api-client';
+import { AddPractitionerAvailabilityDTO, GetPractitionerDTO } from '@libs/api-client';
 import { MasterDataService } from 'src/app/services/master-data.service';
 import { ProfileComponent } from "../../shared/profile/profile.component";
 import { SCHEDULE_DURATION } from '@constants/system-settings.constants';
 import { MatIconModule } from '@angular/material/icon';
-import { addMinutesToDate, formatDateToCustomString, getDayOfWeek, getTimeFromDate } from 'src/app/helpers/date-helpers';
+import { addMinutesToDate, formatDateToCustomString, getDayOfWeek } from 'src/app/helpers/date-helpers';
 
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
+import { UserProfile } from '@models/userProfile.model';
 
-
-
-// table 4 columns
-// No, day(monday,tuesday), from time, enduration, available or not
 export interface ScheduleElement {
   position: number;
   day: string;
@@ -37,7 +33,7 @@ export interface ScheduleElement {
   providers: [provideNativeDateAdapter(),
 
   ],
-  imports: [FormsModule, ReactiveFormsModule, MatIconModule, MatTableModule, MatSortModule, MatDatepickerModule, MatFormFieldModule, MatInputModule, MatSelectModule, ProfileComponent],
+  imports: [FormsModule, ReactiveFormsModule, MatButtonModule,MatIconModule, MatTableModule, MatSortModule, MatDatepickerModule, MatFormFieldModule, MatInputModule, MatSelectModule, ProfileComponent],
   templateUrl: './practitioner-schedule.component.html',
   styleUrl: './practitioner-schedule.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -52,7 +48,7 @@ export class PractitionerScheduleComponent implements OnInit {
   };
 
   displayedColumns: string[] = ['position', 'day', 'fromTime', 'endTime', 'available'];
-  // todo: need to remove the test data
+
   data: ScheduleElement[] = [{
     position: 1,
     day: 'Monday',
@@ -65,17 +61,25 @@ export class PractitionerScheduleComponent implements OnInit {
   @ViewChild(MatSort) sort!: MatSort;
 
   private masterDataService = inject(MasterDataService);
-  practitioners = toSignal(this.masterDataService.getPractitioners(), { initialValue: [] });
+  practitioners = signal<GetPractitionerDTO[]>([]);
 
   readonly dateForm = new FormGroup({
     start: new FormControl<Date>(new Date(), Validators.required),
     end: new FormControl<Date>(new Date(), Validators.required),
-    interval: new FormControl<number>(30),
+    duration: new FormControl<number>(30),
     practitionerId: new FormControl<number | null>(null)
 
   });
 
   isCreate = signal(true);
+
+  selectedPractitoner: UserProfile = {
+    id: 1,
+    firstName: 'aa',
+    lastName: 'bb',
+    gender: 'female',
+    age: 33
+  }
 
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
@@ -85,7 +89,9 @@ export class PractitionerScheduleComponent implements OnInit {
 
   ngOnInit() {
 
-
+    this.masterDataService.practitionersSubject.subscribe({
+      next: data => this.practitioners.set(data)
+    })
 
 
   }
@@ -99,7 +105,10 @@ export class PractitionerScheduleComponent implements OnInit {
     this.isCreate.set(!this.isCreate());
   }
 
+  setDate(event: MatDatepickerInputEvent<Date>):void {
+    console.log(`selected date is ${event.value}`);
 
+  }
 
   saveSchedule(): void {
     // todo , create an array based on date and duration
@@ -116,9 +125,9 @@ export class PractitionerScheduleComponent implements OnInit {
 
     let start = this.dateForm.value.start || new Date();
     let end = this.dateForm.value.end || new Date();
-    let interval = this.dateForm.value.interval || SCHEDULE_DURATION;
+    let duration = this.dateForm.value.duration || SCHEDULE_DURATION;
     let practitionerId = this.dateForm.value.practitionerId ?? 0;
-    if (!(start && end && interval && practitionerId)) {
+    if (!(start && end && duration && practitionerId)) {
       alert('Please input data.')
     }
 
@@ -129,7 +138,7 @@ export class PractitionerScheduleComponent implements OnInit {
     const availabilitySlots = this.generatePractitionerAvailabilitySlots(
       startDate,
       endDate,
-      interval,
+      duration,
       practitionerId
     );
 
@@ -137,7 +146,7 @@ export class PractitionerScheduleComponent implements OnInit {
       position: index,
       day: getDayOfWeek(avail.slotDateTime!, true),
       fromTime: avail.slotDateTime!,
-      endTime: addMinutesToDate(avail.slotDateTime!, interval),
+      endTime: addMinutesToDate(avail.slotDateTime!, duration),
       available: avail.isAvailable!
     }));
   }

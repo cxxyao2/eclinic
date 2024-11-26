@@ -1,10 +1,9 @@
 <!-- practitioner-schedule.component.html -->
 <h2>Schedule Practitioner</h2>
 <form [formGroup]="dateForm">
-    <app-profile></app-profile>
+    <app-profile [profileInfo]="selectedPractitoner"></app-profile>
     <div>
-        <div>
-
+        <div class="content-wrapper">
             <mat-form-field>
                 <mat-label>Practitioner</mat-label>
                 <mat-select formControlName="practitionerId">
@@ -15,23 +14,13 @@
                 </mat-select>
             </mat-form-field>
             <mat-form-field>
-                <mat-label>Enter a date range</mat-label>
-                <mat-date-range-input [rangePicker]="picker">
-                    <input matStartDate formControlName="start" placeholder="Start date">
-                    <input matEndDate formControlName="end" placeholder="End date">
-                </mat-date-range-input>
-                <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+                <mat-label>Choose a date</mat-label>
+                <input matInput [matDatepicker]="picker" (dateInput)="setDate($event)" (dateChange)="setDate($event)">
+                <mat-hint>MM/DD/YYYY</mat-hint>
                 <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-                <mat-date-range-picker #picker></mat-date-range-picker>
-
-                @if (dateForm.controls.start.hasError('matStartDateInvalid')) {
-                <mat-error>Invalid start date</mat-error>
-                }
-                @if (dateForm.controls.end.hasError('matEndDateInvalid')) {
-                <mat-error>Invalid end date</mat-error>
-                }
+                <mat-datepicker #picker></mat-datepicker>
             </mat-form-field>
-            <div class="button-section">
+            <div class="button-group">
                 <div class="button-container">
                     <button mat-fab extended (click)="printSchedule()" aria-label="print" type="button">
                         <mat-icon>print</mat-icon>
@@ -40,7 +29,7 @@
                 </div>
                 @if(isCreate()) {
                 <div class="button-container">
-                    <button mat-raised-button type="button" (click)="createSchedule()">
+                    <button mat-fab extended type="button" (click)="createSchedule()">
                         <mat-icon>
                             add_circle
                         </mat-icon>
@@ -49,7 +38,7 @@
                 </div>
                 } @else {
                 <div class="button-container">
-                    <button mat-raised-button type="button" (click)="resetSchedule()">
+                    <button mat-fab extended type="button" (click)="resetSchedule()">
                         <mat-icon>restart_alt</mat-icon>
                         Reset
                     </button>
@@ -57,7 +46,7 @@
                 }
 
                 <div class="button-container">
-                    <button mat-raised-button type="submit" (click)="saveSchedule()">
+                    <button mat-fab extended type="submit" (click)="saveSchedule()">
                         <mat-icon>save</mat-icon>
                         Save
                     </button>

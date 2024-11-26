@@ -25,18 +25,18 @@ export class MasterDataService {
   private medicationService = inject(MedicationsService);
   private availableService = inject(PractitionerAvailabilitiesService);
 
-  private practitionersSubject = new BehaviorSubject<GetPractitionerDTO[]>([]);
-  private medicationsSubject = new BehaviorSubject<GetMedicationDTO[]>([]);
-  private availabilitiesSubject = new BehaviorSubject<GetPractitionerAvailabilityDTO[]>([]);
-  private patientsSubject = new BehaviorSubject<GetPatientDTO[]>([]);
-  private bedRoomsSubject = new BehaviorSubject<any[]>([]);
+  public  practitionersSubject = new BehaviorSubject<GetPractitionerDTO[]>([]);
+  public  medicationsSubject = new BehaviorSubject<GetMedicationDTO[]>([]);
+  public  availabilitiesSubject = new BehaviorSubject<GetPractitionerAvailabilityDTO[]>([]);
+  public  patientsSubject = new BehaviorSubject<GetPatientDTO[]>([]);
+  public  bedRoomsSubject = new BehaviorSubject<any[]>([]);
 
   constructor() {
-    this.getPatients();
-    this.getPractitioners();
-    this.getMedications();
-    this.getAvailabilities();
-    this.getBedRooms();
+    this.fetchPatients();
+    this.fetchPractitioners();
+    this.fetchMedications();
+    this.fetchAvailabilities();
+    this.fetchBedRooms();
   }
 
 
@@ -47,9 +47,7 @@ export class MasterDataService {
     ).subscribe();
   }
 
-  getPractitioners(): Observable<GetPractitionerDTO[]> {
-    return this.practitionersSubject.asObservable(); // Return as observable for components to subscribe
-  }
+ 
 
   // Fetch and store medications
   fetchMedications(): void {
@@ -59,9 +57,7 @@ export class MasterDataService {
     ).subscribe();
   }
 
-  getMedications(): Observable<GetMedicationDTO[]> {
-    return this.medicationsSubject.asObservable();
-  }
+
 
   fetchAvailabilities(): void {
     this.availableService.apiPractitionerAvailabilitiesGet().pipe(
@@ -96,10 +92,6 @@ export class MasterDataService {
 
   }
 
-  getAvailabilities(): Observable<GetPractitionerAvailabilityDTO[]> {
-    return this.availabilitiesSubject.asObservable();
-  }
-
 
   fetchPatients(): void {
     this.patientService.apiPatientsGet().pipe(
@@ -108,17 +100,12 @@ export class MasterDataService {
     ).subscribe();
   }
 
-  getPatients(): Observable<GetPatientDTO[]> {
-    return this.patientsSubject.asObservable();
-  }
 
   // Fetch and store bed rooms
   fetchBedRooms(): void {
     this.bedRoomsSubject.next(ROOMS_WITH_BEDS);
   }
 
-  getBedRooms(): Observable<any[]> {
-    return this.bedRoomsSubject.asObservable();
-  }
+ 
 
 }
