@@ -1,13 +1,18 @@
 :host {
-    transition: all 500ms ease-in-out;
-    --mdc-list-list-item-hover-state-layer-color:var(--sys-on-primary-container);
+  transition: all 500ms ease-in-out;
+  --mdc-list-list-item-hover-state-layer-color: var(
+    --mat-app-on-primary-container
+  );
 }
 
 .dark :host {
-    color: white;
-    --mdc-list-list-item-hover-label-text-color:var(--sys-on-secondary-container);
-    --mdc-list-list-item-label-text-color:var(--sys-on-secondary-container);
-    --mdc-list-list-item-leading-icon-color:white;
-    --mdc-list-list-item-hover-leading-icon-color:var(--sys-on-secondary-contianer);
- }
-
+  color: white;
+  --mdc-list-list-item-hover-label-text-color: var(
+    --mat-app-on-secondary-container
+  );
+  --mdc-list-list-item-label-text-color: var(--mat-app-on-secondary-container);
+  --mdc-list-list-item-leading-icon-color: white;
+  --mdc-list-list-item-hover-leading-icon-color: var(
+    --mat-app-on-secondary-contianer
+  );
+}

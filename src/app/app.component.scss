@@ -1,25 +1,21 @@
-
 .content {
-    padding: 4px;
-    margin: 0 auto;
+  padding: 4px;
+  margin: 0 auto;
 }
 
 mat-sidenav {
-    background-color: var(--sys-surface-container-low);
-    color: var(--sys-on-surface);
-    border-radius: 0px;
+  background-color: var(--mat-app-surface-container-low);
+  color: var(--mat-app-on-surface);
+  border-radius: 0px;
 }
-
 
 mat-sidenav-container {
-    background-color: var(--sys-surface-container-lowest);
-    color: var(--sys-on-surface);
-    height: calc(100vh - 64px);
+  background-color: var(--mat-app-surface-container-lowest);
+  color: var(--mat-app-on-surface);
+  height: calc(100vh - 64px);
 }
 
-
-mat-sidenav, mat-sidenav-container {
-    transition: all 500ms ease-in-out;
+mat-sidenav,
+mat-sidenav-container {
+  transition: all 500ms ease-in-out;
 }
-
-

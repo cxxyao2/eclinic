@@ -9,37 +9,38 @@ mat-toolbar {
   .first-row {
     position: relative;
     z-index: 5;
-    color: var(--sys-on-primary);
-    background-color: var(--sys-primary);
+    color: var(--mat-app-on-primary);
+    background-color: var(--mat-app-primary);
+    .mat-icon:not([role="alert"]){
+      color: var(--mat-app-on-primary);
+    }
   }
 
   .second-row {
     position: static;
     z-index: 5;
-    background-color: var(--sys-inverse-surface);
-    color: var(--sys-inverse-on-surface);
+    background-color: var(--mat-app-inverse-surface);
+    color: var(--mat-app-inverse-on-surface);
     height: 32px;
     font-size: small;
     button {
       border-radius: 4px;
       background-color: transparent;
+      color: var(--mat-app-inverse-on-surface);
     }
   }
 }
-
-
 
 .spacer {
   flex: 1 1 auto;
 }
 
 .notification-icon {
-  color: var(--sys-error-container);
+  color: var(--mat-app-error-container);
 }
 
 .extended-button-container {
   display: flex;
   justify-content: center;
   align-items: center;
- 
 }

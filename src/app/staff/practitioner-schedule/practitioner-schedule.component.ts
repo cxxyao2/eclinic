@@ -33,7 +33,7 @@ export interface ScheduleElement {
   providers: [provideNativeDateAdapter(),
 
   ],
-  imports: [FormsModule, ReactiveFormsModule, MatButtonModule,MatIconModule, MatTableModule, MatSortModule, MatDatepickerModule, MatFormFieldModule, MatInputModule, MatSelectModule, ProfileComponent],
+  imports: [FormsModule, ReactiveFormsModule, MatButtonModule, MatIconModule, MatTableModule, MatSortModule, MatDatepickerModule, MatFormFieldModule, MatInputModule, MatSelectModule, ProfileComponent],
   templateUrl: './practitioner-schedule.component.html',
   styleUrl: './practitioner-schedule.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -64,8 +64,7 @@ export class PractitionerScheduleComponent implements OnInit {
   practitioners = signal<GetPractitionerDTO[]>([]);
 
   readonly dateForm = new FormGroup({
-    start: new FormControl<Date>(new Date(), Validators.required),
-    end: new FormControl<Date>(new Date(), Validators.required),
+    workDate: new FormControl<Date>(new Date(), Validators.required),
     duration: new FormControl<number>(30),
     practitionerId: new FormControl<number | null>(null)
 
@@ -96,16 +95,9 @@ export class PractitionerScheduleComponent implements OnInit {
 
   }
 
-  createOrResetSchedule(): void {
-    if (this.isCreate()) {
-      this.createSchedule();
-    } else {
-      this.resetSchedule();
-    }
-    this.isCreate.set(!this.isCreate());
-  }
 
-  setDate(event: MatDatepickerInputEvent<Date>):void {
+
+  setDate(event: MatDatepickerInputEvent<Date>): void {
     console.log(`selected date is ${event.value}`);
 
   }
@@ -118,13 +110,14 @@ export class PractitionerScheduleComponent implements OnInit {
   resetSchedule(): void {
 
     this.data = [];
+    this.isCreate.set(!this.isCreate());
   }
 
 
   createSchedule(): void {
 
-    let start = this.dateForm.value.start || new Date();
-    let end = this.dateForm.value.end || new Date();
+    let start = this.dateForm.value.workDate || new Date();
+    let end = this.dateForm.value.workDate || new Date();
     let duration = this.dateForm.value.duration || SCHEDULE_DURATION;
     let practitionerId = this.dateForm.value.practitionerId ?? 0;
     if (!(start && end && duration && practitionerId)) {
@@ -149,6 +142,8 @@ export class PractitionerScheduleComponent implements OnInit {
       endTime: addMinutesToDate(avail.slotDateTime!, duration),
       available: avail.isAvailable!
     }));
+
+    this.isCreate.set(!this.isCreate());
   }
 
 

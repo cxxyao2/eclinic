@@ -138,4 +138,19 @@ body {
   --mat-app-surface-container-lowest: #121212; /* Background-level darkness */
   --mat-app-surface-bright: #1e1e1e; /* Same as main surface for consistency */
   --mat-app-surface-dim: #333333; /* Darker surface tone for variety */
+
+  .cdk-overlay-container .mat-mdc-tooltip {
+    --mdc-plain-tooltip-supporting-text-color: var(--mat-app-on-primary);
+  }
+}
+
+.mat-datepicker-content {
+  --mat-datepicker-calendar-container-background-color: var(
+    --mat-app-secondary-container
+  );
+}
+
+div[role="listbox"] {
+  --mat-select-panel-background-color: var(--mat-app-secondary-container);
+  // --mdc-list-list-item-container-color: red; /* Set the variable */
 }
