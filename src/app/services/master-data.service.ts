@@ -25,11 +25,11 @@ export class MasterDataService {
   private medicationService = inject(MedicationsService);
   private availableService = inject(PractitionerAvailabilitiesService);
 
-  public  practitionersSubject = new BehaviorSubject<GetPractitionerDTO[]>([]);
-  public  medicationsSubject = new BehaviorSubject<GetMedicationDTO[]>([]);
-  public  availabilitiesSubject = new BehaviorSubject<GetPractitionerAvailabilityDTO[]>([]);
-  public  patientsSubject = new BehaviorSubject<GetPatientDTO[]>([]);
-  public  bedRoomsSubject = new BehaviorSubject<any[]>([]);
+  public practitionersSubject = new BehaviorSubject<GetPractitionerDTO[]>([]);
+  public medicationsSubject = new BehaviorSubject<GetMedicationDTO[]>([]);
+  public availabilitiesSubject = new BehaviorSubject<GetPractitionerAvailabilityDTO[]>([]);
+  public patientsSubject = new BehaviorSubject<GetPatientDTO[]>([]);
+  public bedRoomsSubject = new BehaviorSubject<any[]>([]);
 
   constructor() {
     this.fetchPatients();
@@ -47,7 +47,7 @@ export class MasterDataService {
     ).subscribe();
   }
 
- 
+
 
   // Fetch and store medications
   fetchMedications(): void {
@@ -70,25 +70,58 @@ export class MasterDataService {
   addAvailabilities(newEntities: AddPractitionerAvailabilityDTO[]): void {
     const resultArray: GetPractitionerAvailabilityDTO[] = [];
 
-    from(newEntities) // Convert array into an Observable stream
+    from(newEntities)
       .pipe(
         concatMap(data => this.availableService.apiPractitionerAvailabilitiesPost(data)), // Process each object sequentially
-        tap((returnedData: GetPractitionerAvailabilityDTOServiceResponse) => {
-          if (returnedData?.data) {
-            resultArray.push(returnedData.data);
-          }
-        }, // Add the returned object to resultArray
-          finalize(() => {
-            if (resultArray) {
-              this.availabilitiesSubject.next([...this.availabilitiesSubject.value, ...resultArray]);
+        tap({
+          next: (returnedData: GetPractitionerAvailabilityDTOServiceResponse) => {
+            if (returnedData?.data) {
+              resultArray.push(returnedData.data);
             }
-          })
-        ))
+          }
+        }),
+        finalize(() => {
+          if (resultArray) {
+            this.availabilitiesSubject.next([...this.availabilitiesSubject.value, ...resultArray]);
+          }
+        })
+      )
       .subscribe({
         next: () => console.log('Saved successfully'),
         error: err => console.error('Error saving data:', err)
       });
 
+  }
+
+
+  updateAvailabilities(updatedEntities: GetPractitionerAvailabilityDTO[]): void {
+    const resultArray: GetPractitionerAvailabilityDTO[] = [];
+
+    from(updatedEntities)
+      .pipe(
+        concatMap(data => this.availableService.apiPractitionerAvailabilitiesPut(data)), // Process each object sequentially
+        tap({
+          next: (returnedData: GetPractitionerAvailabilityDTOServiceResponse) => {
+            if (returnedData?.data) {
+              resultArray.push(returnedData.data);
+            }
+          }
+        }),
+        finalize(() => {
+          if (resultArray) {
+            const currentValue = this.availabilitiesSubject.value;
+            resultArray.forEach(v => {
+              const idx = currentValue.findIndex(c => c.availableId === v.availableId);
+              if (idx >= 0) currentValue[idx] = v;
+            });
+            this.availabilitiesSubject.next([...currentValue]);
+          }
+        })
+      )
+      .subscribe({
+        next: () => console.log('Saved successfully'),
+        error: err => console.error('Error saving data:', err)
+      });
 
   }
 
@@ -106,6 +139,6 @@ export class MasterDataService {
     this.bedRoomsSubject.next(ROOMS_WITH_BEDS);
   }
 
- 
+
 
 }

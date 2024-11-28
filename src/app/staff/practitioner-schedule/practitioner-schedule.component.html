@@ -1,12 +1,12 @@
 <!-- practitioner-schedule.component.html -->
 <h2>Schedule Practitioner</h2>
-<form [formGroup]="dateForm">
-    <app-profile [profileInfo]="selectedPractitoner"></app-profile>
+<form [formGroup]="scheduleForm">
+    <app-profile [profileInfo]="selectedPractitoner()"></app-profile>
     <div>
         <div class="content-wrapper">
             <mat-form-field>
                 <mat-label>Practitioner</mat-label>
-                <mat-select formControlName="practitionerId">
+                <mat-select formControlName="practitionerId" (selectionChange)="onSelectionChange($event)">
                     @for (prac of practitioners(); track prac) {
                     <mat-option [value]="prac.practitionerId">{{ prac.firstName + ' ' + prac.lastName }}</mat-option>
                     }
@@ -56,21 +56,46 @@
         <div>
             @if(dataSource.data.length>0){
             <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
-
-                @for (column of displayedColumns; track column) {
-                <ng-container [matColumnDef]="column">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                        {{ columnHeaders[column] }}
-                    </th>
-                    <td mat-cell *matCellDef="let element">
-                        {{ element[column] }}
+                <!-- Index Column -->
+                <ng-container matColumnDef="index">
+                    <th mat-header-cell *matHeaderCellDef>#</th>
+                    <td mat-cell *matCellDef="let element; let i = index">
+                        {{ i + 1 }}
                     </td>
                 </ng-container>
-                }
+
+                <!-- Other Columns -->
+                <ng-container *ngFor="let column of displayedColumns">
+                    <ng-container [matColumnDef]="column">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                            {{ columnHeaders[column] }}
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                            <ng-container *ngIf="column === 'day'">
+                                {{ element['slotDateTime'] | date: 'EEE' }}
+                            </ng-container>
+
+                            <ng-container *ngIf="column === 'fromTime'">
+                                {{ element['slotDateTime'] | date: 'HH:mm' }}
+                            </ng-container>
+
+                            <ng-container *ngIf="column === 'endTime'">
+                                {{ element['slotDateTime'] | addMinutes:SCHEDULE_DURATION | date: 'HH:mm' }}
+                            </ng-container>
+
+                            <ng-container *ngIf="column === 'isAvailable'">
+                                <mat-checkbox [checked]="element[column]"
+                                    (change)="onAvaialableChange($event, element, column)"></mat-checkbox>
+                            </ng-container>
+
+                        </td>
+                    </ng-container>
+                </ng-container>
 
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
             </table>
+
             } @else {
             <div class="no-data-message">
                 No data found
