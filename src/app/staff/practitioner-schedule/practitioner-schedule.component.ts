@@ -25,7 +25,7 @@ import { MasterDataService } from 'src/app/services/master-data.service';
 import { ProfileComponent } from "../../shared/profile/profile.component";
 import { SCHEDULE_DURATION } from '@constants/system-settings.constants';
 import { MatIconModule } from '@angular/material/icon';
-import { addMinutesToDate, formatDateToCustomString, getDayOfWeek } from 'src/app/helpers/date-helpers';
+import { addMinutesToDate, compareDates, formatDateToCustomString, getDayOfWeek } from 'src/app/helpers/date-helpers';
 
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
@@ -133,7 +133,7 @@ export class PractitionerScheduleComponent implements OnInit {
     })
   }
 
-  onSelectionChange(event: MatSelectChange): void {
+  onPractitionerChange(event: MatSelectChange): void {
     const id = event.value;
     const pra = this.practitioners().find(pra => pra.practitionerId === id);
     if (pra) {
@@ -146,15 +146,24 @@ export class PractitionerScheduleComponent implements OnInit {
         practitionerId: id
       });
     }
+    this.searchExistingSchedule();
   }
 
-  setDate(event: MatDatepickerInputEvent<Date>): void {
+  onWorkDateChange(event: MatDatepickerInputEvent<Date>): void {
     this.scheduleForm.patchValue({ workDate: event.value });
     console.log(`selected date is ${event.value}`);
 
+    this.searchExistingSchedule();
+
+  }
+
+  searchExistingSchedule(): void {
+    const workDate = this.scheduleForm.value.workDate;
+    const practitionerId = this.scheduleForm.value.practitionerId;
+    if ((!workDate) || practitionerId === 0) return;
     const existingData = this.masterDataService.availabilitiesSubject.value
-      .filter(rec => rec.slotDateTime?.getDate() === event.value?.getDate()
-        && rec.practitionerId === this.scheduleForm.value.practitionerId
+      .filter(rec => rec.slotDateTime && compareDates(rec.slotDateTime, workDate)
+        && rec.practitionerId === practitionerId
       );
 
     this.dataSource.data = existingData;
@@ -163,14 +172,17 @@ export class PractitionerScheduleComponent implements OnInit {
   }
 
   saveSchedule(): void {
-    const updatedEntities = this.changedData.filter(c => c.availableId ?? 0 > 0)
-    const newEntities = this.changedData.filter(c => c.availableId ?? 0 === 0);
-    this.masterDataService.updateAvailabilities(updatedEntities);
-    this.masterDataService.addAvailabilities(newEntities.map(ele => ({
+    const updatedEntities = this.changedData.filter(c => (c.availableId ?? 0) > 0)
+    const newEntities = this.changedData.filter(c => c.availableId === 0);
+    if (updatedEntities.length > 0) this.masterDataService.updateAvailabilities(updatedEntities);
+    if (newEntities.length > 0) this.masterDataService.addAvailabilities(newEntities.map(ele => ({
       practitionerId: ele.practitionerId,
       slotDateTime: ele.slotDateTime,
       isAvailable: ele.isAvailable,
     })));
+
+    // TODO: save success message. + checkbox disabled + buttons changes: edit, reset, save,
+    this.isCreate.set(true);
 
   }
 

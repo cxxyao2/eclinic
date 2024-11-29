@@ -5,7 +5,7 @@
         <div class="content-wrapper">
             <mat-form-field>
                 <mat-label>Practitioner</mat-label>
-                <mat-select formControlName="practitionerId" (selectionChange)="onSelectionChange($event)">
+                <mat-select formControlName="practitionerId" (selectionChange)="onPractitionerChange($event)">
                     @for (prac of practitioners(); track prac) {
                     <mat-option [value]="prac.practitionerId">{{ prac.firstName + ' ' + prac.lastName }}</mat-option>
                     }
@@ -13,8 +13,8 @@
             </mat-form-field>
             <mat-form-field>
                 <mat-label>Choose a date</mat-label>
-                <input matInput formControlName="workDate" [matDatepicker]="picker" (dateInput)="setDate($event)"
-                    (dateChange)="setDate($event)">
+                <input matInput formControlName="workDate" [matDatepicker]="picker"
+                    (dateInput)="onWorkDateChange($event)" (dateChange)="onWorkDateChange($event)">
                 <mat-hint>MM/DD/YYYY</mat-hint>
                 <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
