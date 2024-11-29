@@ -1,6 +1,6 @@
 import { DestroyRef, inject, Injectable } from '@angular/core';
-import { AddPractitionerAvailabilityDTO, GetMedicationDTO, GetPatientDTO, GetPractitionerAvailabilityDTO, GetPractitionerAvailabilityDTOServiceResponse, GetPractitionerDTO } from '@libs/api-client';
-import { BehaviorSubject, from, Observable } from 'rxjs';
+import { AddPractitionerAvailabilityDTO, GetMedicationDTO, GetPatientDTO, GetPractitionerAvailabilityDTO, GetPractitionerAvailabilityDTOServiceResponse, GetPractitionerDTO, StringServiceResponse } from '@libs/api-client';
+import { BehaviorSubject, from } from 'rxjs';
 import { concatMap, finalize, map, tap } from 'rxjs/operators';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -93,6 +93,38 @@ export class MasterDataService {
 
   }
 
+  deleteAvailabilities(deleteEntities: GetPractitionerAvailabilityDTO[]): void {
+    const deletedEntityIds: number[] = []; // Array to save successfully deleted entity IDs
+
+    from(deleteEntities)
+      .pipe(
+        concatMap(entity =>
+          this.availableService.apiPractitionerAvailabilitiesIdDelete(entity.availableId!).pipe(
+            tap(returnedData => {
+              // Check if the backend successfully deleted the entity
+              if ((returnedData as StringServiceResponse)?.data) {
+                deletedEntityIds.push(entity.availableId!);
+              } else {
+                throw new Error(`Failed to delete entity with ID: ${entity.availableId}`);
+              }
+            }),
+          )
+        ),
+        finalize(() => {
+          this.availabilitiesSubject.next(
+            this.availabilitiesSubject.value.filter(item =>
+              !deletedEntityIds.includes(item.availableId!)
+            )
+          );
+        })
+      )
+      .subscribe({
+        next: () => console.log('Processed deletions successfully'),
+        error: err => console.error('Error during deletion process:', err)
+      });
+  }
+
+
 
   updateAvailabilities(updatedEntities: GetPractitionerAvailabilityDTO[]): void {
     const resultArray: GetPractitionerAvailabilityDTO[] = [];
@@ -108,14 +140,13 @@ export class MasterDataService {
           }
         }),
         finalize(() => {
-          if (resultArray) {
-            const currentValue = this.availabilitiesSubject.value;
-            resultArray.forEach(v => {
-              const idx = currentValue.findIndex(c => c.availableId === v.availableId);
-              if (idx >= 0) currentValue[idx] = v;
-            });
-            this.availabilitiesSubject.next([...currentValue]);
-          }
+          const currentValue = this.availabilitiesSubject.value;
+
+          resultArray.forEach(v => {
+            const idx = currentValue.findIndex(c => c.availableId === v.availableId);
+            if (idx >= 0) currentValue[idx] = v;
+          });
+          this.availabilitiesSubject.next([...currentValue]);
         })
       )
       .subscribe({

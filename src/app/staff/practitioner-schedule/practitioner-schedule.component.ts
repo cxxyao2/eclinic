@@ -7,8 +7,19 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatSelectChange, MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogActions,
+  MatDialogClose,
+  MatDialogContent,
+  MatDialogRef,
+  MatDialogTitle,
+} from '@angular/material/dialog';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { provideNativeDateAdapter } from '@angular/material/core';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+
 import { AddPractitionerAvailabilityDTO, GetPractitionerDTO, GetPractitionerAvailabilityDTO } from '@libs/api-client';
 import { MasterDataService } from 'src/app/services/master-data.service';
 import { ProfileComponent } from "../../shared/profile/profile.component";
@@ -23,6 +34,11 @@ import { MatCheckboxChange, MatCheckboxModule } from '@angular/material/checkbox
 import { AddMinutesPipe } from 'src/app/helpers/add-minutes.pipe';
 
 
+export interface DialogData {
+  title: string;
+  content: string;
+  isCancelButtonVisible: boolean
+}
 
 @Component({
   selector: 'app-practitioner-schedule',
@@ -30,7 +46,7 @@ import { AddMinutesPipe } from 'src/app/helpers/add-minutes.pipe';
   providers: [provideNativeDateAdapter(),
 
   ],
-  imports: [AddMinutesPipe, MatCheckboxModule, CommonModule, FormsModule, ReactiveFormsModule, MatButtonModule, MatIconModule, MatTableModule, MatSortModule, MatDatepickerModule, MatFormFieldModule, MatInputModule, MatSelectModule, ProfileComponent],
+  imports: [AddMinutesPipe, MatCheckboxModule, MatPaginatorModule, CommonModule, FormsModule, ReactiveFormsModule, MatButtonModule, MatIconModule, MatTableModule, MatSortModule, MatDatepickerModule, MatFormFieldModule, MatInputModule, MatSelectModule, ProfileComponent],
   templateUrl: './practitioner-schedule.component.html',
   styleUrl: './practitioner-schedule.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -46,9 +62,8 @@ export class PractitionerScheduleComponent implements OnInit {
   displayedColumns: string[] = ['day', 'fromTime', 'endTime', 'isAvailable'];
   SCHEDULE_DURATION = SCHEDULE_DURATION;
 
-  data: GetPractitionerAvailabilityDTO[] = [];
   initialData: GetPractitionerAvailabilityDTO[] = [];
-  dataSource = new MatTableDataSource(this.data);
+  dataSource = new MatTableDataSource<GetPractitionerAvailabilityDTO>([]);
 
   @ViewChild(MatSort) sort!: MatSort;
 
@@ -63,16 +78,54 @@ export class PractitionerScheduleComponent implements OnInit {
 
   isCreate = signal(true);
 
-  // TODO
-  selectedPractitoner = signal<UserProfile>({
-    id: 1,
-    firstName: 'aa',
-    lastName: 'bb'
-  });
+  selectedPractitoner = signal<UserProfile>({ id: 0 });
+
+  readonly dialog = inject(MatDialog);
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   ngAfterViewInit() {
-    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
   }
+
+  openDialog(): void {
+    const dialogRef = this.dialog.open(DialogPractitionerScheduleDialog, {
+      data: {
+        title: 'Confirm action',
+        content: 'Are you sure you want to reset? All unsaved changes will be lost.',
+        isCancelButtonVisible: true
+      },
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result !== undefined) {
+        this.resetSchedule();
+      }
+    });
+  }
+
+
+  openDataInvalidDialog(): void {
+    const dialogRef = this.dialog.open(DialogPractitionerScheduleDialog, {
+      data: {
+        title: 'Notification',
+        content: 'Please select practitioner and date firstly.',
+        isCancelButtonVisible: false
+      },
+    });
+  }
+
+  openNoPrintDataDialog(): void {
+    const dialogRef = this.dialog.open(DialogPractitionerScheduleDialog, {
+      data: {
+        title: 'Notification',
+        content: 'No data to print.',
+        isCancelButtonVisible: false
+      },
+    });
+  }
+
+
 
   ngOnInit() {
     this.masterDataService.practitionersSubject.subscribe({
@@ -98,10 +151,14 @@ export class PractitionerScheduleComponent implements OnInit {
   setDate(event: MatDatepickerInputEvent<Date>): void {
     this.scheduleForm.patchValue({ workDate: event.value });
     console.log(`selected date is ${event.value}`);
-    // todo: get initials
-    // 如果practiioner 和 date都不为空,那么,get 最新的安排, 设置初始值
-    //
 
+    const existingData = this.masterDataService.availabilitiesSubject.value
+      .filter(rec => rec.slotDateTime?.getDate() === event.value?.getDate()
+        && rec.practitionerId === this.scheduleForm.value.practitionerId
+      );
+
+    this.dataSource.data = existingData;
+    this.initialData = existingData;
 
   }
 
@@ -118,11 +175,15 @@ export class PractitionerScheduleComponent implements OnInit {
   }
 
   resetSchedule(): void {
-
     this.dataSource.data = [];
     this.changedData = [];
     this.isCreate.set(!this.isCreate());
 
+    const validEntities = this.dataSource.data.filter(
+      entity => (entity.availableId ?? 0 > 0)
+    );
+
+    this.masterDataService.deleteAvailabilities(validEntities);
 
   }
 
@@ -132,7 +193,8 @@ export class PractitionerScheduleComponent implements OnInit {
     let start = this.scheduleForm.value.workDate || new Date();
     let practitionerId = this.scheduleForm.value.practitionerId ?? 0;
     if (!(start && practitionerId)) {
-      alert('Please input valid data.')
+      this.openDataInvalidDialog();
+      return;
     }
 
     const startDate = formatDateToCustomString(start, '00:00:00');
@@ -190,6 +252,11 @@ export class PractitionerScheduleComponent implements OnInit {
   }
 
   printSchedule(): void {
+    if (this.dataSource.data.length <= 0) {
+      this.openNoPrintDataDialog();
+      return;
+    }
+
     const users = [
       { name: 'Alice', age: 25 },
       { name: 'Bob', age: 30 },
@@ -220,4 +287,28 @@ export class PractitionerScheduleComponent implements OnInit {
 
 }
 
+
+@Component({
+  selector: 'practitioner-schedule-dialog',
+  templateUrl: 'practitioner-schedule-dialog.html',
+  standalone: true,
+  imports: [
+    MatFormFieldModule,
+    MatInputModule,
+    FormsModule,
+    MatButtonModule,
+    MatDialogTitle,
+    MatDialogContent,
+    MatDialogActions,
+    MatDialogClose,
+  ],
+})
+export class DialogPractitionerScheduleDialog {
+  readonly dialogRef = inject(MatDialogRef<DialogPractitionerScheduleDialog>);
+  readonly data = inject<DialogData>(MAT_DIALOG_DATA);
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+}
 

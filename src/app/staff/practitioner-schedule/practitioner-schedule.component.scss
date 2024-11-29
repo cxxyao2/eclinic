@@ -1,14 +1,13 @@
-
-
 form {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
   flex-wrap: wrap;
-  column-gap: 0.5rem;
+  gap: 16px;
 }
 
 table {
+  margin-top: 16px;
   width: 100%;
 }
 
@@ -45,10 +44,15 @@ th.mat-sort-header-sorted {
   width: 120px;
 }
 
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 768px) {
   form {
-    column-gap: 0;
+    gap: 12px;
   }
+
+  table {
+    margin-top: 12px;
+  }
+
   .content-wrapper {
     flex-direction: column;
     justify-content: start;
