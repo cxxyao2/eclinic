@@ -1,11 +1,20 @@
-export function formatDateToCustomString(date: Date, hhmmss = '00:00:00'): string {
+export function formatDateToYMDPlus(date: Date, hhmmss = ''): string {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed, so add 1
   const day = String(date.getDate()).padStart(2, '0');
 
-  return `${year}-${month}-${day}T${hhmmss}`;
+  return hhmmss ? `${year}-${month}-${day}T${hhmmss}` : `${year}-${month}-${day}`;
 }
 
+
+export function formatDateToHHmm(arg: Date): string {
+  const date = new Date(arg);
+  const hours = date.getHours().toString().padStart(2, '0'); // Ensures 2-digit format
+  const minutes = date.getMinutes().toString().padStart(2, '0'); // Ensures 2-digit format
+  const formattedTime = `${hours}:${minutes}`;
+  return formattedTime; // Output: "14:05"
+
+}
 
 export function getDayOfWeek(date: Date, abbreviation = true): string {
   const dayAbbreviations = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];

@@ -11,9 +11,6 @@ import { MedicationsService } from '@libs/api-client';
 import { PractitionerAvailabilitiesService } from '@libs/api-client';
 
 
-
-
-
 @Injectable({
   providedIn: 'root'
 })
@@ -30,6 +27,9 @@ export class MasterDataService {
   public availabilitiesSubject = new BehaviorSubject<GetPractitionerAvailabilityDTO[]>([]);
   public patientsSubject = new BehaviorSubject<GetPatientDTO[]>([]);
   public bedRoomsSubject = new BehaviorSubject<any[]>([]);
+
+  public crudResultMessage = new BehaviorSubject<string | null>(null);
+  public errorMessage = new BehaviorSubject<string | null>(null);
 
   constructor() {
     this.fetchPatients();
@@ -82,13 +82,18 @@ export class MasterDataService {
         }),
         finalize(() => {
           if (resultArray) {
-            this.availabilitiesSubject.next([...this.availabilitiesSubject.value, ...resultArray]);
+            const currentValue = this.availabilitiesSubject.value;
+            this.availabilitiesSubject.next([...currentValue, ...resultArray]);
           }
+          this.crudResultMessage.next('New data Saved successfully');
+          this.errorMessage.next(null);
         })
       )
       .subscribe({
-        next: () => console.log('Saved successfully'),
-        error: err => console.error('Error saving data:', err)
+        error: (err: any) => {
+          this.crudResultMessage.next(null);
+          this.errorMessage.next(err?.message || 'Saving failed.')
+        }
       });
 
   }
@@ -116,11 +121,15 @@ export class MasterDataService {
               !deletedEntityIds.includes(item.availableId!)
             )
           );
+          this.crudResultMessage.next('Deleted successfully');
+          this.errorMessage.next(null);
         })
       )
       .subscribe({
-        next: () => console.log('Processed deletions successfully'),
-        error: err => console.error('Error during deletion process:', err)
+        error: (err: any) => {
+          this.crudResultMessage.next(null);
+          this.errorMessage.next(err?.message || 'Deletion failed.')
+        }
       });
   }
 
@@ -147,11 +156,15 @@ export class MasterDataService {
             if (idx >= 0) currentValue[idx] = v;
           });
           this.availabilitiesSubject.next([...currentValue]);
+          this.crudResultMessage.next('Saved successfully');
+          this.errorMessage.next(null);
         })
       )
       .subscribe({
-        next: () => console.log('Saved successfully'),
-        error: err => console.error('Error saving data:', err)
+        error: (err: any) => {
+          this.crudResultMessage.next(null);
+          this.errorMessage.next(err?.message || 'Saving failed.')
+        }
       });
 
   }
