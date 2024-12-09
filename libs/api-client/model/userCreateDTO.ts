@@ -7,14 +7,16 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { UserRole } from './userRole';
 
 
-export interface GetMedicationDTO { 
-    medicationId?: number;
+export interface UserCreateDTO { 
     name?: string | null;
-    dosage?: string | null;
-    route?: string | null;
-    frequency?: string | null;
-    sIdeEffects?: string | null;
+    role?: UserRole;
+    email: string;
+    password: string;
 }
+export namespace UserCreateDTO {
+}
+
 

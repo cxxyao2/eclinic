@@ -18,6 +18,5 @@ export interface GetLabTestDTO {
     testName?: string | null;
     testResult?: string | null;
     testDate?: Date | null;
-    createdDate?: Date;
 }
 

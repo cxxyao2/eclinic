@@ -4,6 +4,7 @@ README.md
 api.module.ts
 api/api.ts
 api/appointments.service.ts
+api/auth.service.ts
 api/imageRecords.service.ts
 api/inpatients.service.ts
 api/labTests.service.ts
@@ -14,6 +15,7 @@ api/practitioners.service.ts
 api/prescriptions.service.ts
 api/signatures.service.ts
 api/sse.service.ts
+api/users.service.ts
 api/weatherForecast.service.ts
 configuration.ts
 encoder.ts
@@ -58,6 +60,11 @@ model/getPrescriptionDTOServiceResponse.ts
 model/models.ts
 model/signatureDTO.ts
 model/stringServiceResponse.ts
+model/user.ts
+model/userCreateDTO.ts
+model/userLoginDto.ts
+model/userRole.ts
+model/userUpdateDto.ts
 model/weatherForecast.ts
 param.ts
 variables.ts

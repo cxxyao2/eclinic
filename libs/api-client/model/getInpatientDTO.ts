@@ -22,6 +22,5 @@ export interface GetInpatientDTO {
     roomNumber?: string | null;
     bedNumber?: string | null;
     reasonForAdmission?: string | null;
-    createdDate?: Date;
 }
 

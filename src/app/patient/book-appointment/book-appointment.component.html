@@ -4,15 +4,19 @@
 <mat-form-field>
   <mat-label>Patient</mat-label>
   <mat-select [(ngModel)]="patientId" (selectionChange)="loadMatchingPractitioners()">
-    <mat-option *ngFor="let patient of patients" [value]="patient.id">{{ patient.name }} - {{ patient.specialty }}</mat-option>
+    <mat-option *ngFor="let patient of patients" [value]="patient.id">{{ patient.name }} - {{ patient.specialty
+      }}</mat-option>
   </mat-select>
 </mat-form-field>
 
 <mat-form-field>
   <mat-label>Available Practitioner</mat-label>
   <mat-select [(ngModel)]="selectedPractitionerId">
-    <mat-option *ngFor="let prac of availablePractitioners" [value]="prac.id">{{ prac.name }} - {{ prac.specialty }}</mat-option>
+    <mat-option *ngFor="let prac of availablePractitioners" [value]="prac.id">{{ prac.name }} - {{ prac.specialty
+      }}</mat-option>
   </mat-select>
 </mat-form-field>
 
-<button mat-raised-button color="primary" (click)="assignPractitioner()">Assign Practitioner</button>
+<!-- table -->
+
+<button mat-raised-button color="primary" (click)="assignPractitionerSlot()">Assign Practitioner</button>

@@ -17,7 +17,6 @@ export interface GetAppointmentDTO {
     availableId?: number;
     reasonForVisit?: string | null;
     status?: AppointmentStatusEnum;
-    createdDate?: Date;
 }
 export namespace GetAppointmentDTO {
 }

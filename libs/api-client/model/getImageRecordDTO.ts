@@ -21,6 +21,5 @@ export interface GetImageRecordDTO {
     imagePath?: string | null;
     captureDate?: Date;
     status?: string | null;
-    createdDate?: Date;
 }
 

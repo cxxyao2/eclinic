@@ -1,5 +1,7 @@
 export * from './appointments.service';
 import { AppointmentsService } from './appointments.service';
+export * from './auth.service';
+import { AuthService } from './auth.service';
 export * from './imageRecords.service';
 import { ImageRecordsService } from './imageRecords.service';
 export * from './inpatients.service';
@@ -20,6 +22,8 @@ export * from './signatures.service';
 import { SignaturesService } from './signatures.service';
 export * from './sse.service';
 import { SseService } from './sse.service';
+export * from './users.service';
+import { UsersService } from './users.service';
 export * from './weatherForecast.service';
 import { WeatherForecastService } from './weatherForecast.service';
-export const APIS = [AppointmentsService, ImageRecordsService, InpatientsService, LabTestsService, MedicationsService, PatientsService, PractitionerAvailabilitiesService, PractitionersService, PrescriptionsService, SignaturesService, SseService, WeatherForecastService];
+export const APIS = [AppointmentsService, AuthService, ImageRecordsService, InpatientsService, LabTestsService, MedicationsService, PatientsService, PractitionerAvailabilitiesService, PractitionersService, PrescriptionsService, SignaturesService, SseService, UsersService, WeatherForecastService];

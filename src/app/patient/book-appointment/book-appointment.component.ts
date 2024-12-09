@@ -4,6 +4,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
+import { GetPractitionerAvailabilityDTO } from '@libs/api-client';
 
 @Component({
   selector: 'app-book-appointment',
@@ -16,13 +17,8 @@ import { FormsModule } from '@angular/forms';
 })
 export class BookAppointmentComponent {
 
-
-  @Input() patients: any[] = [];
-  @Input() practitioners: any[] = [];
-
   patientId: string | null = null;
-  selectedPractitionerId: string | null = null;
-  availablePractitioners: any[] = [];
+  availablePractitionerSlots: GetPractitionerAvailabilityDTO[] = [];
 
   loadMatchingPractitioners() {
     // Filter practitioners based on the selected patient's specialty
@@ -32,7 +28,7 @@ export class BookAppointmentComponent {
     }
   }
 
-  assignPractitioner() {
+  assignPractitionerSlot() {
     if (this.patientId && this.selectedPractitionerId) {
       // Call the backend API to assign the patient to the selected practitioner
       console.log('Assigning practitioner:', {

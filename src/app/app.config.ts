@@ -8,6 +8,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { TranslocoHttpLoader } from './transloco-loader';
 import { provideTransloco } from '@jsverse/transloco';
 import { BASE_PATH } from '@libs/api-client/variables';
+import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
 
 const envWindow: any = window;
 
@@ -20,7 +21,13 @@ export const appConfig: ApplicationConfig = {
     {
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
       useValue: { appearance: 'outline', SubscriptSizing: 'dynamic' }
-    }, provideHttpClient(), provideTransloco({
+    },
+    {
+      provide: MAT_SNACK_BAR_DEFAULT_OPTIONS,
+      useValue: { duration: 2000 }
+    },
+    provideHttpClient(),
+    provideTransloco({
       config: {
         availableLangs: ['en', 'fr'],
         defaultLang: 'en',
