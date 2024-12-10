@@ -4,7 +4,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
-import { GetPractitionerAvailabilityDTO } from '@libs/api-client';
+import { AddPractitionerScheduleDTO } from '@libs/api-client';
 
 @Component({
   selector: 'app-book-appointment',
@@ -17,25 +17,25 @@ import { GetPractitionerAvailabilityDTO } from '@libs/api-client';
 })
 export class BookAppointmentComponent {
 
-  patientId: string | null = null;
-  availablePractitionerSlots: GetPractitionerAvailabilityDTO[] = [];
+  // patientId: string | null = null;
+  // availablePractitionerSlots: AddPractitionerScheduleDTO[] = [];
 
-  loadMatchingPractitioners() {
-    // Filter practitioners based on the selected patient's specialty
-    const selectedPatient = this.patients.find(patient => patient.id === this.patientId);
-    if (selectedPatient) {
-      this.availablePractitioners = this.practitioners.filter(prac => prac.specialty === selectedPatient.specialty && prac.isAvailable);
-    }
-  }
+  // loadMatchingPractitioners() {
+  //   // Filter practitioners based on the selected patient's specialty
+  //   const selectedPatient = this.patients.find(patient => patient.id === this.patientId);
+  //   if (selectedPatient) {
+  //     this.availablePractitioners = this.practitioners.filter(prac => prac.specialty === selectedPatient.specialty && prac.isAvailable);
+  //   }
+  // }
 
-  assignPractitionerSlot() {
-    if (this.patientId && this.selectedPractitionerId) {
-      // Call the backend API to assign the patient to the selected practitioner
-      console.log('Assigning practitioner:', {
-        patientId: this.patientId,
-        practitionerId: this.selectedPractitionerId
-      });
-      // Implement your backend call here
-    }
-  }
+  // assignPractitionerSlot() {
+  //   if (this.patientId && this.selectedPractitionerId) {
+  //     // Call the backend API to assign the patient to the selected practitioner
+  //     console.log('Assigning practitioner:', {
+  //       patientId: this.patientId,
+  //       practitionerId: this.selectedPractitionerId
+  //     });
+  //     // Implement your backend call here
+  //   }
+  // }
 }

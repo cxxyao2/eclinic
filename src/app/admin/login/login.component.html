@@ -1,1 +1,36 @@
-<p>login works!</p>
+<div class="login-container">
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>Login</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+                <!-- Email Input -->
+                <mat-form-field class="full-width">
+                    <mat-label>Email Address</mat-label>
+                    <input matInput formControlName="email" type="email" placeholder="Enter your email" />
+                    <mat-error *ngIf="loginForm.get('email')?.hasError('required')">
+                        Email is required.
+                    </mat-error>
+                    <mat-error *ngIf="loginForm.get('email')?.hasError('email')">
+                        Please enter a valid email address.
+                    </mat-error>
+                </mat-form-field>
+
+                <!-- Password Input -->
+                <mat-form-field class="full-width">
+                    <mat-label>Password</mat-label>
+                    <input matInput formControlName="password" type="password" placeholder="Enter your password" />
+                    <mat-error *ngIf="loginForm.get('password')?.hasError('required')">
+                        Password is required.
+                    </mat-error>
+                </mat-form-field>
+
+                <!-- Submit Button -->
+                <button mat-raised-button class="full-width login" [disabled]="loginForm.invalid">
+                    Login
+                </button>
+            </form>
+        </mat-card-content>
+    </mat-card>
+</div>

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import {
   HttpEvent,
   HttpHandler,
@@ -10,13 +10,14 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { BASE_PATH } from '@libs/api-client/variables';
+
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  private readonly baseURL = 'https://your-api-url.com'; // Replace with your actual API base URL
   private isRefreshing = false;
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router, @Inject(BASE_PATH) private baseURL: string) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     let authReq = req;
@@ -72,7 +73,6 @@ export class AuthInterceptor implements HttpInterceptor {
   }
 
   private handleAuthError() {
-    // Handle the 401 Unauthorized error and redirect to login
     localStorage.removeItem('accessToken');
     this.router.navigate(['/login']);
   }

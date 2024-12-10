@@ -11,6 +11,7 @@ api/labTests.service.ts
 api/medications.service.ts
 api/patients.service.ts
 api/practitionerAvailabilities.service.ts
+api/practitionerSchedules.service.ts
 api/practitioners.service.ts
 api/prescriptions.service.ts
 api/signatures.service.ts
@@ -26,6 +27,7 @@ model/addInpatientDTO.ts
 model/addPatientDTO.ts
 model/addPractitionerAvailabilityDTO.ts
 model/addPractitionerDTO.ts
+model/addPractitionerScheduleDTO.ts
 model/addPrescriptionDTO.ts
 model/appointmentStatusEnum.ts
 model/dateOnly.ts
@@ -54,12 +56,16 @@ model/getPractitionerAvailabilityDTOServiceResponse.ts
 model/getPractitionerDTO.ts
 model/getPractitionerDTOListServiceResponse.ts
 model/getPractitionerDTOServiceResponse.ts
+model/getPractitionerScheduleDTO.ts
+model/getPractitionerScheduleDTOListServiceResponse.ts
+model/getPractitionerScheduleDTOServiceResponse.ts
 model/getPrescriptionDTO.ts
 model/getPrescriptionDTOListServiceResponse.ts
 model/getPrescriptionDTOServiceResponse.ts
 model/models.ts
 model/signatureDTO.ts
 model/stringServiceResponse.ts
+model/updatePractitionerScheduleDTO.ts
 model/user.ts
 model/userCreateDTO.ts
 model/userLoginDto.ts
