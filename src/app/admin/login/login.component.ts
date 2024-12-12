@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { MatCardModule } from '@angular/material/card';
@@ -9,6 +9,8 @@ import { MatButtonModule } from '@angular/material/button';
 
 
 import { AuthService } from '@libs/api-client';
+import { Router } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
@@ -20,8 +22,9 @@ import { AuthService } from '@libs/api-client';
 })
 export class LoginComponent {
   loginForm: FormGroup;
+  errorMessage = signal<string | null>(null);
 
-  constructor(private fb: FormBuilder, private authService: AuthService) {
+  constructor(private fb: FormBuilder, private router: Router, private authService: AuthService) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]],
@@ -34,10 +37,15 @@ export class LoginComponent {
 
       this.authService.apiAuthLoginPost(loginData).subscribe({
         next: (response) => {
+          localStorage.setItem('accessToken',response.accessToken)
+          this.errorMessage.set(null);
+          this.router.navigate(['/dashboard']);
           console.log('Login successful:', response);
         },
-        error: (error) => {
-          console.error('Login failed:', error);
+        error: (errResponse: HttpErrorResponse) => {
+          const message = errResponse.error?.message || errResponse.message || "Something went wrong."
+          this.errorMessage.set(message);
+          console.error('Login failed:', errResponse);
         }
       }
 

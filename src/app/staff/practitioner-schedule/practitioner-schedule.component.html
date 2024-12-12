@@ -1,8 +1,17 @@
-<h2>Schedule Practitioner</h2>
+<h2>Practitioner Schedule</h2>
 <form>
     <app-profile [profileInfo]="selectedPractitioner()"></app-profile>
     <div>
         <div class="content-wrapper">
+            <div>
+                @if (isLoadingResults) {
+                <div class="loading-shade">
+                    @if (isLoadingResults) {
+                    <mat-spinner></mat-spinner>
+                    }
+                </div>
+                }
+            </div>
             <mat-form-field>
                 <mat-label>Practitioner</mat-label>
                 <mat-select [formControl]="practitionerIdControl" (selectionChange)="onPractitionerChange($event)">
@@ -37,7 +46,7 @@
                 </div>
 
                 <div class="button-container">
-                    <button mat-fab extended type="button" (click)="deleteSchedule()">
+                    <button mat-fab extended type="button" (click)="onDeleteSchedule()">
                         <mat-icon>delete</mat-icon>
                         Delete
                     </button>
@@ -70,21 +79,21 @@
                         </th>
                         <td mat-cell *matCellDef="let element">
                             <ng-container *ngIf="column === 'day'">
-                                {{ element['slotDateTime'] | date: 'EEE' }}
+                                {{ element['startDateTime'] | date: 'EEE' }}
                             </ng-container>
 
                             <ng-container *ngIf="column === 'fromTime'">
-                                {{ element['slotDateTime'] | date: 'HH:mm' }}
+                                {{ element['startDateTime'] | date: 'HH:mm' }}
                             </ng-container>
 
                             <ng-container *ngIf="column === 'endTime'">
-                                {{ element['slotDateTime'] | addMinutes:SCHEDULE_DURATION | date: 'HH:mm' }}
+                                {{ element['endDateTime'] | date: 'HH:mm' }}
                             </ng-container>
 
-                            <ng-container *ngIf="column === 'isAvailable'">
+                            <!-- <ng-container *ngIf="column === 'isAvailable'">
                                 <mat-checkbox [checked]="element[column]"
                                     (change)="onAvailableChange($event, element, column)"></mat-checkbox>
-                            </ng-container>
+                            </ng-container> -->
 
                         </td>
                     </ng-container>
@@ -92,15 +101,15 @@
 
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                <tr class="mat-row" *matNoDataRow>
+                    <td class="mat-cell" colspan="4">No data</td>
+                </tr>
             </table>
             <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
                 aria-label="Select page of Practitioner Schedule">
             </mat-paginator>
-            <div class="message" *ngIf="dataSource.data.length === 0">No data found.</div>
-            <div class="message" *ngIf="masterDataService.crudResultMessage.value">
-                {{masterDataService.crudResultMessage.value}}</div>
-            <div class="message error" *ngIf="masterDataService.errorMessage.value">
-                {{masterDataService.errorMessage.value}}</div>
+
         </div>
     </div>
 

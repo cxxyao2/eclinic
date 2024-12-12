@@ -99,13 +99,30 @@ export class PractitionerSchedulesService {
     }
 
     /**
+     * @param practitionerId 
+     * @param workDate 
+     * @param patientId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public apiPractitionerSchedulesGet(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<GetPractitionerScheduleDTOListServiceResponse>;
-    public apiPractitionerSchedulesGet(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<GetPractitionerScheduleDTOListServiceResponse>>;
-    public apiPractitionerSchedulesGet(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<GetPractitionerScheduleDTOListServiceResponse>>;
-    public apiPractitionerSchedulesGet(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public apiPractitionerSchedulesGet(practitionerId?: number, workDate?: Date, patientId?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<GetPractitionerScheduleDTOListServiceResponse>;
+    public apiPractitionerSchedulesGet(practitionerId?: number, workDate?: Date, patientId?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<GetPractitionerScheduleDTOListServiceResponse>>;
+    public apiPractitionerSchedulesGet(practitionerId?: number, workDate?: Date, patientId?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<GetPractitionerScheduleDTOListServiceResponse>>;
+    public apiPractitionerSchedulesGet(practitionerId?: number, workDate?: Date, patientId?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        if (practitionerId !== undefined && practitionerId !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>practitionerId, 'practitionerId');
+        }
+        if (workDate !== undefined && workDate !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>workDate, 'workDate');
+        }
+        if (patientId !== undefined && patientId !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>patientId, 'patientId');
+        }
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -149,6 +166,7 @@ export class PractitionerSchedulesService {
         return this.httpClient.request<GetPractitionerScheduleDTOListServiceResponse>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                params: localVarQueryParameters,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,

@@ -1,10 +1,8 @@
 <div class="login-container">
-    <mat-card>
-        <mat-card-header>
-            <mat-card-title>Login</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-            <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <mat-card>
+            <mat-card-content>
+                <div class="full-width title">Login</div>
                 <!-- Email Input -->
                 <mat-form-field class="full-width">
                     <mat-label>Email Address</mat-label>
@@ -26,11 +24,16 @@
                     </mat-error>
                 </mat-form-field>
 
+                <div *ngIf="errorMessage()" class="error-message">
+                    {{ errorMessage() }}
+                </div>
+            </mat-card-content>
+            <mat-card-actions>
                 <!-- Submit Button -->
-                <button mat-raised-button class="full-width login" [disabled]="loginForm.invalid">
+                <button mat-raised-button type="submit" class="full-width login" [disabled]="loginForm.invalid">
                     Login
                 </button>
-            </form>
-        </mat-card-content>
-    </mat-card>
+            </mat-card-actions>
+        </mat-card>
+    </form>
 </div>

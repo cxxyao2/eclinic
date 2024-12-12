@@ -6,9 +6,6 @@
   gap:0.5rem;
 }
 
-button {
-  width: 100%;
-}
 
 .image-container {
   width: 300px;
@@ -20,4 +17,26 @@ button {
   width: 100%; /* Ensures the image adjusts to container width */
   height: 100%; /* Adjusts height to fill the container */
   object-fit: cover; /* Crops the image to cover the container */
+}
+
+
+.user-form {
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.form-item {
+  margin-bottom: 10px;
+}
+
+.form-label {
+  font-weight: bold;
+  color: var(--mat-app-secondary); /* Darker color for contrast */
+  text-transform: uppercase; /* Makes the label text uppercase */
+  margin-right: 10px; /* Adds space between label and value */
+}
+
+.form-value {
+  font-weight: normal;
 }

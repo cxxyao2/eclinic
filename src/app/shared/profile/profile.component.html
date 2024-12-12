@@ -1,12 +1,13 @@
-<div class="image-container">
-    <img alt="avatar" [src]="imagePath" />
+<div class="user-form">
+    <div class="image-container">
+        <img alt="avatar" [src]="imagePath" />
+    </div>
+    <div class="form-item">
+        <label class="form-label">Name:</label>
+        <span class="form-value">{{profileInfo().firstName + " " + profileInfo().lastName}} </span>
+    </div>
+    <div class="form-item">
+        <label class="form-label">Age:</label>
+        <span class="form-value">{{profileInfo().age??30}}</span>
+    </div>
 </div>
-<button type="button">todo update your image</button>
-<div> First name:</div>
-<div> {{profileInfo().firstName}}</div>
-<div> last name:</div>
-<div> {{profileInfo().lastName}}</div>
-<div> Gender:</div>
-<div> {{profileInfo().gender}}</div>
-<div> Age: </div>
-<div> {{profileInfo().age}}</div>

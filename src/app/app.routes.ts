@@ -10,6 +10,10 @@ import { BookAppointmentComponent } from './patient/book-appointment/book-appoin
 import { AuthorizationComponent } from './admin/authorization/authorization.component';
 
 export const routes: Routes = [
+    {
+        path: 'dashboard',
+        component: DashboardComponent,
+    },
 
     {
         path: 'available',

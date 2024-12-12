@@ -4,7 +4,7 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
-import { HTTP_INTERCEPTORS, provideHttpClient } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { TranslocoHttpLoader } from './transloco-loader';
 import { provideTransloco } from '@jsverse/transloco';
 import { BASE_PATH } from '@libs/api-client/variables';
@@ -27,7 +27,6 @@ export const appConfig: ApplicationConfig = {
       provide: MAT_SNACK_BAR_DEFAULT_OPTIONS,
       useValue: { duration: 2000 }
     },
-    provideHttpClient(),
     provideTransloco({
       config: {
         availableLangs: ['en', 'fr'],
@@ -42,6 +41,7 @@ export const appConfig: ApplicationConfig = {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi: true
-    }
+    },
+    provideHttpClient(withInterceptorsFromDi())
   ]
 };

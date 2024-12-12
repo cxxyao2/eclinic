@@ -1,12 +1,12 @@
 // Angular Core Imports
-import { ChangeDetectionStrategy, Component, OnInit, Signal, ViewChild, computed, effect, inject, signal } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AfterViewInit, ChangeDetectionStrategy, Component, Signal, ViewChild, computed, effect, inject, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 
 // Angular Material Imports
 import { MatButtonModule } from '@angular/material/button';
-import { MatCheckboxChange, MatCheckboxModule } from '@angular/material/checkbox';
-import { MatDatepickerInputEvent, MatDatepickerModule } from '@angular/material/datepicker';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDialog, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogRef, MatDialogTitle, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -14,8 +14,10 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectChange, MatSelectModule } from '@angular/material/select';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+
 
 // Third-Party Libraries
 import jsPDF from 'jspdf';
@@ -24,12 +26,13 @@ import 'jspdf-autotable';
 // Application-Specific Imports
 import { SCHEDULE_DURATION } from '@constants/system-settings.constants';
 import { addMinutesToDate, compareDates, formatDateToHHmm, formatDateToYMDPlus, getDayOfWeek } from 'src/app/helpers/date-helpers';
-import { AddPractitionerAvailabilityDTO, GetPractitionerDTO, GetPractitionerAvailabilityDTO } from '@libs/api-client';
+import { AddPractitionerScheduleDTO, GetPractitionerDTO, GetPractitionerScheduleDTO, PractitionerSchedulesService } from '@libs/api-client';
 import { MasterDataService } from 'src/app/services/master-data.service';
 import { ProfileComponent } from 'src/app/shared/profile/profile.component';
 import { AddMinutesPipe } from 'src/app/helpers/add-minutes.pipe';
 import { UserProfile } from '@models/userProfile.model';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { catchError, concatMap, finalize, from, map, merge, of as observableOf, startWith, switchMap, tap } from 'rxjs';
 
 export interface DialogData {
   title: string;
@@ -54,6 +57,7 @@ export interface DialogData {
     MatInputModule,
     MatPaginatorModule,
     MatSelectModule,
+    MatProgressSpinnerModule,
     MatSortModule,
     MatTableModule,
     ProfileComponent,
@@ -62,7 +66,7 @@ export interface DialogData {
   styleUrls: ['./practitioner-schedule.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PractitionerScheduleComponent implements OnInit {
+export class PractitionerScheduleComponent implements AfterViewInit {
   // Constants
   SCHEDULE_DURATION = SCHEDULE_DURATION;
 
@@ -70,21 +74,21 @@ export class PractitionerScheduleComponent implements OnInit {
   columnHeaders: { [key: string]: string } = {
     day: 'Day',
     fromTime: 'From Time',
-    endTime: 'End Time',
-    isAvailable: 'Available',
+    endTime: 'End Time'
   };
-  changedData: GetPractitionerAvailabilityDTO[] = []; // added, updated
-  deletedData: GetPractitionerAvailabilityDTO[] = []; // deleted
+  changedData: GetPractitionerScheduleDTO[] = []; // added, updated
+  deletedData: GetPractitionerScheduleDTO[] = []; // deleted
 
 
-  dataSource = new MatTableDataSource<GetPractitionerAvailabilityDTO>([]);
-  displayedColumns: string[] = ['day', 'fromTime', 'endTime', 'isAvailable'];
-  initialData: GetPractitionerAvailabilityDTO[] = [];
+  dataSource = new MatTableDataSource<GetPractitionerScheduleDTO>([]);
+  displayedColumns: string[] = ['day', 'fromTime', 'endTime'];
+  initialData: GetPractitionerScheduleDTO[] = [];
   practitioners = signal<GetPractitionerDTO[]>([]);
   // Form controls
   workDayControl = new FormControl<Date | null>(new Date());
   practitionerIdControl = new FormControl<number | null>(0);
-  selectedPractitioner = signal<UserProfile>({ id: 0 });
+  selectedPractitioner = signal<UserProfile>({ id: 0, firstName: "", lastName: "", age: 30 });
+  isLoadingResults = false;
   // Convert form control values to signals
   workDay$ = toSignal(this.workDayControl.valueChanges, { initialValue: new Date() });
   practitionerId$ = toSignal(this.practitionerIdControl.valueChanges, { initialValue: 0 });
@@ -96,36 +100,48 @@ export class PractitionerScheduleComponent implements OnInit {
   // Services
   masterDataService = inject(MasterDataService);
   readonly dialog = inject(MatDialog);
-  // Filtered data using compute
-  filteredData: Signal<any[]> = computed(() => {
-    const workDay = this.workDay$();
-    const practitionerId = this.practitionerId$();
-    const data = this.masterDataService.availabilitiesSubject.value;
 
-    return data.filter(item => {
-      const matchesWorkday = item.slotDateTime && workDay && compareDates(item.slotDateTime, workDay);
-      const matchesPractitionerId = item.practitionerId && practitionerId && item.practitionerId === practitionerId;
-      return matchesWorkday && matchesPractitionerId;
-    });
-  });
 
-  constructor() {
-    effect(() => {
-      this.dataSource.data = this.filteredData();
-      this.changedData = [];
-      this.deletedData = [];
-    });
+  constructor(private scheduleService: PractitionerSchedulesService) {
   }
 
   // Lifecycle Hooks
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
     this.masterDataService.practitionersSubject.subscribe({
       next: (data) => this.practitioners.set(data),
     });
-  }
+    merge(this.workDayControl.valueChanges, this.practitionerIdControl.valueChanges)
+      .pipe(
+        startWith({}),
+        switchMap(() => {
+          // Get the values from the form controls
+          const practitionerId = this.practitionerIdControl.value;
+          const workDate = this.workDayControl.value;
+          if (!practitionerId || !workDate) {
+            this.isLoadingResults = false;
+            return observableOf(null);
+          }
+          // https://localhost:7120/api/PractitionerSchedules?patitionerId=1&workdate=2024-12-09
+          this.isLoadingResults = true;
 
-  ngAfterViewInit(): void {
+          return this.scheduleService.apiPractitionerSchedulesGet(
+            practitionerId,
+            new Date(workDate!)
+          ).pipe(catchError(() => observableOf(null)));
+        }),
+        map(response => {
+          this.isLoadingResults = false;
+
+          if (response?.data === null) {
+            return [];
+          }
+
+          return response?.data;
+        }),
+      )
+      .subscribe(data => (this.dataSource.data = data ?? []));
     this.dataSource.paginator = this.paginator;
+
   }
 
   // Event Handlers
@@ -141,25 +157,29 @@ export class PractitionerScheduleComponent implements OnInit {
     }
   }
 
-  onAvailableChange(event: MatCheckboxChange, element: any, column: string): void {
-    const newValue = event.checked;
-    element[column] = newValue;
-    const index = this.changedData.findIndex((item) => item.availableId === element.availableId);
-    if (index === -1) {
-      this.changedData.push(element);
-    } else {
-      this.changedData[index] = element;
+  saveSchedule(): void {
+    // add
+    const newData = this.dataSource.data.filter((entity) => (entity.scheduleId ?? 0) === 0);
+    if (newData.length > 0) {
+      this.postScheduleArray(newData);
+    }
+
+    // delete
+    if (this.deletedData.length > 0) {
+      this.deleteScheduleArray(this.deletedData);
     }
   }
 
-  deleteSchedule(): void {
+
+  onDeleteSchedule(): void {
     const dialogRef = this.dialog.open(DialogPractitionerScheduleDialog, {
       data: { title: 'Confirm Action', content: 'Are you sure you want to delete? All unsaved changes will be lost.', isCancelButtonVisible: true },
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
       if (result !== undefined) {
-        this.deletedData = this.dataSource.data.filter((entity) => (entity.availableId ?? 0) > 0);
+        this.deletedData = this.dataSource.data.filter((entity) => (entity.scheduleId ?? 0) > 0);
+
         this.changedData = [];
         this.dataSource.data = [];
       }
@@ -168,25 +188,54 @@ export class PractitionerScheduleComponent implements OnInit {
   }
 
 
-  saveSchedule(): void {
-    const updatedEntities = this.changedData.filter((c) => (c.availableId ?? 0) > 0);
-    const newEntities = this.changedData.filter((c) => (c.availableId ?? 0) === 0);
-    this.masterDataService.errorMessage.next(null);
-    this.masterDataService.crudResultMessage.next(null);
-    if (updatedEntities.length > 0) this.masterDataService.updateAvailabilities(updatedEntities);
-    if (newEntities.length > 0) {
-      this.masterDataService.addAvailabilities(
-        newEntities.map((ele) => ({
-          practitionerId: ele.practitionerId,
-          slotDateTime: ele.slotDateTime,
-          isAvailable: ele.isAvailable,
-        }))
-      )
-    }
 
-    if (this.deletedData.length > 0) {
-      this.masterDataService.deleteAvailabilities(this.deletedData);
-    }
+  postSchedule(data: GetPractitionerScheduleDTO) {
+    const newEntity: AddPractitionerScheduleDTO = Object.assign({}, data);
+    return this.scheduleService.apiPractitionerSchedulesPost(newEntity).pipe(
+      tap(() => console.log(`Posted: ${data.patientId}`)),
+      catchError((error) => {
+        console.error(`Error posting: ${data}`, error);
+        return observableOf(null); // Return a fallback value to continue the stream
+      })
+    );
+  }
+
+  deleteScheduleArray(dataArray: GetPractitionerScheduleDTO[]) {
+    from(dataArray)
+      .pipe(
+        concatMap((item) => this.scheduleService.apiPractitionerSchedulesIdDelete(item.scheduleId!)), // Process each item sequentially
+        finalize(() => {
+          // Perform a final action after all processing
+          console.log('All items have been processed.');
+        })
+      )
+      .subscribe({
+        next: (response) => {
+          if (response) {
+            console.log('Response:', response);
+          }
+        },
+        error: (err) => console.error('Stream error:', err),
+      });
+  }
+
+  postScheduleArray(dataArray: GetPractitionerScheduleDTO[]) {
+    from(dataArray)
+      .pipe(
+        concatMap((item) => this.postSchedule(item)), // Process each item sequentially
+        finalize(() => {
+          // Perform a final action after all processing
+          console.log('All items have been processed.');
+        })
+      )
+      .subscribe({
+        next: (response) => {
+          if (response) {
+            console.log('Response:', response);
+          }
+        },
+        error: (err) => console.error('Stream error:', err),
+      });
   }
 
 
@@ -194,7 +243,7 @@ export class PractitionerScheduleComponent implements OnInit {
   createSchedule(): void {
     const workDate = this.workDay$();
     const practitionerId = this.practitionerId$();
-    if (!workDate || !practitionerId) {
+    if (!workDate || ((practitionerId ?? 0) === 0)) {
       this.openDataInvalidDialog();
       return;
     }
@@ -208,30 +257,28 @@ export class PractitionerScheduleComponent implements OnInit {
 
     const startDate = formatDateToYMDPlus(workDate, '00:00:00');
     const endDate = formatDateToYMDPlus(workDate, '23:30:00');
-    const availabilitySlots = this.generatePractitionerAvailabilitySlots(startDate, endDate, this.SCHEDULE_DURATION, practitionerId);
+    const availabilitySlots = this.generatePractitionerScheduleSlots(startDate, endDate, this.SCHEDULE_DURATION, practitionerId || 0);
 
     this.changedData = [...availabilitySlots];
-    this.dataSource.data = availabilitySlots.map((avail) => ({
-      slotDateTime: avail.slotDateTime,
-      isAvailable: avail.isAvailable,
-    }));
+    this.dataSource.data = [...availabilitySlots];
   }
 
-  generatePractitionerAvailabilitySlots(
+  generatePractitionerScheduleSlots(
     startDate: string,
     endDate: string,
     duration: number,
     practitionerId: number
-  ): AddPractitionerAvailabilityDTO[] {
-    const slots: AddPractitionerAvailabilityDTO[] = [];
+  ): AddPractitionerScheduleDTO[] {
+    const slots: AddPractitionerScheduleDTO[] = [];
     let currentDate = new Date(startDate);
     const endDateTime = new Date(endDate);
 
     while (currentDate < endDateTime) {
       slots.push({
         practitionerId,
-        slotDateTime: new Date(currentDate),
-        isAvailable: true,
+        startDateTime: new Date(currentDate),
+        endDateTime: addMinutesToDate(currentDate, SCHEDULE_DURATION),
+        reasonForVisit: 'Urgenet'
       });
       currentDate = new Date(currentDate.getTime() + duration * 60 * 1000);
     }
@@ -240,8 +287,6 @@ export class PractitionerScheduleComponent implements OnInit {
   }
 
   // Dialogs
-
-
   openDataInvalidDialog(): void {
     this.dialog.open(DialogPractitionerScheduleDialog, {
       data: { title: 'Notification', content: 'Please select practitioner and date first.', isCancelButtonVisible: false },
@@ -275,12 +320,11 @@ export class PractitionerScheduleComponent implements OnInit {
       30,
       { align: 'center' });
 
-    const columns = ['Day', 'From Time', 'End Time', 'Available'];
+    const columns = ['Day', 'From Time', 'End Time'];
     const rows = this.dataSource.data.map((slot) => [
-      getDayOfWeek(new Date(slot.slotDateTime!)),
-      formatDateToHHmm(slot.slotDateTime!),
-      formatDateToHHmm(addMinutesToDate(slot.slotDateTime!, SCHEDULE_DURATION)),
-      slot.isAvailable]);
+      getDayOfWeek(new Date(slot.startDateTime!)),
+      formatDateToHHmm(slot.startDateTime!),
+      formatDateToHHmm(slot.endDateTime!)]);
 
     (doc as any).autoTable({ head: [columns], body: rows, startY: 40, theme: 'grid' });
     const pdfUrl = doc.output('bloburl');
