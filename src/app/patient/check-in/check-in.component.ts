@@ -13,5 +13,8 @@ import { MriImagesComponent } from "../mri-images/mri-images.component";
   styleUrl: './check-in.component.scss'
 })
 export class CheckInComponent {
+  // create visit record. 
+  // field: PractitionerSignaturePath = ""
+  
 
 }

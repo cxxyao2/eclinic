@@ -1,1 +1,29 @@
-<p>waiting-list works!</p>
+<div class="carousel-container">
+    <mat-tab-group [(selectedIndex)]="currentIndex" (selectedIndexChange)="onTabChange($event)">
+      <!-- Screen 1: Hospital -->
+      <mat-tab label="Hospital">
+        <div class="carousel-screen">
+          <img src="assets/images/hospital.jpg" alt="Hospital" class="carousel-image" />
+        </div>
+      </mat-tab>
+  
+      <!-- Screen 2: Smiling Doctor -->
+      <mat-tab label="Doctor">
+        <div class="carousel-screen">
+          <img src="assets/images/smiling-doctor.jpg" alt="Smiling Doctor" class="carousel-image" />
+        </div>
+      </mat-tab>
+  
+      <!-- Screen 3: Waiting Room Grid -->
+      <mat-tab label="Waiting Room">
+        <div class="carousel-screen">
+          <div class="patient-grid">
+            <div class="patient" *ngFor="let patient of patients">
+              <span>{{ patient }}</span>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+  

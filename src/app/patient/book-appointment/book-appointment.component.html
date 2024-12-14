@@ -1,6 +1,8 @@
 <h2>Practitioner Schedule</h2>
 <form>
-  <app-profile [profileInfo]="selectedPatient()"></app-profile>
+  <div class="user-container">
+    <app-profile [profileInfo]="selectedPatient()"></app-profile>
+  </div>
   <div>
     <div class="content-wrapper">
       <div>
@@ -28,7 +30,6 @@
         <mat-datepicker #picker></mat-datepicker>
       </mat-form-field>
       <div class="button-group">
-
         <div class="button-container">
           <button mat-fab extended type="submit" (click)="saveSchedule()">
             <mat-icon>save</mat-icon>
@@ -37,8 +38,8 @@
         </div>
       </div>
     </div>
-    <div class="mat-elevation-z8">
-      <table mat-table [dataSource]="dataSource" matSort>
+    <div class="table-container">
+      <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
         <!-- Other Columns -->
         <ng-container *ngFor="let column of displayedColumns">
           <ng-container [matColumnDef]="column">
@@ -52,12 +53,9 @@
               <ng-container *ngIf="column === 'practitionerName'">
                 {{ element['practitionerName'] }}
               </ng-container>
-
-
               <ng-container *ngIf="column === 'startDateTime'">
                 {{ element['startDateTime'] | date: 'HH:mm'}}
               </ng-container>
-
               <ng-container *ngIf="column === 'endDateTime'">
                 {{ element['endDateTime'] | date: 'HH:mm' }}
               </ng-container>
@@ -67,7 +65,7 @@
 
               <ng-container *ngIf="column === 'actions'">
                 @if((element['patientId']??0)>0) {
-                <button mat-stroked-button type="button" (click)="onCancel(element)">Assign</button>
+                <button mat-stroked-button type="button" (click)="onCancel(element)">Cancel</button>
                 } @else {
                 <button mat-stroked-button type="button" (click)="onAssign(element)">Assign</button>
                 }
@@ -80,13 +78,12 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 
         <tr class="mat-row" *matNoDataRow>
-          <td class="mat-cell" colspan="4">No data</td>
+          <td class="mat-cell" colspan="4">&nbsp;&nbsp;No data</td>
         </tr>
       </table>
       <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
         aria-label="Select page of Practitioner Schedule">
       </mat-paginator>
-      <div>{{dataSource.data | json}}</div>
     </div>
   </div>
 

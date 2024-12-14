@@ -26,6 +26,8 @@ import { MasterDataService } from 'src/app/services/master-data.service';
 import { ProfileComponent } from 'src/app/shared/profile/profile.component';
 import { UserProfile } from '@models/userProfile.model';
 import { provideNativeDateAdapter } from '@angular/material/core';
+import { SnackbarService } from 'src/app/services/snackbar-service.service';
+
 
 @Component({
   selector: 'app-book-appointment',
@@ -53,7 +55,6 @@ import { provideNativeDateAdapter } from '@angular/material/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BookAppointmentComponent implements AfterViewInit {
-
 
   // Data & Forms
   columnHeaders: { [key: string]: string } = {
@@ -88,6 +89,8 @@ export class BookAppointmentComponent implements AfterViewInit {
   // Services
   private masterDataService = inject(MasterDataService);
   private scheduleService = inject(PractitionerSchedulesService);
+  private snackbarService = inject(SnackbarService);
+
 
 
   ngAfterViewInit(): void {
@@ -114,7 +117,6 @@ export class BookAppointmentComponent implements AfterViewInit {
         }),
         map(response => {
           this.isLoadingResults = false;
-
           if (response?.data === null) {
             return [];
           }
@@ -142,6 +144,7 @@ export class BookAppointmentComponent implements AfterViewInit {
 
   onCancel(element: GetPractitionerScheduleDTO) {
     element.patientId = 0;
+    element.patientName = "";
     const idx = this.updateData.findIndex(e => e.scheduleId === element.scheduleId);
     if (idx >= 0)
       this.updateData[idx].patientId = 0;
@@ -151,51 +154,72 @@ export class BookAppointmentComponent implements AfterViewInit {
 
   onAssign(element: GetPractitionerScheduleDTO) {
     element.patientId = this.patientId$();
+    element.patientName = this.selectedPatient().firstName + " " + this.selectedPatient().lastName;
     const idx = this.updateData.findIndex(e => e.scheduleId === element.scheduleId);
     if (idx >= 0) {
-
       this.updateData[idx].patientId = element.patientId;
-      this.updateData[idx].patientName = "xxx111";
     }
     else
       this.updateData.push(element);
   }
 
-saveSchedule(): void {
-  if(this.updateData.length > 0) {
-  this.updateScheduleArray(this.updateData);
-}
+  saveSchedule(): void {
+    if (this.updateData.length > 0) {
+      this.updateScheduleArray(this.updateData);
+    } else {
+      this.snackbarService.show('No data to save.');
+    }
   }
 
-updateSchedule(data: GetPractitionerScheduleDTO) {
-  const newEntity: AddPractitionerScheduleDTO = Object.assign({}, data);
-  return this.scheduleService.apiPractitionerSchedulesPut(newEntity).pipe(
-    tap(() => console.log(`Posted: ${data.patientId}`)),
-    catchError((error) => {
-      console.error(`Error posting: ${data}`, error);
-      return observableOf(null); // Return a fallback value to continue the stream
-    })
-  );
-}
 
-updateScheduleArray(dataArray: GetPractitionerScheduleDTO[]) {
-  from(dataArray)
-    .pipe(
-      concatMap((item) => this.updateSchedule(item)),
-      finalize(() => {
-        // Perform a final action after all processing
-        console.log('All items have been processed.');
+
+  updateSchedule(data: GetPractitionerScheduleDTO) {
+    const newEntity: AddPractitionerScheduleDTO = Object.assign({}, data);
+    return this.scheduleService.apiPractitionerSchedulesPut(newEntity).pipe(
+      tap(() => console.log(`Posted: ${data.patientId}`)),
+      catchError((error) => {
+        console.error(`Error posting: ${data}`, error);
+        return observableOf(null); // Return a fallback value to continue the stream
       })
-    )
-    .subscribe({
-      next: (response) => {
-        if (response) {
-          console.log('Response:', response);
-        }
-      },
-      error: (err) => console.error('Stream error:', err),
-    });
-}
+    );
+  }
 
+
+  updateScheduleArray(dataArray: GetPractitionerScheduleDTO[]) {
+    let successCount = 0;
+    let errorCount = 0;
+
+    from(dataArray)
+      .pipe(
+        concatMap((item) =>
+          this.updateSchedule(item).pipe(
+            tap((response) => {
+              if (response) {
+                successCount++;
+              } else {
+                errorCount++;
+              }
+            })
+          )
+        ),
+        finalize(() => {
+          if (errorCount === 0) {
+            this.snackbarService.show('All items processed successfully!', 'success-snackbar');
+            this.updateData = [];
+          } else {
+            this.snackbarService.show('Some items failed to process.', 'error-snackbar');
+
+          }
+        })
+      )
+      .subscribe({
+        next: (response) => {
+          if (response) {
+            console.log('Response:', response);
+          }
+        },
+        error: (err) => console.error('Stream error:', err),
+      });
+  }
 
 }

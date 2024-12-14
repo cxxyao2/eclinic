@@ -1,0 +1,11 @@
+.signature-container {
+  text-align: center;
+}
+
+canvas {
+  touch-action: none; /* Prevent touch scrolling on mobile devices. */
+}
+
+.canvas {
+  border: 1px solid black;
+}

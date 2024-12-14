@@ -11,23 +11,19 @@ form {
   padding: 16px;
 }
 
+.table-container {
+  max-width: 600px;
+  overflow-x: auto;
+  margin: 10px auto;
+  border-radius: 8px;
+}
+
 table {
   margin-top: 16px;
-  width: 100%;
 }
 
 th.mat-sort-header-sorted {
   color: black;
-}
-
-.message {
-  text-align: center;
-  font-size: 1rem;
-  color: gray;
-  margin: 1rem auto;
-  &.error {
-    color: var(--mat-app-error);
-  }
 }
 
 .content-wrapper {

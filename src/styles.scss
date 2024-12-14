@@ -138,4 +138,27 @@ body {
   --mat-app-surface-container-lowest: #121212; /* Background-level darkness */
   --mat-app-surface-bright: #1e1e1e; /* Same as main surface for consistency */
   --mat-app-surface-dim: #333333; /* Darker surface tone for variety */
+
+  --mdc-outlined-button-label-text-color: var(--mat-app-on-background);
+}
+
+.mat-snack-bar-container {
+  border-radius: 8px;
+  font-size: 14px;
+  padding: 16px;
+}
+
+.success-snackbar {
+  background-color: var(--mat-app-primary-container); /* Green */
+  color: var(--mat-app-on-primary-container);
+}
+
+.error-snackbar {
+  background-color: var(--mat-app-error-container); /* Red */
+  color: var(--mat-app-on-error-container);
+}
+
+.default-snackbar {
+  background-color: #2196f3; /* Blue */
+  color: white;
 }
