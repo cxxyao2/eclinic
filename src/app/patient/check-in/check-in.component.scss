@@ -1,7 +1,25 @@
 .container {
-  display: grid;
-  grid-template-columns: auto 1fr; /* First column auto-sizes, second takes the rest */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
   gap: 10px; /* Optional: Adds space between the child divs */
+}
+
+.header-section {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+}
+
+.date {
+  font-weight: bold;
+}
+
+table {
+  width: 100%;
 }
 
 /* Media query for smaller screens */

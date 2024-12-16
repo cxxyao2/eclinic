@@ -11,6 +11,7 @@
 
 export interface GetPrescriptionDTO { 
     prescriptionId?: number;
+    visitId?: number;
     patientId?: number;
     practitionerId?: number;
     practitionerName?: string | null;

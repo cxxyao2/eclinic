@@ -8,10 +8,17 @@ import { MriImagesComponent } from "../mri-images/mri-images.component";
 @Component({
   selector: 'app-consultation-form',
   standalone: true,
-  imports: [CommonModule,MatTabsModule, TranslocoDirective, ConsultationFormComponent, LabResultsComponent, MriImagesComponent],
+  imports: [CommonModule, MatTabsModule, TranslocoDirective, ConsultationFormComponent, LabResultsComponent, MriImagesComponent],
   templateUrl: './consultation-form.component.html',
   styleUrl: './consultation-form.component.scss'
 })
 export class ConsultationFormComponent {
 
+  // visitRecord table
+  // save others fields  
+  // save signature field to backend subfolder + update related field in visitRecord 
+
+  // save medication 
+  // save test
+  // create inpatient record if needed
 }

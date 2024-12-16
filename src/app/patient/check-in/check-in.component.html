@@ -1,22 +1,57 @@
-<ng-container *transloco="let t; prefix: 'dashboard'">
-  <p>{{ t('title') }}</p>
+<h3> Check In</h3>
 
-  <h3>No animation</h3>
-
-  <div class="container">
-    <div>Patient Info</div>
-    <mat-tab-group animationDuration="0ms">
-      <mat-tab label="Consulation">
-        <app-consultation-form></app-consultation-form>
-      </mat-tab>
-      <mat-tab label="Lab Results">
-        <app-lab-results></app-lab-results>
-      </mat-tab>
-      <mat-tab label="MRI Images">
-        <app-mri-images></app-mri-images>
-      </mat-tab>
-    </mat-tab-group>
+<div class="container">
+  <div class="header-section">
+    <span class="date">{{today |date:'yyyy-MM-dd'}}</span>
+    <mat-form-field>
+      <mat-label>Patients</mat-label>
+      <mat-select [formControl]="patientIdControl">
+        @for (prac of patients(); track prac) {
+        <mat-option [value]="prac.patientId">{{ prac.firstName + ' ' + prac.lastName }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <button (click)="getPatientAppointment()">
+      <mat-icon>search</mat-icon>
+      Search
+    </button>
   </div>
+  <div>
+    <table mat-table matSort [dataSource]="dataSource" class="mat-elevation-z8">
+      <ng-container matColumnDef="practitionerName">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef> Practitioner </th>
+        <td mat-cell *matCellDef="let element"> {{element.practitionerName}} </td>
+      </ng-container>
 
- 
-</ng-container>
+      <ng-container matColumnDef="startDateTime">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef> Planned Start</th>
+        <td mat-cell *matCellDef="let element"> {{element.startDateTime| date: 'HH:mm'}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="endDateTime">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef> Planned End </th>
+        <td mat-cell *matCellDef="let element"> {{element.endDateTime| date: 'HH:mm'}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="action">
+        <th mat-header-cell mat-sort-header *matHeaderCellDef> Action </th>
+        <td mat-cell *matCellDef="let element">
+          <button type="button" (click)="addWaitingList(element)"> Check In </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" colspan="4">&nbsp;&nbsp;No data</td>
+      </tr>
+    </table>
+
+
+  </div>
+  <div>
+    <h3>waiting list</h3>
+    <app-check-in-waiting-list [waitingList]="waitingList()"></app-check-in-waiting-list>
+  </div>
+</div>

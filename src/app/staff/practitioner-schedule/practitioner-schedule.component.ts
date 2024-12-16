@@ -33,6 +33,7 @@ import { AddMinutesPipe } from 'src/app/helpers/add-minutes.pipe';
 import { UserProfile } from '@models/userProfile.model';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { catchError, concatMap, finalize, from, map, merge, of as observableOf, startWith, switchMap, tap } from 'rxjs';
+import { SnackbarService } from 'src/app/services/snackbar-service.service';
 
 export interface DialogData {
   title: string;
@@ -100,6 +101,8 @@ export class PractitionerScheduleComponent implements AfterViewInit {
   // Services
   masterDataService = inject(MasterDataService);
   readonly dialog = inject(MatDialog);
+  private snackbarService = inject(SnackbarService);
+
 
 
   constructor(private scheduleService: PractitionerSchedulesService) {
@@ -161,7 +164,7 @@ export class PractitionerScheduleComponent implements AfterViewInit {
     // add
     const newData = this.dataSource.data.filter((entity) => (entity.scheduleId ?? 0) === 0);
     if (newData.length > 0) {
-      this.postScheduleArray(newData);
+      this.addNewSchedules(newData);
     }
 
     // delete
@@ -189,7 +192,7 @@ export class PractitionerScheduleComponent implements AfterViewInit {
 
 
 
-  postSchedule(data: GetPractitionerScheduleDTO) {
+  addOneSchedule(data: GetPractitionerScheduleDTO) {
     const newEntity: AddPractitionerScheduleDTO = Object.assign({}, data);
     return this.scheduleService.apiPractitionerSchedulesPost(newEntity).pipe(
       tap(() => console.log(`Posted: ${data.patientId}`)),
@@ -219,20 +222,26 @@ export class PractitionerScheduleComponent implements AfterViewInit {
       });
   }
 
-  postScheduleArray(dataArray: GetPractitionerScheduleDTO[]) {
+  addNewSchedules(dataArray: GetPractitionerScheduleDTO[]) {
+    let recordCount = 0;
     from(dataArray)
       .pipe(
-        concatMap((item) => this.postSchedule(item)), // Process each item sequentially
+        concatMap((item) => this.addOneSchedule(item)), // Process each item sequentially
         finalize(() => {
-          // Perform a final action after all processing
-          console.log('All items have been processed.');
+          if (recordCount === dataArray.length) {
+            this.snackbarService.show('All items processed successfully!', 'success-snackbar');
+            this.dataSource.data = [];
+            this.changedData = [];
+            this.deletedData = [];
+            this.practitionerIdControl.setValue(0, { onlySelf: true });
+          } else {
+            this.snackbarService.show('Some items failed to process.', 'error-snackbar');
+          }
         })
       )
       .subscribe({
-        next: (response) => {
-          if (response) {
-            console.log('Response:', response);
-          }
+        next: () => {
+          recordCount += 1;
         },
         error: (err) => console.error('Stream error:', err),
       });

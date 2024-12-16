@@ -17,6 +17,7 @@ api/prescriptions.service.ts
 api/signatures.service.ts
 api/sse.service.ts
 api/users.service.ts
+api/visitRecords.service.ts
 api/weatherForecast.service.ts
 configuration.ts
 encoder.ts
@@ -29,6 +30,7 @@ model/addPractitionerAvailabilityDTO.ts
 model/addPractitionerDTO.ts
 model/addPractitionerScheduleDTO.ts
 model/addPrescriptionDTO.ts
+model/addVisitRecordDTO.ts
 model/appointmentStatusEnum.ts
 model/dateOnly.ts
 model/dayOfWeek.ts
@@ -62,6 +64,9 @@ model/getPractitionerScheduleDTOServiceResponse.ts
 model/getPrescriptionDTO.ts
 model/getPrescriptionDTOListServiceResponse.ts
 model/getPrescriptionDTOServiceResponse.ts
+model/getVisitRecordDTO.ts
+model/getVisitRecordDTOListServiceResponse.ts
+model/getVisitRecordDTOServiceResponse.ts
 model/models.ts
 model/signatureDTO.ts
 model/stringServiceResponse.ts

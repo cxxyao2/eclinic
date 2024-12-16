@@ -4,5 +4,6 @@
     "dashboard": {
       "title": "Dashboard Title",
       "desc": "Dashboard Desc"
-    }
+    },
+    "checkin":"Check In"
   }

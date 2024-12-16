@@ -9,14 +9,14 @@
  */
 
 
-export interface AddPrescriptionDTO { 
-    visitId?: number;
+export interface AddVisitRecordDTO { 
     patientId?: number;
     practitionerId?: number;
-    medicationId?: number;
-    dosage?: string | null;
-    startDate?: Date | null;
-    endDate?: Date | null;
+    scheduleIdId?: number;
+    practitionerSignaturePath?: string | null;
+    visitDate?: Date;
+    diagnosis?: string | null;
+    treatment?: string | null;
     notes?: string | null;
 }
 
