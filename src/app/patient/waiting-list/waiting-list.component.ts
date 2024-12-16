@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, inject, OnInit, signal } from '@angular/core';
+import { AfterViewInit, Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { MatTabsModule } from '@angular/material/tabs';
 import { GetVisitRecordDTOListServiceResponse, VisitRecordsService } from '@libs/api-client';
 
@@ -10,11 +10,12 @@ import { GetVisitRecordDTOListServiceResponse, VisitRecordsService } from '@libs
   templateUrl: './waiting-list.component.html',
   styleUrl: './waiting-list.component.scss'
 })
-export class WaitingListComponent implements AfterViewInit, OnInit {
+export class WaitingListComponent implements AfterViewInit, OnInit, OnDestroy {
   currentIndex = 0; // Current tab index
   patients = signal<string[]>([]);
   today = new Date();
 
+  private intervalId: any;
   private visitService = inject(VisitRecordsService);
 
   ngAfterViewInit() {
@@ -23,9 +24,15 @@ export class WaitingListComponent implements AfterViewInit, OnInit {
   }
 
   ngOnInit() {
-    setInterval(() => {
+    this.intervalId = setInterval(() => {
       this.currentIndex = (this.currentIndex + 1) % 3; // Cycle through tabs
     }, 2000); // Switch every 2 seconds
+  }
+
+  ngOnDestroy(): void {
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+    }
   }
 
   getWaitingListByDate(bookedDate: Date) {
