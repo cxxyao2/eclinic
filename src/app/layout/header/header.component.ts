@@ -56,8 +56,8 @@ export class HeaderComponent implements OnInit {
 
 
   showNotifications() {
-    // TODO
-    // REDIRECT TO inpatient arrangement
+    // 1, show a list of inpatients
+    // 2, click a specific inpatient, then REDIRECT TO inpatient arrangement
   }
 
 }
