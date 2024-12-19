@@ -12,7 +12,7 @@
 export interface AddVisitRecordDTO { 
     patientId?: number;
     practitionerId?: number;
-    scheduleIdId?: number;
+    scheduleId?: number;
     practitionerSignaturePath?: string | null;
     visitDate?: Date;
     diagnosis?: string | null;

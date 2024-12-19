@@ -37,12 +37,15 @@ export class LoginComponent {
 
       this.authService.apiAuthLoginPost(loginData).subscribe({
         next: (response) => {
-          localStorage.setItem('accessToken',response.accessToken)
+          localStorage.setItem('accessToken', response.accessToken);
+          localStorage.setItem('email', loginData['email']);
           this.errorMessage.set(null);
           this.router.navigate(['/dashboard']);
           console.log('Login successful:', response);
         },
         error: (errResponse: HttpErrorResponse) => {
+          localStorage.removeItem('accessToken');
+          localStorage.removeItem('email');
           const message = errResponse.error?.message || errResponse.message || "Something went wrong."
           this.errorMessage.set(message);
           console.error('Login failed:', errResponse);

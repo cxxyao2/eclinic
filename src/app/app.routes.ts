@@ -9,6 +9,7 @@ import { WaitingListComponent } from './patient/waiting-list/waiting-list.compon
 import { BookAppointmentComponent } from './patient/book-appointment/book-appointment.component';
 import { AuthorizationComponent } from './admin/authorization/authorization.component';
 import { AdminComponent } from './admin/admin/admin.component';
+import { UpdateUserComponent } from './admin/update-user/update-user.component';
 
 export const routes: Routes = [
     {
@@ -53,7 +54,10 @@ export const routes: Routes = [
     {
         path: 'login',
         component: LoginComponent
-
+    },
+    {
+        path: 'update-user',
+        component: UpdateUserComponent
     },
     {
         path: '',

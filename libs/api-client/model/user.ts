@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { Practitioner } from './practitioner';
 import { UserRole } from './userRole';
 
 
@@ -22,6 +23,8 @@ export interface User {
     refreshToken?: string | null;
     tokenCreated?: Date;
     tokenExpires?: Date;
+    practitionerId?: number | null;
+    practitioner?: Practitioner;
 }
 export namespace User {
 }

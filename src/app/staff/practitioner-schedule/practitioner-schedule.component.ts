@@ -25,28 +25,22 @@ import 'jspdf-autotable';
 
 // Application-Specific Imports
 import { SCHEDULE_DURATION } from '@constants/system-settings.constants';
-import { addMinutesToDate, compareDates, formatDateToHHmm, formatDateToYMDPlus, getDayOfWeek } from 'src/app/helpers/date-helpers';
-import { AddPractitionerScheduleDTO, GetPractitionerDTO, GetPractitionerScheduleDTO, PractitionerSchedulesService } from '@libs/api-client';
+import { addMinutesToDate, formatDateToHHmm, formatDateToYMDPlus, getDayOfWeek } from 'src/app/helpers/date-helpers';
+import { AddPractitionerScheduleDTO, GetMedicationDTO, GetPractitionerDTO, GetPractitionerScheduleDTO, PractitionerSchedulesService } from '@libs/api-client';
 import { MasterDataService } from 'src/app/services/master-data.service';
 import { ProfileComponent } from 'src/app/shared/profile/profile.component';
-import { AddMinutesPipe } from 'src/app/helpers/add-minutes.pipe';
 import { UserProfile } from '@models/userProfile.model';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { catchError, concatMap, finalize, from, map, merge, of as observableOf, startWith, switchMap, tap } from 'rxjs';
 import { SnackbarService } from 'src/app/services/snackbar-service.service';
+import { DialogSimpleDialog } from 'src/app/shared/dialog-simple-dialog';
 
-export interface DialogData {
-  title: string;
-  content: string;
-  isCancelButtonVisible: boolean;
-}
 
 @Component({
   selector: 'app-practitioner-schedule',
   standalone: true,
   providers: [provideNativeDateAdapter()],
   imports: [
-    AddMinutesPipe,
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
@@ -61,8 +55,8 @@ export interface DialogData {
     MatProgressSpinnerModule,
     MatSortModule,
     MatTableModule,
-    ProfileComponent,
-  ],
+    ProfileComponent
+],
   templateUrl: './practitioner-schedule.component.html',
   styleUrls: ['./practitioner-schedule.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -102,8 +96,6 @@ export class PractitionerScheduleComponent implements AfterViewInit {
   masterDataService = inject(MasterDataService);
   readonly dialog = inject(MatDialog);
   private snackbarService = inject(SnackbarService);
-
-
 
   constructor(private scheduleService: PractitionerSchedulesService) {
   }
@@ -175,7 +167,7 @@ export class PractitionerScheduleComponent implements AfterViewInit {
 
 
   onDeleteSchedule(): void {
-    const dialogRef = this.dialog.open(DialogPractitionerScheduleDialog, {
+    const dialogRef = this.dialog.open(DialogSimpleDialog, {
       data: { title: 'Confirm Action', content: 'Are you sure you want to delete? All unsaved changes will be lost.', isCancelButtonVisible: true },
     });
     dialogRef.afterClosed().subscribe(result => {
@@ -258,7 +250,7 @@ export class PractitionerScheduleComponent implements AfterViewInit {
     }
 
     if (this.dataSource.data.length > 0) {
-      this.dialog.open(DialogPractitionerScheduleDialog, {
+      this.dialog.open(DialogSimpleDialog, {
         data: { title: 'Notification', content: 'The schedule for the staff has already been created.If you want to update it, please proceed to click "Delete" button first', isCancelButtonVisible: false },
       });
       return;
@@ -297,13 +289,13 @@ export class PractitionerScheduleComponent implements AfterViewInit {
 
   // Dialogs
   openDataInvalidDialog(): void {
-    this.dialog.open(DialogPractitionerScheduleDialog, {
+    this.dialog.open(DialogSimpleDialog, {
       data: { title: 'Notification', content: 'Please select practitioner and date first.', isCancelButtonVisible: false },
     });
   }
 
   openNoPrintDataDialog(): void {
-    this.dialog.open(DialogPractitionerScheduleDialog, {
+    this.dialog.open(DialogSimpleDialog, {
       data: { title: 'Notification', content: 'No data to print.', isCancelButtonVisible: false },
     });
   }
@@ -342,28 +334,4 @@ export class PractitionerScheduleComponent implements AfterViewInit {
 }
 
 
-
-@Component({
-  selector: 'practitioner-schedule-dialog',
-  templateUrl: 'practitioner-schedule-dialog.html',
-  standalone: true,
-  imports: [
-    MatFormFieldModule,
-    MatInputModule,
-    FormsModule,
-    MatButtonModule,
-    MatDialogTitle,
-    MatDialogContent,
-    MatDialogActions,
-    MatDialogClose,
-  ],
-})
-export class DialogPractitionerScheduleDialog {
-  readonly dialogRef = inject(MatDialogRef<DialogPractitionerScheduleDialog>);
-  readonly data = inject<DialogData>(MAT_DIALOG_DATA);
-
-  onNoClick(): void {
-    this.dialogRef.close();
-  }
-}
 

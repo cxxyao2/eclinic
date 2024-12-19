@@ -19,7 +19,7 @@
       <div class="carousel-screen">
         <div class="patient-grid">
           <div class="patient" *ngFor="let patient of patients()">
-            <span>{{ patient }}</span>
+            <span [class.calling]="patient.notes==='calling'">{{ patient.patientName }}</span>
           </div>
         </div>
       </div>

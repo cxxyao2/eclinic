@@ -42,6 +42,7 @@ export * from './getPrescriptionDTOServiceResponse';
 export * from './getVisitRecordDTO';
 export * from './getVisitRecordDTOListServiceResponse';
 export * from './getVisitRecordDTOServiceResponse';
+export * from './practitioner';
 export * from './signatureDTO';
 export * from './stringServiceResponse';
 export * from './updatePractitionerScheduleDTO';

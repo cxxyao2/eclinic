@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { MatTabsModule } from '@angular/material/tabs';
-import { GetVisitRecordDTOListServiceResponse, VisitRecordsService } from '@libs/api-client';
+import { GetVisitRecordDTO, GetVisitRecordDTOListServiceResponse, VisitRecordsService } from '@libs/api-client';
 
 @Component({
   selector: 'app-waiting-list',
@@ -12,7 +12,7 @@ import { GetVisitRecordDTOListServiceResponse, VisitRecordsService } from '@libs
 })
 export class WaitingListComponent implements AfterViewInit, OnInit, OnDestroy {
   currentIndex = 0; // Current tab index
-  patients = signal<string[]>([]);
+  patients = signal<GetVisitRecordDTO[]>([]);
   today = new Date();
 
   private intervalId: any;
@@ -25,8 +25,8 @@ export class WaitingListComponent implements AfterViewInit, OnInit, OnDestroy {
 
   ngOnInit() {
     this.intervalId = setInterval(() => {
-      this.currentIndex = (this.currentIndex + 1) % 3; // Cycle through tabs
-    }, 2000); // Switch every 2 seconds
+      this.currentIndex = (this.currentIndex + 1) % 3;
+    }, 2000);
   }
 
   ngOnDestroy(): void {
@@ -39,7 +39,7 @@ export class WaitingListComponent implements AfterViewInit, OnInit, OnDestroy {
     this.visitService.apiVisitRecordsWaitingListGet(bookedDate).subscribe({
       next: (res: GetVisitRecordDTOListServiceResponse) => {
         const visits = res.data ?? [];
-        this.patients.set(visits.map(v => v.patientName ?? ""));
+        this.patients.set(visits);
       },
       error: () => { }
     }

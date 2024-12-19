@@ -19,7 +19,8 @@ export class MasterDataService {
   private practitionerService = inject(PractitionersService);
   private patientService = inject(PatientsService);
   private medicationService = inject(MedicationsService);
-  
+
+
   public practitionersSubject = new BehaviorSubject<GetPractitionerDTO[]>([]);
   public medicationsSubject = new BehaviorSubject<GetMedicationDTO[]>([]);
   public patientsSubject = new BehaviorSubject<GetPatientDTO[]>([]);
@@ -28,12 +29,17 @@ export class MasterDataService {
   public crudResultMessage = new BehaviorSubject<string | null>(null);
   public errorMessage = new BehaviorSubject<string | null>(null);
 
+
+
   constructor() {
     this.fetchPatients();
     this.fetchPractitioners();
     this.fetchMedications();
     this.fetchBedRooms();
   }
+
+
+
 
 
   fetchPractitioners(): void {

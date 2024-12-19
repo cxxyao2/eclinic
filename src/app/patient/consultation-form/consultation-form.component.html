@@ -1,23 +1,46 @@
-<ng-container *transloco="let t; prefix: 'dashboard'">
-  <p>{{ t('title') }}</p>
+<div class="container">
+  <div>
+    <div>
+      <strong>Practitioner:</strong> {{practitioner().firstName + " " + practitioner().lastName}}
+    </div>
 
-  <h3>No animation</h3>
-
-  <div class="container">
-    <div>Patient Info</div>
-    <mat-tab-group animationDuration="0ms">
-      <mat-tab label="Consulation">
-       <div>todo -- medication</div>
-       <div>signature -- todo</div>
-      </mat-tab>
-      <mat-tab label="Lab Results">
-        <app-lab-results></app-lab-results>
-      </mat-tab>
-      <mat-tab label="MRI Images">
-        <app-mri-images></app-mri-images>
-      </mat-tab>
-    </mat-tab-group>
+    <mat-form-field>
+      <mat-label>Patient BookedTime</mat-label>
+      <mat-select [formControl]="visitControl">
+        @for (prac of scheduledVisits(); track prac) {
+        <mat-option [value]="prac">{{ prac.patientName + " " + (prac.visitDate| date:'HH:mm')
+          }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    @if(isProcessing()){
+    <button type="button" (click)="onEnd()">Processing</button>
+    } @else {
+    <button type="button" (click)="onStart()">Next Patient</button>
+    }
   </div>
 
- 
-</ng-container>
+  <form [formGroup]="diagnosisForm">
+    <mat-checkbox [formControl]="needsAdmissionControl">Need admission</mat-checkbox>
+    <div *ngIf="diagnosisForm.get('needsAdmission')?.value" class="admission-warning">
+      <mat-icon>warning</mat-icon>
+      This patient will require immediate hospital admission and nursing care.
+    </div>
+
+    <mat-form-field class="full-width">
+      <mat-label>Symptoms</mat-label>
+      <input matInput [formControl]="diagnosisControl" />
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <mat-label>Treatment</mat-label>
+      <input matInput [formControl]="treatmentControl" />
+    </mat-form-field>
+  </form>
+
+  <div>
+    <h3>Signature</h3>
+    <app-canvas [visitId]="visitRecord()?.visitId??0" (signSaved)="onSignSaved($event)"></app-canvas>
+  </div>
+  <app-consulation-form-medic #prescriptionTable></app-consulation-form-medic>
+</div>

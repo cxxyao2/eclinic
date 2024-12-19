@@ -1,10 +1,40 @@
-.example-form {
-    min-width: 150px;
-    max-width: 500px;
-    width: 100%;
-  }
-  
-  .example-full-width {
-    width: 100%;
-  }
-  
+.container mat-form-field + mat-form-field {
+  margin-left: 8px;
+}
+
+.container mat-form-field {
+  width: 220px;
+}
+
+.container form {
+  margin-bottom: 20px;
+}
+
+.container form > * {
+  margin: 12px 0;
+}
+
+.container .mat-radio-button {
+  margin: 0 12px;
+}
+
+.form-fields {
+  display: flex;
+  align-items: flex-start;
+}
+
+.admission-warning {
+  display: flex;
+  align-items: center;
+  color: red;
+  font-weight: bold;
+  margin-top: 8px;
+}
+
+.admission-warning mat-icon {
+  margin-right: 8px;
+}
+
+.full-width {
+  width: 100%;
+}

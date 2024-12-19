@@ -24,10 +24,9 @@
                 <mat-icon>dark_mode</mat-icon>
                 }
             </button>
-            <!-- todo: need add unread notification numbers -->
-            <button mat-icon-button (click)="showNotifications()" aria-label="Show Notifications"
-                matTooltip="Show Notifications">
-                <mat-icon role="alert" class="notification-icon">notifications</mat-icon>
+            <button mat-icon-button (click)="showNotifications()" aria-label="Show Notifications">
+                <mat-icon role="alert" class="notification-icon"
+                    [matBadge]="sseService.message().length">notifications</mat-icon>
             </button>
 
             <button mat-flat-button routerLink="/login">

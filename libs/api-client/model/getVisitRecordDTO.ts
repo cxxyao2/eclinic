@@ -15,7 +15,7 @@ export interface GetVisitRecordDTO {
     patientName?: string | null;
     practitionerId?: number;
     practitionerName?: string | null;
-    scheduleIdId?: number;
+    scheduleId?: number;
     practitionerSignaturePath?: string | null;
     visitDate?: Date;
     diagnosis?: string | null;

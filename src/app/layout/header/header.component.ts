@@ -1,4 +1,4 @@
-import { Component, DestroyRef, effect, inject, input, model, OnInit, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, effect, inject, input, model, OnInit, output, signal } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
@@ -6,6 +6,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslocoService } from '@jsverse/transloco';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { SseClientService } from 'src/app/services/sse.service';
+import { MatBadgeModule } from '@angular/material/badge';
 
 const languageMap: { [key: string]: string } = {
   fr: 'French',
@@ -17,9 +19,11 @@ const languageMap: { [key: string]: string } = {
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [MatToolbarModule, MatButtonModule, MatIconModule, MatMenuModule, MatTooltipModule],
+  imports: [MatBadgeModule, MatToolbarModule, MatButtonModule, MatIconModule, MatMenuModule, MatTooltipModule],
   templateUrl: './header.component.html',
-  styleUrl: './header.component.scss'
+  styleUrl: './header.component.scss',
+  providers: [SseClientService],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderComponent implements OnInit {
   isLargeScreen = input<boolean | undefined | null>(false);
@@ -30,6 +34,7 @@ export class HeaderComponent implements OnInit {
   currentLanguage = signal('English');
   private destroyRef = inject(DestroyRef);
   private translocoService = inject(TranslocoService);
+  sseService = inject(SseClientService);
 
   setDarkMode = effect(() => {
     document.body.classList.toggle('dark', this.darkMode());

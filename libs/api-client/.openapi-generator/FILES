@@ -68,6 +68,7 @@ model/getVisitRecordDTO.ts
 model/getVisitRecordDTOListServiceResponse.ts
 model/getVisitRecordDTOServiceResponse.ts
 model/models.ts
+model/practitioner.ts
 model/signatureDTO.ts
 model/stringServiceResponse.ts
 model/updatePractitionerScheduleDTO.ts
