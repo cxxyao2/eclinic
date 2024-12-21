@@ -1,59 +1,61 @@
-<div class="container">
-  <form [formGroup]="diagnosisForm">
-    <div>
-      <div style="margin:1rem 0;">
-        <strong>Practitioner:</strong> {{(practitioner().firstName + " " + practitioner().lastName) | uppercase}}
-      </div>
+<h3>Practitioner:&nbsp; {{(practitioner().firstName + " " + practitioner().lastName) | uppercase}}</h3>
 
-      <div class="patient-selection">
+<form [formGroup]="diagnosisForm">
+  <div class="patient-selection">
+    <div>
+      <mat-form-field>
+        <mat-label>Patient && Booked Time</mat-label>
+        <mat-select [formControl]="visitControl">
+          @for (prac of scheduledVisits(); track prac) {
+          <mat-option [value]="prac">{{ prac.patientName + " " + (prac.visitDate| date:'HH:mm')
+            }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+    @if(isProcessing()){
+    <div class="end-button">
+      <mat-checkbox [formControl]="needsAdmissionControl">Need admission</mat-checkbox>
+      <button mat-flat-button type="button" (click)="onEnd()">End Consultation</button>
+    </div>
+    } @else {
+    <button mat-flat-button type="button" (click)="onStart()">Start Consultation</button>
+    }
+  </div>
+
+  <mat-tab-group animationDuration="0ms">
+    <mat-tab label="Diagnosis">
+      <div class="container">
+        <div *ngIf="needAdmission()" class="admission-warning">
+          <mat-icon>warning</mat-icon>
+          This patient will require immediate hospital admission and nursing care.
+        </div>
 
         <div>
-          <mat-form-field>
-            <mat-label>Patient BookedTime</mat-label>
-            <mat-select [formControl]="visitControl">
-              @for (prac of scheduledVisits(); track prac) {
-              <mat-option [value]="prac">{{ prac.patientName + " " + (prac.visitDate| date:'HH:mm')
-                }}</mat-option>
-              }
-            </mat-select>
+          <mat-form-field class="full-width">
+            <mat-label>Symptoms</mat-label>
+            <input matInput [formControl]="diagnosisControl" />
           </mat-form-field>
         </div>
-        @if(isProcessing()){
-        <div class="end-button">
-          <mat-checkbox [formControl]="needsAdmissionControl">Need admission</mat-checkbox>
-          <button mat-flat-button type="button" (click)="onEnd()">End</button>
+
+        <div>
+          <mat-form-field class="full-width">
+            <mat-label>Treatment</mat-label>
+            <input matInput [formControl]="treatmentControl" />
+          </mat-form-field>
         </div>
-        } @else {
-        <button mat-flat-button type="button" (click)="onStart()">Calling</button>
-        }
+
       </div>
-    </div>
-
-    <div *ngIf="needAdmission()" class="admission-warning">
-      <mat-icon>warning</mat-icon>
-      This patient will require immediate hospital admission and nursing care.
-    </div>
-
-    <div>
-      <mat-form-field class="full-width">
-        <mat-label>Symptoms</mat-label>
-        <input matInput [formControl]="diagnosisControl" />
-      </mat-form-field>
-    </div>
-
-    <div>
-      <mat-form-field class="full-width">
-        <mat-label>Treatment</mat-label>
-        <input matInput [formControl]="treatmentControl" />
-      </mat-form-field>
-    </div>
-
-    <div>
-      <h3>Signature</h3>
-      <app-canvas [visitId]="visitRecord()?.visitId??0" (signSaved)="onSignSaved($event)"></app-canvas>
-    </div>
-    <div>
-      <app-consulation-form-medic #prescriptionTable></app-consulation-form-medic>
-    </div>
-  </form>
-</div>
+    </mat-tab>
+    <mat-tab label="Medications">
+      <div class="container">
+        <app-consulation-form-medic #prescriptionTable></app-consulation-form-medic>
+      </div>
+    </mat-tab>
+    <mat-tab label="Signature">
+      <div class="container">
+        <app-canvas [visitId]="visitRecord()?.visitId??0" (signSaved)="onSignSaved($event)"></app-canvas>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</form>

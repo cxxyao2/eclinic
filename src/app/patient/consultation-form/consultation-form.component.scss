@@ -5,12 +5,8 @@
   gap: 1rem;
 }
 
-.container form {
-  margin-bottom: 20px;
-}
-
-.container form > * {
-  margin: 12px 0;
+.container  > * {
+  margin: 8px 0;
 }
 
 .container .mat-radio-button {
@@ -25,7 +21,7 @@
 .admission-warning {
   display: flex;
   align-items: center;
-  color: red;
+  color: var(--mat-app-error);
   font-weight: bold;
   margin-top: 8px;
 }
@@ -41,6 +37,7 @@
 .patient-selection {
   display: flex;
   align-content: flex-start;
+  align-items:baseline;
 }
 
 .end-button {

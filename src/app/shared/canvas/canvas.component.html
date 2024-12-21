@@ -1,7 +1,7 @@
 <div class="signature-container">
-    <canvas #canvasElement width="600" height="100" class="canvas" (mousedown)="startDrawing($event)" (mousemove)="draw($event)"
-        (mouseup)="stopDrawing()" (touchstart)="startDrawing($event)" (touchmove)="draw($event)"
-        (touchend)="stopDrawing()"></canvas>
+    <canvas #canvasElement [width]="isBigScreen()?600:300" height="100" class="canvas"
+        (mousedown)="startDrawing($event)" (mousemove)="draw($event)" (mouseup)="stopDrawing()"
+        (touchstart)="startDrawing($event)" (touchmove)="draw($event)" (touchend)="stopDrawing()"></canvas>
     <div class="button-container">
         <button mat-stroked-button type="button" (click)="clearCanvas()">Clear</button>
         <button mat-flat-button type="button" (click)="submitSignature()">Submit</button>

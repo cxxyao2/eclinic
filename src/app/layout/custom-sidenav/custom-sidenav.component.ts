@@ -36,7 +36,6 @@ export class CustomSidenavComponent {
     this.sideNavCollapsed.set(val);
   }
 
-
   menuItems = signal<MenuItem[]>([
     {
       icon: 'event_available',

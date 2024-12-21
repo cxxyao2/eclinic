@@ -1,4 +1,5 @@
 import { Component, inject } from "@angular/core";
+import { MatButtonModule } from "@angular/material/button";
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from "@angular/material/dialog";
 
 export interface DialogData {
@@ -13,6 +14,7 @@ export interface DialogData {
   templateUrl: 'dialog-simple-dialog.html',
   standalone: true,
   imports: [
+    MatButtonModule,
     MatDialogModule
   ],
 })

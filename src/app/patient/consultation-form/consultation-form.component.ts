@@ -25,6 +25,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ConsulationFormMedicComponent } from "../../consulation-form-medic/consulation-form-medic.component";
 import { from } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
+import { MatTabsModule } from '@angular/material/tabs';
 
 
 @Component({
@@ -40,9 +41,7 @@ import { MatButtonModule } from '@angular/material/button';
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
-    MatTableModule,
-    MatSortModule,
-    MatPaginatorModule,
+    MatTabsModule,
     MatIconModule,
     CanvasComponent,
     FormsModule,

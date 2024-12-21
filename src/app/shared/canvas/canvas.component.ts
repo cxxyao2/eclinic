@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, ViewChild, ElementRef, Component, inject, Afte
 import { CommonModule } from '@angular/common';
 import { SignatureDTO, SignaturesService } from '@libs/api-client';
 import { MatButtonModule } from '@angular/material/button';
+import { ResponsiveService } from 'src/app/services/responsive.service';
 
 @Component({
   selector: 'app-canvas',
@@ -17,6 +18,8 @@ export class CanvasComponent implements AfterViewInit {
   visitId = input.required<number>();
 
   private signService = inject(SignaturesService);
+  private responseService = inject(ResponsiveService);
+  isBigScreen = this.responseService.isLargeScreen;
   private canvas!: HTMLCanvasElement;
   private ctx!: CanvasRenderingContext2D;
   private isDrawing = false;
