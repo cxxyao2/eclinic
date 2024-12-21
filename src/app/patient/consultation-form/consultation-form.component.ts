@@ -24,6 +24,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ConsulationFormMedicComponent } from "../../consulation-form-medic/consulation-form-medic.component";
 import { from } from 'rxjs';
+import { MatButtonModule } from '@angular/material/button';
 
 
 @Component({
@@ -33,6 +34,7 @@ import { from } from 'rxjs';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+    MatButtonModule,
     MatCheckboxModule,
     MatRadioModule,
     MatFormFieldModule,

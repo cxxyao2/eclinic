@@ -119,7 +119,7 @@ export class CheckInComponent implements AfterViewInit, OnInit {
     const newVisit: AddVisitRecordDTO = {
       patientId: schedule.patientId ?? 0,
       practitionerId: schedule.practitionerId,
-      scheduleIdId: schedule.scheduleId,
+      scheduleId: schedule.scheduleId,
       practitionerSignaturePath: "",
       visitDate: this.today,
       diagnosis: "",
@@ -132,7 +132,7 @@ export class CheckInComponent implements AfterViewInit, OnInit {
       patientName: schedule.patientName,
       practitionerId: schedule.practitionerId,
       practitionerName: schedule.practitionerName,
-      scheduleIdId: schedule.scheduleId,
+      scheduleId: schedule.scheduleId,
       practitionerSignaturePath: "",
       visitDate: this.today,
       diagnosis: "",

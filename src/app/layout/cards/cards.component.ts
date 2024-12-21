@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
@@ -5,7 +6,7 @@ import { MatCardModule } from '@angular/material/card';
 @Component({
   selector: 'app-cards',
   standalone: true,
-  imports: [MatGridListModule, MatCardModule],
+  imports: [CommonModule, MatGridListModule, MatCardModule],
   templateUrl: './cards.component.html',
   styleUrl: './cards.component.scss'
 })
