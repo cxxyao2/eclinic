@@ -3,6 +3,7 @@ import { AfterViewInit, Component, DestroyRef, inject, OnInit, signal, ViewChild
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -17,6 +18,7 @@ import { map, Observable, startWith } from 'rxjs';
   imports: [
     FormsModule,
     ReactiveFormsModule,
+    MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
     MatTableModule,
@@ -77,13 +79,11 @@ export class ConsulationFormMedicComponent implements OnInit, AfterViewInit {
   onMedicationSelected(event: any): void {
     let obj = event.option.value as GetMedicationDTO;
     this.selectedMedication.set(obj);
-  }
-
-  addMedication(): void {
     const data = [...this.dataSource.data];
     this.dataSource.data = [...data, { ...this.selectedMedication() }];
-
   }
+
+
 
   applyFilterTable(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;

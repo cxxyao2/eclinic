@@ -70,6 +70,7 @@ export class ConsultationFormComponent implements OnInit {
   });
   // protected readonly hideRequired = toSignal(this.needsAdmissionControl.valueChanges);
   protected readonly visitRecord = toSignal(this.visitControl.valueChanges);
+  protected readonly needAdmission = toSignal(this.needsAdmissionControl.valueChanges);
   dataSource = new MatTableDataSource<GetMedicationDTO>([]);
   displayedColumns: string[] = ['no', 'medicationId', 'medicationName', 'dosage', 'action'];
   @ViewChild(MatPaginator) paginator!: MatPaginator;

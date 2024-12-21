@@ -1,16 +1,12 @@
-import { ChangeDetectionStrategy, ViewChild, ElementRef, Component, viewChild, inject, AfterViewInit, signal, input, Output, EventEmitter } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { ChangeDetectionStrategy, ViewChild, ElementRef, Component, inject, AfterViewInit, input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SignatureDTO, SignaturesService } from '@libs/api-client';
-
-const API_URL = 'http:///localhost:5036/api/Signature';
-
-
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-canvas',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,MatButtonModule],
   templateUrl: './canvas.component.html',
   styleUrl: './canvas.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -25,17 +21,9 @@ export class CanvasComponent implements AfterViewInit {
   private ctx!: CanvasRenderingContext2D;
   private isDrawing = false;
 
-
   ngAfterViewInit(): void {
     this.canvas = this.canvasElement.nativeElement;
     this.ctx = this.canvas.getContext('2d') as CanvasRenderingContext2D;
-
-    //   this.canvas.addEventListener('mousedown', this.startDrawing.bind(this));
-    //   this.canvas.addEventListener('mousemove', this.draw.bind(this));
-    //   this.canvas.addEventListener('mouseup', this.stopDrawing.bind(this));
-    //   this.canvas.addEventListener('touchstart', this.startDrawing.bind(this));
-    //   this.canvas.addEventListener('touchmove', this.draw.bind(this));
-    //   this.canvas.addEventListener('touchend', this.stopDrawing.bind(this));
   }
 
   startDrawing(event: MouseEvent | TouchEvent): void {
@@ -46,7 +34,7 @@ export class CanvasComponent implements AfterViewInit {
     this.ctx.moveTo(x, y);
   }
 
-   draw(event: MouseEvent | TouchEvent): void {
+  draw(event: MouseEvent | TouchEvent): void {
     if (!this.isDrawing) return;
 
     const { x, y } = this.getPosition(event);
@@ -54,13 +42,13 @@ export class CanvasComponent implements AfterViewInit {
     this.ctx.stroke();
   }
 
-   stopDrawing(): void {
+  stopDrawing(): void {
     this.isDrawing = false;
     this.ctx.closePath();
   }
 
   // This method calculates the relative position of the mouse or touch event inside the canvas.
-   getPosition(event: MouseEvent | TouchEvent): { x: number, y: number } {
+  getPosition(event: MouseEvent | TouchEvent): { x: number, y: number } {
     const rect = this.canvas.getBoundingClientRect();
     if (event instanceof MouseEvent) {
       return { x: event.clientX - rect.left, y: event.clientY - rect.top };
@@ -77,16 +65,21 @@ export class CanvasComponent implements AfterViewInit {
 
   submitSignature(): void {
     const dataUrl = this.canvas.toDataURL('image/png');
+    if (!dataUrl || dataUrl.length === 0) {
+      alert('You did not sign your name.');
+      return;
+    }
     // const base64String = dataUrl.split(',')[1]; // Exact the base64 part of the image
     // Send the image data to the backend
-    const signDTO: SignatureDTO ={
+    const signDTO: SignatureDTO = {
       image: dataUrl,
       visitRecordId: this.visitId()
-    } 
+    }
     this.signService.apiSignaturesPost(signDTO).subscribe({
       next: (res) => {
-        this.signSaved.emit(res.data??"");
-        console.log('Signature uploaded successfully');},
+        this.signSaved.emit(res.data ?? "");
+        console.log('Signature uploaded successfully');
+      },
       error: (err) => console.error('Error uploading signature', err)
     });
   }

@@ -1,9 +1,8 @@
-.container mat-form-field + mat-form-field {
-  margin-left: 8px;
-}
-
-.container mat-form-field {
-  width: 220px;
+.container {
+  display: flex;
+  flex-direction: column;
+  align-content: flex-start;
+  gap: 1rem;
 }
 
 .container form {
@@ -37,4 +36,19 @@
 
 .full-width {
   width: 100%;
+}
+
+.patient-selection {
+  display: flex;
+  align-content: flex-start;
+}
+
+.end-button {
+  flex: 1;
+  display: flex;
+  align-content: space-between;
+}
+
+button {
+  margin-left: 8px;
 }
