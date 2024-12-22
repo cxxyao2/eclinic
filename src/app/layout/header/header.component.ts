@@ -1,3 +1,4 @@
+import { User } from '@libs/api-client';
 import { ChangeDetectionStrategy, Component, DestroyRef, effect, inject, input, model, OnInit, output, signal } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -5,9 +6,10 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslocoService } from '@jsverse/transloco';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { SseClientService } from 'src/app/services/sse.service';
 import { MatBadgeModule } from '@angular/material/badge';
+import { MasterDataService } from 'src/app/services/master-data.service';
 
 const languageMap: { [key: string]: string } = {
   fr: 'French',
@@ -34,7 +36,10 @@ export class HeaderComponent implements OnInit {
   currentLanguage = signal('English');
   private destroyRef = inject(DestroyRef);
   private translocoService = inject(TranslocoService);
+  private masterService = inject(MasterDataService);
   sseService = inject(SseClientService);
+
+  user = toSignal(this.masterService.userSubject);
 
   setDarkMode = effect(() => {
     document.body.classList.toggle('dark', this.darkMode());

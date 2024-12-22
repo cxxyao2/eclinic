@@ -1,4 +1,4 @@
-import { InpatientsService } from './../../../../libs/api-client/api/inpatients.service';
+import { InpatientsService } from '@libs/api-client/api/inpatients.service';
 import { CommonModule } from '@angular/common';
 import { AfterViewInit, ChangeDetectionStrategy, Component, DestroyRef, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -75,7 +75,7 @@ export class ConsultationFormComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild('prescriptionTable') prescriptionTable!: ConsulationFormMedicComponent;
-
+  @ViewChild('signature') practitionerSign!: CanvasComponent;
 
 
   scheduledVisits = signal<GetVisitRecordDTO[]>([]);
@@ -119,6 +119,7 @@ export class ConsultationFormComponent implements OnInit {
           switchMap((res) => {
             if (res && res.length > 0) {
               const praId = res[0].practitionerId ?? 0;
+              console.log('user data',res);
               return this.practitionerService.apiPractitionersIdGet(praId);
             }
             throw new Error('No user found');
@@ -172,12 +173,20 @@ export class ConsultationFormComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(
         {
-          next: (res) => console.log('res.data', res.data),
+          next: (res) => {
+            console.log('res.data', res.data);
+          },
           error: (err) => console.error('error', err)
         }
       );
 
     this.isProcessing.set(true);
+  }
+
+  refreshForm() {
+    this.fetchVistRecord();
+    this.diagnosisForm.reset();
+    this.practitionerSign.clearCanvas();
 
   }
 
@@ -218,12 +227,13 @@ export class ConsultationFormComponent implements OnInit {
           next: (res) => {
             console.log('res.data', res.data);
             this.snackbarService.show("Diagnosis saved successfully.");
+            this.refreshForm();
           },
           error: (err) => console.error('error', err),
           complete: () => this.isProcessing.set(false)
         }
       );
-    
+
     const needAdmission = this.diagnosisForm.value.admission;
     if (needAdmission) {
       const addInpatient: AddInpatientDTO = {
@@ -253,6 +263,7 @@ export class ConsultationFormComponent implements OnInit {
       concatMap((item) => this.prescriptionService.apiPrescriptionsPost(item)),
       finalize(() => {
         console.log('All items have been processed');
+        this.prescriptionTable.resetMedication();
       })
     ).subscribe({
       next: () => { },

@@ -1,21 +1,18 @@
+.title {
+  margin: 16px;
+}
 .container {
   display: flex;
   flex-direction: column;
   align-content: flex-start;
-  gap: 1rem;
 }
 
-.container  > * {
+.container > * {
   margin: 8px 0;
 }
 
 .container .mat-radio-button {
   margin: 0 12px;
-}
-
-.form-fields {
-  display: flex;
-  align-items: flex-start;
 }
 
 .admission-warning {
@@ -34,10 +31,12 @@
   width: 100%;
 }
 
-.patient-selection {
+.booked-selection {
   display: flex;
+  flex-wrap: wrap;
   align-content: flex-start;
-  align-items:baseline;
+  align-items: baseline;
+  margin: 16px;
 }
 
 .end-button {
@@ -48,4 +47,45 @@
 
 button {
   margin-left: 8px;
+}
+
+/* General Styles */
+.main-container {
+  display: grid;
+  gap: 16px; /* Adds spacing between sections */
+  margin: 16px;
+}
+
+/* Grid Layout for Different Screen Sizes */
+@media screen and (max-width: 768px) {
+  .main-container {
+    grid-template-columns: 1fr; /* Stacks sections vertically */
+  }
+}
+
+@media screen and (min-width: 769px) {
+  .main-container {
+    grid-template-columns: 1fr auto; 
+  }
+}
+
+/* Section Styles */
+.doctor-section,
+.patient-section {
+  padding: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Patient Section Specific Styles */
+.patient-section {
+  background-color: #f9f9f9;
+}
+
+.patient-picture {
+  width: 100%;
+  max-width: 150px;
+  display: block;
+  margin-bottom: 16px;
 }

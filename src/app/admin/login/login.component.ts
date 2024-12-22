@@ -11,6 +11,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { AuthService } from '@libs/api-client';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
+import { MasterDataService } from 'src/app/services/master-data.service';
 
 @Component({
   selector: 'app-login',
@@ -24,7 +25,11 @@ export class LoginComponent {
   loginForm: FormGroup;
   errorMessage = signal<string | null>(null);
 
-  constructor(private fb: FormBuilder, private router: Router, private authService: AuthService) {
+  constructor(private fb: FormBuilder,
+    private router: Router,
+    private authService: AuthService,
+    private masterService: MasterDataService
+  ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]],
@@ -39,6 +44,7 @@ export class LoginComponent {
         next: (response) => {
           localStorage.setItem('accessToken', response.accessToken);
           localStorage.setItem('email', loginData['email']);
+          this.masterService.userSubject.next(response.user);
           this.errorMessage.set(null);
           this.router.navigate(['/dashboard']);
           console.log('Login successful:', response);

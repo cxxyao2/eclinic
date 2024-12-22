@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit, signal, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, inject, OnInit, signal, AfterViewInit, ViewChild, DestroyRef } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { TranslocoDirective } from '@jsverse/transloco';
@@ -20,9 +20,9 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { ConsultationFormComponent } from "../consultation-form/consultation-form.component";
 import { LabResultsComponent } from "../lab-results/lab-results.component";
 import { MriImagesComponent } from "../mri-images/mri-images.component";
-import { AddVisitRecordDTO, GetPatientDTO, GetPractitionerScheduleDTO, GetPractitionerScheduleDTOListServiceResponse, GetVisitRecordDTO, GetVisitRecordDTOListServiceResponse, GetVisitRecordDTOServiceResponse, PractitionerSchedulesService } from '@libs/api-client';
+import { AddVisitRecordDTO, GetPatientDTO, GetPractitionerScheduleDTO, GetPractitionerScheduleDTOListServiceResponse, GetVisitRecordDTO, GetVisitRecordDTOListServiceResponse, GetVisitRecordDTOServiceResponse, PractitionerSchedulesService, UpdatePractitionerScheduleDTO } from '@libs/api-client';
 import { VisitRecordsService } from '@libs/api-client';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { toSignal, takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MasterDataService } from 'src/app/services/master-data.service';
 import { CheckInWaitingListComponent } from '../check-in-waiting-list/check-in-waiting-list.component';
 
@@ -56,6 +56,7 @@ export class CheckInComponent implements AfterViewInit, OnInit {
   private masterService = inject(MasterDataService);
   private visitService = inject(VisitRecordsService);
   private scheduleService = inject(PractitionerSchedulesService);
+  private destroyRef = inject(DestroyRef);
 
   displayedColumns: string[] = ['practitionerName', 'startDateTime', 'endDateTime', 'action'];
   // business logic. Receptionist: 
@@ -87,13 +88,16 @@ export class CheckInComponent implements AfterViewInit, OnInit {
   }
 
   getAppointmentByDate(bookedDate: Date) {
-    this.scheduleService.apiPractitionerSchedulesGet(undefined, bookedDate).subscribe({
-      next: (res: GetPractitionerScheduleDTOListServiceResponse) => {
-        this.todayAllShedules = res.data ?? [];
-      },
-      error: () => { }
-    }
-    );
+    this.scheduleService.apiPractitionerSchedulesGet(undefined, bookedDate)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (res: GetPractitionerScheduleDTOListServiceResponse) => {
+          const result = res.data ?? [];
+          this.todayAllShedules = result.filter(res => res.reasonForVisit !== 'done');
+        },
+        error: () => { }
+      }
+      );
   }
 
   getWaitingListByDate(bookedDate: Date) {
@@ -114,7 +118,17 @@ export class CheckInComponent implements AfterViewInit, OnInit {
   }
 
   addWaitingList(schedule: GetPractitionerScheduleDTO) {
-    // 1, remove from schedule data
+    // 1, update schedule data
+    const newSchedule = { ...schedule };
+    newSchedule.reasonForVisit = 'done';
+    this.scheduleService.apiPractitionerSchedulesPut(newSchedule as UpdatePractitionerScheduleDTO).subscribe(
+      {
+        next: (data) => { console.log('updated', data); },
+        error: (err) => { console.error('error is', err); }
+      }
+    );
+
+
     // 2, add to waitlist data
     const newVisit: AddVisitRecordDTO = {
       patientId: schedule.patientId ?? 0,

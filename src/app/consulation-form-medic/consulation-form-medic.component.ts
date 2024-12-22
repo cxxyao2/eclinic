@@ -109,5 +109,9 @@ export class ConsulationFormMedicComponent implements OnInit, AfterViewInit {
   getMedications(): GetMedicationDTO[] {
     return this.dataSource.data;
   }
+
+  resetMedication():void {
+    this.dataSource.data = [];
+  }
 }
 

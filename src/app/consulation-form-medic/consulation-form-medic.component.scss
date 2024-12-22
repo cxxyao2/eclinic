@@ -1,11 +1,16 @@
-
-
-table {
+:host {
+  display: flex;
+  flex-direction: column;
+  align-content: flex-start;
+  gap: 1rem;
   width: 100%;
 }
 
-.mat-mdc-form-field {
-  font-size: 14px;
+.full-width {
+  width: 100%;
+}
+
+table {
   width: 100%;
 }
 

@@ -96,9 +96,8 @@ export class PractitionerScheduleComponent implements AfterViewInit {
   masterDataService = inject(MasterDataService);
   readonly dialog = inject(MatDialog);
   private snackbarService = inject(SnackbarService);
+  private scheduleService = inject(PractitionerSchedulesService)
 
-  constructor(private scheduleService: PractitionerSchedulesService) {
-  }
 
   // Lifecycle Hooks
   ngAfterViewInit(): void {

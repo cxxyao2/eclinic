@@ -3,11 +3,14 @@ import { CommonModule } from '@angular/common';
 import { SignatureDTO, SignaturesService } from '@libs/api-client';
 import { MatButtonModule } from '@angular/material/button';
 import { ResponsiveService } from 'src/app/services/responsive.service';
+import { DialogSimpleDialog } from '../dialog-simple-dialog';
+import { MatDialog } from '@angular/material/dialog';
+import { SnackbarService } from 'src/app/services/snackbar-service.service';
 
 @Component({
   selector: 'app-canvas',
   standalone: true,
-  imports: [CommonModule,MatButtonModule],
+  imports: [CommonModule, MatButtonModule],
   templateUrl: './canvas.component.html',
   styleUrl: './canvas.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -19,10 +22,12 @@ export class CanvasComponent implements AfterViewInit {
 
   private signService = inject(SignaturesService);
   private responseService = inject(ResponsiveService);
+  private snackbarService = inject(SnackbarService);
   isBigScreen = this.responseService.isLargeScreen;
   private canvas!: HTMLCanvasElement;
   private ctx!: CanvasRenderingContext2D;
   private isDrawing = false;
+  readonly dialog = inject(MatDialog);
 
   ngAfterViewInit(): void {
     this.canvas = this.canvasElement.nativeElement;
@@ -68,8 +73,10 @@ export class CanvasComponent implements AfterViewInit {
 
   submitSignature(): void {
     const dataUrl = this.canvas.toDataURL('image/png');
-    if (!dataUrl || dataUrl.length === 0) {
-      alert('You did not sign your name.');
+    if (this.isCanvasBlank()) {
+      this.dialog.open(DialogSimpleDialog, {
+        data: { title: 'Notification', content: 'Please sign your name on the touchpad before saving the prescription.', isCancelButtonVisible: false },
+      });
       return;
     }
     // const base64String = dataUrl.split(',')[1]; // Exact the base64 part of the image
@@ -81,30 +88,17 @@ export class CanvasComponent implements AfterViewInit {
     this.signService.apiSignaturesPost(signDTO).subscribe({
       next: (res) => {
         this.signSaved.emit(res.data ?? "");
-        console.log('Signature uploaded successfully');
+        this.snackbarService.show('Signature uploaded successfully');
       },
       error: (err) => console.error('Error uploading signature', err)
     });
   }
 
-  // Capture the canvas content as based64 string
-  // saveSignature() {
-  //   const canvas = this.signatureCanvas();
-  //   // const dataUrl = canvas.toDataURL('image/png');
-  //   const dataUrl = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4"
-  //                           + "//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==";
-  //   if(!dataUrl) {
-  //     this.errorMessage.set("Please draw soemthing in the canvas.")
-  //     return;
-  //   }
+  isCanvasBlank() {
+    const pixelBuffer = new Uint32Array(
+      this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height).data.buffer
+    );
 
-  //   const visitId= Math.round(Math.random()*1000);
-
-  //   // Send the image data to the backend
-  //   this.http.post(API_URL, {image: dataUrl, visitId}).subscribe(response=>{
-  //     this.errorMessage.set(null);
-  //     console.log('Signature saved',response);
-  //   });
-
-  // }
+    return !pixelBuffer.some(color => color !== 0);
+  }
 }
