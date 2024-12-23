@@ -54,7 +54,7 @@ export const routes: Routes = [
         component: InpatientAdmitComponent,
     },
     {
-        path: "inpatient/:roomId",
+        path: "inpatient/:roomNumber",
         component: InpatientBedAssignComponent
     },
     {
