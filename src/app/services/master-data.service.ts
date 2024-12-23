@@ -1,5 +1,5 @@
 import { DestroyRef, inject, Injectable } from '@angular/core';
-import { AddPractitionerAvailabilityDTO, GetMedicationDTO, GetPatientDTO, GetPractitionerAvailabilityDTO, GetPractitionerAvailabilityDTOServiceResponse, GetPractitionerDTO, StringServiceResponse, User } from '@libs/api-client';
+import { AddPractitionerAvailabilityDTO, GetBedDTO, GetMedicationDTO, GetPatientDTO, GetPractitionerAvailabilityDTO, GetPractitionerAvailabilityDTOServiceResponse, GetPractitionerDTO, StringServiceResponse, User } from '@libs/api-client';
 import { BehaviorSubject, from } from 'rxjs';
 import { concatMap, finalize, map, tap } from 'rxjs/operators';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -24,11 +24,11 @@ export class MasterDataService {
   public practitionersSubject = new BehaviorSubject<GetPractitionerDTO[]>([]);
   public medicationsSubject = new BehaviorSubject<GetMedicationDTO[]>([]);
   public patientsSubject = new BehaviorSubject<GetPatientDTO[]>([]);
-  public bedRoomsSubject = new BehaviorSubject<any[]>([]);
+  public bedsSubject = new BehaviorSubject<GetBedDTO[]>([]);
   public userSubject = new BehaviorSubject<User>({} as User);
 
-  public crudResultMessage = new BehaviorSubject<string | null>(null);
-  public errorMessage = new BehaviorSubject<string | null>(null);
+
+
 
 
 
@@ -36,7 +36,6 @@ export class MasterDataService {
     this.fetchPatients();
     this.fetchPractitioners();
     this.fetchMedications();
-    this.fetchBedRooms();
   }
 
 
@@ -67,13 +66,5 @@ export class MasterDataService {
       takeUntilDestroyed(this.destroyRef)
     ).subscribe();
   }
-
-
-  // Fetch and store bed rooms
-  fetchBedRooms(): void {
-    this.bedRoomsSubject.next(ROOMS_WITH_BEDS);
-  }
-
-
 
 }

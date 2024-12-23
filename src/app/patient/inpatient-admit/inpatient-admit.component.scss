@@ -1,55 +1,56 @@
 .card-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 16px;
-    margin: 16px;
-  }
-  
-  .card {
-    padding: 16px;
-    cursor: default;
-  }
-  
-  .card.clickable {
-    cursor: pointer;
-    border: 2px solid green;
-  }
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin: 16px;
+}
 
+.card {
+  padding: 16px;
+  cursor: default;
+}
 
-  .room-layout {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-    margin: 16px 0;
-  }
-  
-  .room-icon {
-    font-size: 36px;
-    color: #777;
-  }
-  
-  .window-icon {
-    align-self: flex-start;
-  }
-  
-  .door-icon {
-    align-self: flex-end;
-  }
-  
-  .bed-container {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Adjust based on room layout */
-    gap: 8px;
-    margin: 16px 0;
-  }
-  
-  .bed {
-    padding: 8px;
-    border-radius: 4px;
-    text-align: center;
-    color: white;
-    font-size: 14px;
-  }
-  
-  
+.clickable-card {
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.clickable-card:hover {
+  transform: scale(1.02);
+}
+
+.room-layout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  margin: 16px 0;
+}
+
+.room-icon {
+  font-size: 36px;
+  color: #777;
+}
+
+.window-icon {
+  align-self: flex-start;
+}
+
+.door-icon {
+  align-self: flex-end;
+}
+
+.bed-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Adjust based on room layout */
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.bed {
+  padding: 8px;
+  border-radius: 4px;
+  text-align: center;
+  color: white;
+  font-size: 14px;
+}

@@ -10,6 +10,8 @@ import { BookAppointmentComponent } from './patient/book-appointment/book-appoin
 import { AuthorizationComponent } from './admin/authorization/authorization.component';
 import { AdminComponent } from './admin/admin/admin.component';
 import { UpdateUserComponent } from './admin/update-user/update-user.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { InpatientBedAssignComponent } from './inpatient-bed-assign/inpatient-bed-assign.component';
 
 export const routes: Routes = [
     {
@@ -52,6 +54,10 @@ export const routes: Routes = [
         component: InpatientAdmitComponent,
     },
     {
+        path: "inpatient/:roomId",
+        component: InpatientBedAssignComponent
+    },
+    {
         path: 'login',
         component: LoginComponent
     },
@@ -64,5 +70,5 @@ export const routes: Routes = [
         pathMatch: 'full',
         redirectTo: 'dashboard'
     },
-    { path: '**', redirectTo: '/dashboard' },
+    { path: '**', component: PageNotFoundComponent },
 ];

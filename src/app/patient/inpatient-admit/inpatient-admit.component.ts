@@ -1,87 +1,74 @@
+import { GetBedDTO } from './../../../../libs/api-client/model/getBedDTO';
+import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
+import { BedsService } from '@libs/api-client';
+import { take } from 'rxjs';
+import { BEDNUMBER_PER_ROOM } from '@constants/rooms-with-beds.constants';
+import { MasterDataService } from 'src/app/services/master-data.service';
 
-
-interface Room {
-  roomNumber: number;
+export interface Room {
+  roomNo: string;
   totalBeds: number;
   occupiedBeds: number;
-  beds: Bed[]; // Array to hold bed details
+  emptyBeds: number;
 }
-
-interface Bed {
-  bedNumber: number;
-  occupied: boolean;
-  patientName?: string;
-  illnessName?: string;
-}
-
 
 @Component({
   selector: 'app-inpatient-admit',
   standalone: true,
-  imports: [CommonModule,MatCardModule, MatIconModule],
+  imports: [CommonModule, RouterModule, MatCardModule, MatIconModule],
   templateUrl: './inpatient-admit.component.html',
   styleUrl: './inpatient-admit.component.scss'
 })
-export class InpatientAdmitComponent {
+export class InpatientAdmitComponent implements OnInit {
 
-  // todo: 1, 展示所有房间的使用情况. 一个护士管理4个房间, 16个床位
-  // 2, 默认1个房间4张床位, 可以分配新病人到空床位
-  // 3，可以在同一房间的4个床位间移动 1,2,3,4,病人ID 和床ID
+  // todo: 1, 展示所有房间的使用情况.
+  // 8 room * 8 bed. 
+  // 2, 默认1个房间8张床位, 可以分配新病人到空床位
+  // 3，可以在同一房间的6个床位间移动 1,2,3,4,病人ID 和床ID
   // Example data for rooms
- // Example data for rooms
- rooms: Room[] = [
-  {
-    roomNumber: 101,
-    totalBeds: 4,
-    occupiedBeds: 2,
-    beds: [
-      { bedNumber: 1, occupied: true, patientName: 'John Doe', illnessName: 'Fever' },
-      { bedNumber: 2, occupied: true, patientName: 'Jane Smith', illnessName: 'Flu' },
-      { bedNumber: 3, occupied: false },
-      { bedNumber: 4, occupied: false }
-    ]
-  },
-  {
-    roomNumber: 102,
-    totalBeds: 4,
-    occupiedBeds: 4,
-    beds: [
-      { bedNumber: 1, occupied: true, patientName: 'Alice Brown', illnessName: 'Cold' },
-      { bedNumber: 2, occupied: true, patientName: 'Tom Lee', illnessName: 'Headache' },
-      { bedNumber: 3, occupied: true, patientName: 'Sara White', illnessName: 'Cough' },
-      { bedNumber: 4, occupied: true, patientName: 'Mark Green', illnessName: 'Asthma' }
-    ]
-  },
-  {
-    roomNumber: 103,
-    totalBeds: 4,
-    occupiedBeds: 1,
-    beds: [
-      { bedNumber: 1, occupied: true, patientName: 'Charlie Black', illnessName: 'Allergy' },
-      { bedNumber: 2, occupied: false },
-      { bedNumber: 3, occupied: false },
-      { bedNumber: 4, occupied: false }
-    ]
+  // Example data for rooms
+  private bedService = inject(BedsService);
+  private masterService = inject(MasterDataService);
+
+  groupedRooms: Room[] = [];
+
+
+  ngOnInit(): void {
+    this.bedService.apiBedsGet().pipe(take(1)).subscribe({
+      next: (res) => {
+        let data = res.data ?? [];
+        this.masterService.bedsSubject.next(data);
+        
+      },
+      error: (err) => console.error(err)
+    });
+
   }
-];
 
-selectedRoom: Room | null = null;
 
-getAvailableBeds(occupiedBeds: number, totalBeds: number): number {
-  return totalBeds - occupiedBeds;
-}
 
-selectRoom(room: Room): void {
-  if (this.getAvailableBeds(room.occupiedBeds, room.totalBeds) > 0) {
-    this.selectedRoom = room;
+  getRoomAndEmptyBeds(beds: GetBedDTO[]) {
+    const groupedRooms = Object.values(
+      beds.reduce((acc, bed) => {
+        const { roomNumber, inpatientId } = bed;
+        const roomNo = roomNumber ?? "";
+
+        if (!acc[roomNo]) {
+          acc[roomNo] = { roomNo, emptyBeds: 0, occupiedBeds: BEDNUMBER_PER_ROOM, totalBeds: BEDNUMBER_PER_ROOM };
+        }
+        if (!inpatientId) {
+          acc[roomNo].emptyBeds += 1;
+          acc[roomNo].occupiedBeds -= 1;
+        }
+        return acc;
+      }, {} as Record<string, Room>)
+    );
+
+    console.log(groupedRooms);
   }
-}
 
-closeRoomDetails(): void {
-  this.selectedRoom = null;
-}
 }

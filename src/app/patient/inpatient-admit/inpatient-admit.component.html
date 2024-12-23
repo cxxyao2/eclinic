@@ -1,60 +1,16 @@
 <div class="card-container">
-    <mat-card
-      *ngFor="let room of rooms"
-      class="card"
-      (click)="selectRoom(room)"
-      [ngClass]="{ clickable: getAvailableBeds(room.occupiedBeds, room.totalBeds) > 0 }"
-    >
-      <mat-card-header>
-        <mat-card-title
-          [ngStyle]="{ color: getAvailableBeds(room.occupiedBeds, room.totalBeds) > 0 ? 'green' : 'black' }"
-        >
-          Room {{ room.roomNumber }}
-        </mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <p><strong>Total Beds:</strong> {{ room.totalBeds }}</p>
-        <p><strong>Occupied Beds:</strong> {{ room.occupiedBeds }}</p>
-        <p
-          [ngStyle]="{ color: getAvailableBeds(room.occupiedBeds, room.totalBeds) > 0 ? 'green' : 'black' }"
-        >
-          <strong>Available Beds:</strong> {{ getAvailableBeds(room.occupiedBeds, room.totalBeds) }}
-        </p>
-      </mat-card-content>
-    </mat-card>
-  </div>
-  
-  <!-- Room Details Popup -->
-<!-- Room Details Popup -->
-<div class="room-details-popup" *ngIf="selectedRoom">
-    <mat-card class="details-card">
-      <mat-card-header>
-        <mat-card-title>Room {{ selectedRoom.roomNumber }} Details</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <!-- Add visual elements for the room layout -->
-        <div class="room-layout">
-          <mat-icon class="room-icon window-icon">window</mat-icon>
-          <div class="bed-container">
-            <div
-              *ngFor="let bed of selectedRoom.beds"
-              class="bed"
-              [ngStyle]="{ backgroundColor: bed.occupied ? 'red' : 'green' }"
-            >
-              <p *ngIf="bed.occupied">
-                <strong>Patient:</strong> {{ bed.patientName }}<br />
-                <strong>Illness:</strong> {{ bed.illnessName }}
-              </p>
-              <p *ngIf="!bed.occupied"><strong>Empty Bed</strong></p>
-            </div>
-          </div>
-          <mat-icon class="room-icon door-icon">door_front</mat-icon>
-        </div>
-      </mat-card-content>
-      <mat-card-actions>
-        <button mat-button (click)="closeRoomDetails()">Close</button>
-      </mat-card-actions>
-    </mat-card>
-  </div>
-  
-  
+  <mat-card *ngFor="let room of groupedRooms" class="card clickable-card" [routerLink]="['/inpatient', room.roomNo]">
+    <mat-card-header>
+      <mat-card-title [ngStyle]="{ color: room.emptyBeds > 0 ? 'green' : 'black' }">
+        Room {{ room.roomNo }}
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <p><strong>Total Beds:</strong> {{ room.totalBeds }}</p>
+      <p><strong>Occupied Beds:</strong> {{ room.occupiedBeds }}</p>
+      <p [ngStyle]="{ color:room.emptyBeds > 0 ? 'green' : 'black' }">
+        <strong>Available Beds:</strong> {{ room.emptyBeds }}
+      </p>
+    </mat-card-content>
+  </mat-card>
+</div>

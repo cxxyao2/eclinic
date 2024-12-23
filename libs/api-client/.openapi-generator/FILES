@@ -5,6 +5,7 @@ api.module.ts
 api/api.ts
 api/appointments.service.ts
 api/auth.service.ts
+api/beds.service.ts
 api/imageRecords.service.ts
 api/inpatients.service.ts
 api/labTests.service.ts
@@ -37,6 +38,9 @@ model/dayOfWeek.ts
 model/getAppointmentDTO.ts
 model/getAppointmentDTOListServiceResponse.ts
 model/getAppointmentDTOServiceResponse.ts
+model/getBedDTO.ts
+model/getBedDTOListServiceResponse.ts
+model/getBedDTOServiceResponse.ts
 model/getImageRecordDTO.ts
 model/getImageRecordDTOListServiceResponse.ts
 model/getImageRecordDTOServiceResponse.ts
@@ -71,6 +75,7 @@ model/models.ts
 model/practitioner.ts
 model/signatureDTO.ts
 model/stringServiceResponse.ts
+model/updateBedDTO.ts
 model/updatePractitionerScheduleDTO.ts
 model/user.ts
 model/userCreateDTO.ts
