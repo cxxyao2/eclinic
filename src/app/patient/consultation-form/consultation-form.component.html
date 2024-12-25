@@ -76,7 +76,12 @@
       <p><strong>Patient:</strong> {{visitRecord()?.patientName|| ""}}</p>
       <p><strong>Allergies:</strong> Peanuts, Penicillin.</p>
       <p><strong>Other Info:</strong> Diabetes type 2.</p>
-      <p><mat-icon>attach_file</mat-icon>MRI Images</p>
+      @if(this.visitRecord()?.patientId){
+      <p (click)="showImage()"><mat-icon>attach_file</mat-icon>MRI Images</p>
+      <app-image-review *ngIf="isImageViewerOpen()" [fileName]="imageFile()"
+        (close)="closeImageViewer()"></app-image-review>
+      }
+
     </div>
   </div>
 

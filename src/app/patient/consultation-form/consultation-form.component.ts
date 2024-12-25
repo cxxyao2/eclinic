@@ -1,6 +1,6 @@
 import { InpatientsService } from '@libs/api-client/api/inpatients.service';
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, ChangeDetectionStrategy, Component, DestroyRef, inject, OnInit, signal, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -8,24 +8,25 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatPaginator } from '@angular/material/paginator';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
-import { MatSort, MatSortModule } from '@angular/material/sort';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { AddInpatientDTO, AddPrescriptionDTO, GetMedicationDTO, GetPractitionerDTO, GetVisitRecordDTO, MedicationsService, PractitionersService, PrescriptionsService, UsersService, VisitRecordsService } from '@libs/api-client';
-import { concatMap, finalize, switchMap } from 'rxjs/operators';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { AddInpatientDTO, AddPrescriptionDTO, GetMedicationDTO, GetPractitionerDTO, GetVisitRecordDTO, PractitionersService, PrescriptionsService, UsersService, VisitRecordsService } from '@libs/api-client';
+import { concatMap, finalize, map, switchMap, take } from 'rxjs/operators';
 import { SnackbarService } from 'src/app/services/snackbar-service.service';
 import { CanvasComponent } from 'src/app/shared/canvas/canvas.component';
 import { DialogSimpleDialog } from 'src/app/shared/dialog-simple-dialog';
 
-import { AsyncPipe } from '@angular/common';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ConsulationFormMedicComponent } from "../../consulation-form-medic/consulation-form-medic.component";
 import { from } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTabsModule } from '@angular/material/tabs';
+import { ImageReviewComponent } from 'src/app/image-review/image-review.component';
+import { MasterDataService } from 'src/app/services/master-data.service';
 
 
 @Component({
@@ -49,7 +50,8 @@ import { MatTabsModule } from '@angular/material/tabs';
     MatInputModule,
     MatAutocompleteModule,
     ReactiveFormsModule,
-    ConsulationFormMedicComponent
+    ConsulationFormMedicComponent,
+    ImageReviewComponent
   ],
   templateUrl: './consultation-form.component.html',
   styleUrl: './consultation-form.component.scss',
@@ -82,8 +84,11 @@ export class ConsultationFormComponent implements OnInit {
   visitDate = new Date();
   practitioner = signal<GetPractitionerDTO>({});
   isProcessing = signal<boolean>(false);
+  imageFile = signal<string>('');
+  isImageViewerOpen = signal<boolean>(false);
 
 
+  private masterService = inject(MasterDataService);
   private visitService = inject(VisitRecordsService);
   private userService = inject(UsersService);
   private practitionerService = inject(PractitionersService);
@@ -93,6 +98,7 @@ export class ConsultationFormComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
   private signatureFilePath = signal<string>("");
   readonly dialog = inject(MatDialog);
+
 
 
   // 1, show practitioner Name with reference to user's practitionerId
@@ -119,7 +125,7 @@ export class ConsultationFormComponent implements OnInit {
           switchMap((res) => {
             if (res && res.length > 0) {
               const praId = res[0].practitionerId ?? 0;
-              console.log('user data',res);
+              console.log('user data', res);
               return this.practitionerService.apiPractitionersIdGet(praId);
             }
             throw new Error('No user found');
@@ -273,6 +279,30 @@ export class ConsultationFormComponent implements OnInit {
 
   onSignSaved(filePath: string) {
     this.signatureFilePath.set(filePath);
+  }
+
+
+  showImage(): void {
+    const patientId = this.visitRecord()?.patientId!;
+
+
+    this.masterService.imageRecordsSubjet.pipe(
+      map((imageRecords) => imageRecords.filter(i => i.patientId === patientId)),
+      take(1),
+    ).subscribe((imagefiles) => {
+      if (imagefiles && imagefiles.length >= 1) {
+        this.isImageViewerOpen.set(true);
+        this.imageFile.set(imagefiles[0].imagePath!);
+      } else {
+        this.isImageViewerOpen.set(false);
+        this.imageFile.set("");
+      }
+    });
+
+  }
+
+  closeImageViewer(): void {
+    this.isImageViewerOpen.set(false);
   }
 
 }

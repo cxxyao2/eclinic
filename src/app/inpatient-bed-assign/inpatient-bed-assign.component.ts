@@ -4,14 +4,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { BedsService, GetBedDTO, GetInpatientDTO, InpatientsService, UpdateBedDTO } from '@libs/api-client';
 import { MasterDataService } from '../services/master-data.service';
-import { concatMap, from } from 'rxjs';
+import { combineLatest, concatMap, finalize, from, map } from 'rxjs';
 import {
   CdkDragDrop,
   CdkDrag,
   CdkDropList,
   CdkDropListGroup,
-  moveItemInArray,
-  transferArrayItem,
 } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
 
@@ -37,10 +35,19 @@ export class InpatientBedAssignComponent implements OnInit {
   private inpatientService = inject(InpatientsService);
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe(params => {
-      this.roomNumber = params.get('roomNumber');
-      let oldBeds = this.masterService.bedsSubject.value;
-      this.initBeds = oldBeds.filter(b => b.roomNumber === this.roomNumber);
+
+    combineLatest([
+      this.route.paramMap,
+      this.masterService.bedsSubject
+    ]).pipe(
+      map(([params, beds]) => {
+        const roomNumber = params.get('roomNumber');
+        const filteredBeds = beds.filter(b => b.roomNumber === roomNumber);
+        return { roomNumber, filteredBeds };
+      })
+    ).subscribe(({ roomNumber, filteredBeds }) => {
+      this.roomNumber = roomNumber;
+      this.initBeds = filteredBeds;
       this.bedsOfRoom.set([...this.initBeds]);
     });
 
@@ -68,7 +75,7 @@ export class InpatientBedAssignComponent implements OnInit {
     this.bedsOfRoom.set([...this.initBeds]);
   }
 
-  // todo, drag, 
+
   onDrop(event: CdkDragDrop<GetBedDTO[]>): void {
     const draggedIndex = event.previousIndex;
     const droppedIndex = event.currentIndex;
@@ -76,13 +83,15 @@ export class InpatientBedAssignComponent implements OnInit {
     // Swap patient names and inpatientId
     const beds = this.bedsOfRoom();
 
-
     const temp = beds[draggedIndex];
     beds[draggedIndex].patientName = beds[droppedIndex].patientName;
     beds[draggedIndex].inpatientId = beds[droppedIndex].inpatientId;
+    beds[draggedIndex].practitionerName = beds[droppedIndex].practitionerName;
+
 
     beds[droppedIndex].patientName = temp.patientName;
     beds[droppedIndex].patientId = temp.patientId;
+    beds[droppedIndex].practitionerName = temp.practitionerName;
     this.bedsOfRoom.set([...beds]);
   }
 
@@ -100,13 +109,12 @@ export class InpatientBedAssignComponent implements OnInit {
 
     // 2, save inpaitents
     const changedInPatients: GetInpatientDTO[] = [];
-    const occupiedBeds = changedBeds.filter(c => !!c.inpatientId)
-    occupiedBeds.forEach(o => {
+    changedBeds.filter(c => !!c.inpatientId).forEach(o => {
       let idx = this.existingInpatients.findIndex(ex => ex.inpatientId === o.inpatientId);
       if (idx >= 0) {
         const updateEntity: GetInpatientDTO = {
           inpatientId: o.inpatientId!,
-          nurseId: this.masterService.userSubject.value.practitionerId,
+          nurseId: this.masterService.userSubject.value?.practitionerId,
           roomNumber: o.roomNumber,
           bedNumber: o.bedNumber
         };
@@ -117,8 +125,13 @@ export class InpatientBedAssignComponent implements OnInit {
     from(changedInPatients).pipe(
       concatMap((inp: GetInpatientDTO) => {
         return this.inpatientService.apiInpatientsPut(inp)
-      })
-    ).subscribe();
+      }),
+      finalize(() =>
+        console.log('Inpatients completed.')
+      )
+    ).subscribe({
+      error: (err) => console.error(err)
+    });
 
 
   }

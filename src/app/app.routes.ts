@@ -12,6 +12,7 @@ import { AdminComponent } from './admin/admin/admin.component';
 import { UpdateUserComponent } from './admin/update-user/update-user.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { InpatientBedAssignComponent } from './inpatient-bed-assign/inpatient-bed-assign.component';
+import { SearchPopupComponent } from './shared/search-popup/search-popup.component';
 
 export const routes: Routes = [
     {
@@ -62,8 +63,8 @@ export const routes: Routes = [
         component: LoginComponent
     },
     {
-        path: 'update-user',
-        component: UpdateUserComponent
+        path: 'search',
+        component: SearchPopupComponent
     },
     {
         path: '',

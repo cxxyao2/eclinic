@@ -11,7 +11,7 @@ mat-toolbar {
     z-index: 5;
     color: var(--mat-app-on-primary);
     background-color: var(--mat-app-primary);
-    .mat-icon:not([role="alert"]){
+    .mat-icon:not([role="alert"]) {
       color: var(--mat-app-on-primary);
     }
   }
@@ -43,4 +43,25 @@ mat-toolbar {
   display: flex;
   justify-content: center;
   align-items: center;
+  button {
+    cursor: pointer;
+  }
+}
+
+.notification-list {
+  position: absolute;
+  top: 64px; /* Adjust according to your header height */
+  right: 10px; /* Align with the icon */
+  background: var(--mat-app-primary-container);
+  border: 1px solid var(--mat-app-secondary);
+  border-radius: 8px;
+  width: 200px; /* Adjust width */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  padding: 10px;
+}
+
+.notification-list mat-list-item {
+  font-size: 1rem;
+  padding: 5px 0;
 }

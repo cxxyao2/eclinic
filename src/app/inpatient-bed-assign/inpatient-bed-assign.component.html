@@ -1,13 +1,8 @@
 <div class="room">
-  <div
-    *ngFor="let bed of bedsOfRoom(); let i = index"
-    class="bed"
-    cdkDrag
-    [cdkDragData]="bed"
-    (cdkDropListDropped)="onDrop($event)"
-    cdkDropList
-  >
-    <p>Bed {{ bed.bedNumber }}</p>
-    <p>{{ bed.patientName }}</p>
+  <div *ngFor="let bed of bedsOfRoom(); let i = index" class="bed" cdkDrag [cdkDragData]="bed"
+    (cdkDropListDropped)="onDrop($event)" cdkDropList>
+    <p>Bed: &nbsp; {{ bed.bedNumber }}</p>
+    <p>Patient: &nbsp; {{ bed.patientName }}</p>
+    <p>Doctoer: &nbsp; {{bed.practitionerName}}</p>
   </div>
 </div>

@@ -1,0 +1,12 @@
+<div class="overlay" (click)="closePopup()">
+  <div class="popup" (click)="$event.stopPropagation()">
+    <button class="close-button" (click)="closePopup()">X</button>
+    <div *ngIf="progress() < 100; else showImage">
+      <mat-progress-bar mode="determinate" [value]="progress"></mat-progress-bar>
+      <p>Downloading image... {{ progress() }}%</p>
+    </div>
+    <ng-template #showImage>
+      <img [src]="imageSrc" alt="Downloaded MRI Image" />
+    </ng-template>
+  </div>
+</div>

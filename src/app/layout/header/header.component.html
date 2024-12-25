@@ -13,7 +13,8 @@
         <span class="spacer"></span>
 
         <div class="extended-button-container">
-            <button mat-icon-button aria-label="search" matTooltip="Search" [matTooltipPosition]="'above'">
+            <button mat-icon-button aria-label="search" matTooltip="Search" [matTooltipPosition]="'above'"
+                routerLink="{{'/search'}}">
                 <mat-icon>search</mat-icon>
             </button>
             <button mat-icon-button (click)="darkMode.set(!darkMode())" aria-label="Toggle Theme"
@@ -24,24 +25,40 @@
                 <mat-icon>dark_mode</mat-icon>
                 }
             </button>
-            @if(user()?.role === 0 ){
-            <button mat-icon-button (click)="showNotifications()" aria-label="Show Notifications">
+            @if(user()){
+            @if(user()?.role === 0) {
+            <button mat-icon-button (click)="toggleNotifications()" aria-label="Show Notifications">
                 <mat-icon role="alert" class="notification-icon"
                     [matBadge]="sseService.message().length">notifications</mat-icon>
             </button>
-            }
 
-            <button mat-flat-button routerLink="/login">
+
+            <!-- Notification List -->
+            <div>
+                <mat-list>
+                    <mat-list-item *ngFor="let message of sseService.message()">
+                        {{ message.inpatientId }}
+                    </mat-list-item>
+                </mat-list>
+            </div>
+            }
+            <button mat-flat-button (click)="logout()">
+                {{ user()?.userName | titlecase }} &nbsp;Logout</button>
+            } @else {
+            <button mat-flat-button [routerLink]="'/login'">
                 <mat-icon>account_circle</mat-icon>
                 Login
             </button>
+            }
+
+
 
         </div>
 
     </mat-toolbar-row>
 
     <mat-toolbar-row class="second-row mat-elevation-z3">
-        <span>Register&nbsp;&gt;&nbsp;Appointment</span>
+        <span>&nbsp;{{currentFullRoute()?.substring(1)?.replace('-', ' ') | titlecase}}</span>
         <span class="spacer"></span>
         <button mat-flat-button [matMenuTriggerFor]="beforeMenu">
             <mat-icon>language</mat-icon>

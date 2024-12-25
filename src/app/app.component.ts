@@ -1,4 +1,4 @@
-import { Component, computed, AfterViewInit, DestroyRef, effect, inject, OnInit, signal, ViewChild } from '@angular/core';
+import { Component, computed, AfterViewInit, effect, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from "./layout/header/header.component";
 import { CustomSidenavComponent } from "./layout/custom-sidenav/custom-sidenav.component";

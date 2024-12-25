@@ -1,10 +1,9 @@
 import { DestroyRef, inject, Injectable } from '@angular/core';
-import { AddPractitionerAvailabilityDTO, GetBedDTO, GetMedicationDTO, GetPatientDTO, GetPractitionerAvailabilityDTO, GetPractitionerAvailabilityDTOServiceResponse, GetPractitionerDTO, StringServiceResponse, User } from '@libs/api-client';
-import { BehaviorSubject, from } from 'rxjs';
-import { concatMap, finalize, map, tap } from 'rxjs/operators';
+import { GetBedDTO, GetImageRecordDTO, GetMedicationDTO, GetPatientDTO, GetPractitionerDTO, ImageRecordsService, User } from '@libs/api-client';
+import { BehaviorSubject } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
-import { ROOMS_WITH_BEDS } from '@constants/rooms-with-beds.constants';
 import { PractitionersService } from '@libs/api-client';
 import { PatientsService } from '@libs/api-client';
 import { MedicationsService } from '@libs/api-client';
@@ -19,32 +18,37 @@ export class MasterDataService {
   private practitionerService = inject(PractitionersService);
   private patientService = inject(PatientsService);
   private medicationService = inject(MedicationsService);
-
+  private imageService = inject(ImageRecordsService);
 
   public practitionersSubject = new BehaviorSubject<GetPractitionerDTO[]>([]);
   public medicationsSubject = new BehaviorSubject<GetMedicationDTO[]>([]);
   public patientsSubject = new BehaviorSubject<GetPatientDTO[]>([]);
   public bedsSubject = new BehaviorSubject<GetBedDTO[]>([]);
-  public userSubject = new BehaviorSubject<User>({} as User);
-
-
-
-
+  public userSubject = new BehaviorSubject<User | null>(null);
+  public imageRecordsSubjet = new BehaviorSubject<GetImageRecordDTO[]>([]);
+  public currentFullUrl = new BehaviorSubject<string | null>(null);
 
 
   constructor() {
     this.fetchPatients();
     this.fetchPractitioners();
     this.fetchMedications();
+    this.fetchImageRecords();
   }
 
 
 
+  fetchImageRecords(): void {
+    this.imageService.apiImageRecordsGet()
+      .pipe(
+        tap((res) => this.imageRecordsSubjet.next(res.data ?? []))
+      ).subscribe();
+  }
 
 
   fetchPractitioners(): void {
     this.practitionerService.apiPractitionersGet().pipe(
-      map((result) => this.practitionersSubject.next(result.data ?? [])),
+      tap((result) => this.practitionersSubject.next(result.data ?? [])),
       takeUntilDestroyed(this.destroyRef)
     ).subscribe();
   }
@@ -54,7 +58,7 @@ export class MasterDataService {
   // Fetch and store medications
   fetchMedications(): void {
     this.medicationService.apiMedicationsGet().pipe(
-      map((result) => this.medicationsSubject.next(result.data ?? [])),
+      tap((result) => this.medicationsSubject.next(result.data ?? [])),
       takeUntilDestroyed(this.destroyRef)
     ).subscribe();
   }
@@ -62,7 +66,7 @@ export class MasterDataService {
 
   fetchPatients(): void {
     this.patientService.apiPatientsGet().pipe(
-      map((result) => this.patientsSubject.next(result.data ?? [])),
+      tap((result) => this.patientsSubject.next(result.data ?? [])),
       takeUntilDestroyed(this.destroyRef)
     ).subscribe();
   }

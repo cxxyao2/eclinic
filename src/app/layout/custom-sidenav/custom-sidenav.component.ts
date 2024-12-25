@@ -5,6 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { RouterModule, UrlTree } from '@angular/router';
 import { MenuItemComponent } from "../menu-item/menu-item.component";
 import { ResponsiveService } from '../../services/responsive.service';
+import { MasterDataService } from 'src/app/services/master-data.service';
 
 export type MenuItem = {
   icon: string;
@@ -28,9 +29,9 @@ export class CustomSidenavComponent {
 
   sideNavCollapsed = signal(false);
   responseService = inject(ResponsiveService);
+  masterService = inject(MasterDataService);
   isBigScreen = this.responseService.isLargeScreen;
-  // TODO
-  username = "Magical Manager";
+  user = this.masterService.userSubject.asObservable();
 
   @Input() set collapsed(val: boolean) {
     this.sideNavCollapsed.set(val);

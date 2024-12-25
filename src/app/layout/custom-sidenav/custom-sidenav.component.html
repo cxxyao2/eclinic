@@ -2,7 +2,7 @@
     @if(!isBigScreen()){
     <a mat-list-item class="hide-sidebar" (click)="toggleSidenav()">
         <mat-icon matListItemIcon>arrow_back</mat-icon>
-        <span matListItemTitle>Hello {{username}}</span>
+        <span matListItemTitle>Hello {{(user | async)?.userName | titlecase}}</span>
     </a>
     <mat-divider> </mat-divider>
     }
