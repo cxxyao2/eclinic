@@ -23,22 +23,7 @@ export class DashboardComponent {
 }
 
 
-
-// <!-- 
-// <div style="margin: 16px;">
-//     <!-- Child component for cards -->
-//     <app-cards></app-cards>
-  
-//     <!-- Child components for charts -->
-//     <div style="display: flex; gap: 16px; margin-top: 16px;">
-//       <app-line-chart></app-line-chart>
-//       <app-column-chart></app-column-chart>
-//     </div>
-  
-//     <!-- Child component for the table -->
-//     <div style="margin-top: 16px;">
-//       <app-patient-table></app-patient-table>
-//     </div>
-//   </div> 
-// -->
-  
+// <div style="display: flex; gap: 16px; margin-top: 16px;">
+// <app-line-chart></app-line-chart>
+// // <app-column-chart></app-column-chart>
+// </div>

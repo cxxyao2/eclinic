@@ -27,20 +27,10 @@
             </button>
             @if(user()){
             @if(user()?.role === 0) {
-            <button mat-icon-button (click)="toggleNotifications()" aria-label="Show Notifications">
+            <button mat-icon-button (click)="showNotifications()" aria-label="Show Notifications">
                 <mat-icon role="alert" class="notification-icon"
                     [matBadge]="sseService.message().length">notifications</mat-icon>
             </button>
-
-
-            <!-- Notification List -->
-            <div>
-                <mat-list>
-                    <mat-list-item *ngFor="let message of sseService.message()">
-                        {{ message.inpatientId }}
-                    </mat-list-item>
-                </mat-list>
-            </div>
             }
             <button mat-flat-button (click)="logout()">
                 {{ user()?.userName | titlecase }} &nbsp;Logout</button>

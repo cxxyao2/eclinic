@@ -9,7 +9,6 @@ import { WaitingListComponent } from './patient/waiting-list/waiting-list.compon
 import { BookAppointmentComponent } from './patient/book-appointment/book-appointment.component';
 import { AuthorizationComponent } from './admin/authorization/authorization.component';
 import { AdminComponent } from './admin/admin/admin.component';
-import { UpdateUserComponent } from './admin/update-user/update-user.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { InpatientBedAssignComponent } from './inpatient-bed-assign/inpatient-bed-assign.component';
 import { SearchPopupComponent } from './shared/search-popup/search-popup.component';

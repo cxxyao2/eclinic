@@ -1,5 +1,5 @@
 import { DestroyRef, inject, Injectable } from '@angular/core';
-import { GetBedDTO, GetImageRecordDTO, GetMedicationDTO, GetPatientDTO, GetPractitionerDTO, ImageRecordsService, User } from '@libs/api-client';
+import { GetBedDTO, GetImageRecordDTO, GetInpatientDTO, GetMedicationDTO, GetPatientDTO, GetPractitionerDTO, ImageRecordsService, User } from '@libs/api-client';
 import { BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -26,8 +26,7 @@ export class MasterDataService {
   public bedsSubject = new BehaviorSubject<GetBedDTO[]>([]);
   public userSubject = new BehaviorSubject<User | null>(null);
   public imageRecordsSubjet = new BehaviorSubject<GetImageRecordDTO[]>([]);
-  public currentFullUrl = new BehaviorSubject<string | null>(null);
-
+  public selectedPatientSubject = new BehaviorSubject<GetInpatientDTO|null>(null);
 
   constructor() {
     this.fetchPatients();

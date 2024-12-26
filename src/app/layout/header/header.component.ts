@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { User } from '@libs/api-client';
+import { GetInpatientDTO, User } from '@libs/api-client';
 import { ChangeDetectionStrategy, Component, DestroyRef, effect, inject, input, model, OnInit, output, signal } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -14,6 +14,8 @@ import { MasterDataService } from 'src/app/services/master-data.service';
 import { Router, RouterModule } from '@angular/router';
 import { NavService } from 'src/app/services/nav.service';
 import { MatListModule } from '@angular/material/list';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { DialogSimpleDialog } from 'src/app/shared/dialog-simple-dialog';
 
 const languageMap: { [key: string]: string } = {
   fr: 'French',
@@ -43,6 +45,7 @@ export class HeaderComponent implements OnInit {
   private translocoService = inject(TranslocoService);
   private masterService = inject(MasterDataService);
   private navigationService = inject(NavService);
+  readonly dialog = inject(MatDialog);
 
   public router = inject(Router);
   sseService = inject(SseClientService);
@@ -68,12 +71,39 @@ export class HeaderComponent implements OnInit {
     this.translocoService.setActiveLang(newLanguage);
   }
 
+  showNotifications() {
+    const dialogConfig = new MatDialogConfig();
 
-  toggleNotifications() {
-    this.isNotificationVisible.set(!this.isNotificationVisible());
-    console.log('hi', this.sseService.message());
-    // 1, show a list of inpatients
-    // 2, click a specific inpatient, then REDIRECT TO inpatient arrangement
+    // Set dialog position
+    dialogConfig.position = {
+      top: '64px',
+      right: '0px'
+    };
+
+    // Set dialog dimensions
+    dialogConfig.width = '300px';
+    dialogConfig.height = '400px';
+
+    // Pass data to the dialog
+    dialogConfig.data = {
+      title: 'Patient need a bed',
+      content: [...this.sseService.message()],
+      isCancelButtonVisible: true,
+      optionId: 'inpatientId',
+      optionValue: 'patientName'
+    };
+
+    const dialogRef = this.dialog.open(DialogSimpleDialog, dialogConfig);
+    dialogRef.afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(result => {
+        if (typeof result === 'object' && result) {
+          // navigate to assign
+          this.masterService.selectedPatientSubject.next(result);
+          this.router.navigate(['/inpatient']);
+        }
+
+      });
   }
 
   logout() {

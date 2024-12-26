@@ -15,7 +15,7 @@ export interface User {
     createdBy?: number;
     createdAt?: Date;
     updatedBy?: number;
-    updatedAt?: Date | null;
+    updatedAt?: Date;
     userID?: number;
     email: string;
     userName?: string | null;

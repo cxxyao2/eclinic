@@ -11,7 +11,7 @@ import { GetVisitRecordDTO, GetVisitRecordDTOListServiceResponse, VisitRecordsSe
   styleUrl: './waiting-list.component.scss'
 })
 export class WaitingListComponent implements AfterViewInit, OnInit, OnDestroy {
-  currentIndex = 0; // Current tab index
+  currentIndex = 0; 
   patients = signal<GetVisitRecordDTO[]>([]);
   today = new Date();
 

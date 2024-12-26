@@ -1,8 +1,43 @@
-<div class="room">
-  <div *ngFor="let bed of bedsOfRoom(); let i = index" class="bed" cdkDrag [cdkDragData]="bed"
+<h3>Room:&nbsp;{{roomNumber}} &nbsp;Patient: &nbsp;{{patientInWaiting()?.patientName}}</h3>
+<div class="actions">
+  <div class="button-container">
+    <button mat-fab extended (click)="addToRoom()">
+      <mat-icon>add</mat-icon>
+      Add</button>
+  </div>
+
+  <div class="button-container">
+    <button mat-fab extended (click)="removeFromRoom()">
+      <mat-icon>delete</mat-icon>
+      Remove
+    </button>
+  </div>
+
+  <div class="button-container">
+    <button mat-fab extended (click)="onSave()">
+      <mat-icon>save</mat-icon>
+      Save
+    </button>
+  </div>
+</div>
+
+<!-- todo -->
+<!-- <div class="room">
+  <div *ngFor="let bed of bedsOfRoom()" class="bed" [class.empty]="!!bed.patientName" cdkDrag [cdkDragData]="bed"
     (cdkDropListDropped)="onDrop($event)" cdkDropList>
     <p>Bed: &nbsp; {{ bed.bedNumber }}</p>
-    <p>Patient: &nbsp; {{ bed.patientName }}</p>
-    <p>Doctoer: &nbsp; {{bed.practitionerName}}</p>
+    <p>Patient: &nbsp; {{ bed.patientName || 'empty'}}</p>
+    <p>Doctoer: &nbsp; {{bed.practitionerName ||'empty'}}</p>
   </div>
+</div> -->
+
+<div cdkDropList class="room" (cdkDropListDropped)="drop($event)">
+  @for (bed of bedsOfRoom; track bed) {
+  <div class="bed"  [class.empty]="!!bed.patientName"  [class.selected]="bed.patientName==patientInWaiting()?.patientName" cdkDrag>
+    <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
+    <p>Bed: &nbsp; {{ bed.bedNumber }}</p>
+    <p>Patient: &nbsp; {{ bed.patientName || 'empty'}}</p>
+    <p>Doctoer: &nbsp; {{bed.practitionerName ||'empty'}}</p>
+  </div>
+  }
 </div>

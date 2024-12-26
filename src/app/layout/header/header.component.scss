@@ -49,15 +49,15 @@ mat-toolbar {
 }
 
 .notification-list {
-  position: absolute;
+  position: fixed;
   top: 64px; /* Adjust according to your header height */
   right: 10px; /* Align with the icon */
-  background: var(--mat-app-primary-container);
+  background: red;
   border: 1px solid var(--mat-app-secondary);
   border-radius: 8px;
   width: 200px; /* Adjust width */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  z-index: 1000;
+  z-index: 2000;
   padding: 10px;
 }
 

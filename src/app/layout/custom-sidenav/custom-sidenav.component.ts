@@ -85,11 +85,6 @@ export class CustomSidenavComponent {
       icon: 'login',
       label: 'Login',
       route: 'login'
-    },
-    {
-      icon: 'account_box',
-      label: 'Update',
-      route: 'update-user'
     }
   ]);
 

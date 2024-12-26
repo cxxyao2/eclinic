@@ -13,7 +13,7 @@ export interface Practitioner {
     createdBy?: number;
     createdAt?: Date;
     updatedBy?: number;
-    updatedAt?: Date | null;
+    updatedAt?: Date;
     practitionerId?: number;
     firstName: string;
     lastName: string;
