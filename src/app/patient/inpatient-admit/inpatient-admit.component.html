@@ -1,4 +1,4 @@
-<h3 class="title">Patient: {{selectedPatient()?.patientName}} &nbsp;is awaiting bed and room assignment.</h3>
+<h3 class="title">Patient: {{selectedPatient()?.patientName || 'Nobody'}} &nbsp;is awaiting bed and room assignment.</h3>
 <div class="card-container">
   <mat-card *ngFor="let room of groupedRooms()" class="card clickable-card" [routerLink]="['/inpatient', room.roomNo]">
     <mat-card-header>

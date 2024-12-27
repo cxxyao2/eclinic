@@ -7,18 +7,14 @@ import { NgxEchartsDirective } from 'ngx-echarts';
   selector: 'app-column-chart',
   templateUrl: './column-chart.component.html',
   styleUrls: ['./column-chart.component.scss'],
-  imports:[NgxEchartsDirective],
+  imports: [NgxEchartsDirective],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ColumnChartComponent {
-
   options: EChartsOption = {
-    title: {
-      text: 'Illness'
-    },
     tooltip: {},
     legend: {
-      data: ['cases']
+      data: ['Admitted', 'Discharged']
     },
     xAxis: {
       data: ['Jan', 'Feb', 'Mar', 'April', 'May', 'June']
@@ -26,12 +22,16 @@ export class ColumnChartComponent {
     yAxis: {},
     series: [
       {
-        name: 'cases',
+        name: 'Admitted',
         type: 'bar',
         data: [120, 90, 100, 110, 120, 50]
+      },
+      {
+        name: 'Discharged',
+        type: 'bar',
+        data: [80, 70, 90, 100, 110, 40]
       }
     ]
   };
 
-
-  }
+}

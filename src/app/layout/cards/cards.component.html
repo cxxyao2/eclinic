@@ -1,11 +1,6 @@
-<mat-grid-list cols="4" rowHeight="1:1" gutterSize="16px">
-    <mat-grid-tile *ngFor="let card of cards" class="card-tile">
-      <mat-card>
-        <mat-card-title>{{ card.title }}</mat-card-title>
-        <mat-card-content>
-          <h2>{{ card.value }}</h2>
-        </mat-card-content>
-      </mat-card>
-    </mat-grid-tile>
-  </mat-grid-list>
-  
+<div class="card-container">
+  <div class="card" *ngFor="let card of cards">
+    <h3>{{card.title}}</h3>
+    <div class="card-value"><mat-icon>{{card.icon}}</mat-icon>{{card.value}}</div>
+  </div>
+</div>

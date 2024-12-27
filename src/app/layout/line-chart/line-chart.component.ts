@@ -21,11 +21,6 @@ export class LineChartComponent implements OnInit {
 
   initializeChartOptions(): void {
     this.chartOption = {
-      title: {
-        text: 'Monthly Case Numbers',
-        subtext: 'Respiratory Infections vs Cardiac Cases',
-        left: 'center'
-      },
       tooltip: {
         trigger: 'axis',
         axisPointer: {
@@ -33,8 +28,7 @@ export class LineChartComponent implements OnInit {
         }
       },
       legend: {
-        data: ['Respiratory Infections', 'Cardiac Cases'],
-        top: '10%'
+        data: ['Respiratory Infections', 'Cardiac Cases']
       },
       xAxis: {
         type: 'category',
@@ -74,24 +68,10 @@ export class LineChartComponent implements OnInit {
         }
       ]
     };
-    // this.chartOption = {
-    //   xAxis: {
-    //     type: 'category',
-    //     data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-    //   },
-    //   yAxis: {
-    //     type: 'value',
-    //   },
-    //   series: [
-    //     {
 
-    //       data: [820, 932, 901, 934, 1290, 1330, 1320],
-    //       type: 'line',
-    //     },
-    //   ],
-    // };
 
   }
+
 
 }
 
