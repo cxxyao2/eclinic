@@ -12,6 +12,7 @@ import { AdminComponent } from './admin/admin/admin.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { InpatientBedAssignComponent } from './inpatient-bed-assign/inpatient-bed-assign.component';
 import { SearchPopupComponent } from './shared/search-popup/search-popup.component';
+import { authGuard } from './service/auth.guard';
 
 export const routes: Routes = [
     {
@@ -45,7 +46,8 @@ export const routes: Routes = [
             },
             {
                 path: 'authorize',
-                component: AuthorizationComponent
+                component: AuthorizationComponent,
+                canActivate: [authGuard]
             }
         ]
     },

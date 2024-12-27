@@ -1,10 +1,18 @@
 <mat-nav-list>
     @if(!isBigScreen()){
-    <a mat-list-item class="hide-sidebar" (click)="toggleSidenav()">
+    <a mat-list-item (click)="toggleSidenav()">
         <mat-icon matListItemIcon>arrow_back</mat-icon>
-        <span matListItemTitle>Hello {{(user | async)?.userName | titlecase}}</span>
+        <span matListItemTitle>Hello {{user()?.userName | titlecase}}</span>
     </a>
     <mat-divider> </mat-divider>
+    @if(user()){
+    <a mat-list-item (click)="logout()">
+        <mat-icon matListItemIcon>logout</mat-icon>
+        <span matListItemTitle>Logout</span>
+    </a>
+    }@else{
+    <app-menu-item [item]="loginItemForSmallScreen()" [collapsed]="false"></app-menu-item>
+    }
     }
     @for(item of menuItems(); track item.label){
     <app-menu-item [item]="item" [collapsed]="sideNavCollapsed()"></app-menu-item>

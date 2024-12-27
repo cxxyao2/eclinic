@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, Input, input } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { UserProfile } from '@models/userProfile.model';
 
@@ -10,7 +10,7 @@ import { UserProfile } from '@models/userProfile.model';
   styleUrl: './profile.component.scss'
 })
 export class ProfileComponent {
-  imagePath = 'assets/images/sarah.jpg';
+  @Input() imagePath: string = 'assets/images/sarah.jpg';
   profileInfo = input.required<UserProfile>();
 
 }

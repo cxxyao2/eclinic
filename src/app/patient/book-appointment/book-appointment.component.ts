@@ -66,7 +66,7 @@ export class BookAppointmentComponent implements AfterViewInit {
     actions: 'Actions'
   };
   changedData: GetPractitionerScheduleDTO[] = []; // added, updated
-
+  imagePath = signal('assets/images/smiling-doctor.jpg');
 
   dataSource = new MatTableDataSource<GetPractitionerScheduleDTO>([]);
   displayedColumns: string[] = ['index', 'practitionerName', 'startDateTime', 'endDateTime', 'patientName', 'actions'];

@@ -21,19 +21,10 @@
   </div>
 </div>
 
-<!-- todo -->
-<!-- <div class="room">
-  <div *ngFor="let bed of bedsOfRoom()" class="bed" [class.empty]="!!bed.patientName" cdkDrag [cdkDragData]="bed"
-    (cdkDropListDropped)="onDrop($event)" cdkDropList>
-    <p>Bed: &nbsp; {{ bed.bedNumber }}</p>
-    <p>Patient: &nbsp; {{ bed.patientName || 'empty'}}</p>
-    <p>Doctoer: &nbsp; {{bed.practitionerName ||'empty'}}</p>
-  </div>
-</div> -->
-
 <div cdkDropList class="room" (cdkDropListDropped)="drop($event)">
   @for (bed of bedsOfRoom; track bed) {
-  <div class="bed"  [class.empty]="!!bed.patientName"  [class.selected]="bed.patientName==patientInWaiting()?.patientName" cdkDrag>
+  <div class="bed" [class.empty]="!!bed.patientName"
+    [class.selected]="bed.patientName && (bed.patientName==patientInWaiting()?.patientName)" cdkDrag>
     <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
     <p>Bed: &nbsp; {{ bed.bedNumber }}</p>
     <p>Patient: &nbsp; {{ bed.patientName || 'empty'}}</p>

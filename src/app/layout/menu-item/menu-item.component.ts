@@ -55,6 +55,7 @@ export class MenuItemComponent implements OnInit {
       return;
     }
 
+   
     if (this.navService.appDrawer.mode === 'over') {
       this.router.navigate([item.route]);
       this.navService.closeNav();

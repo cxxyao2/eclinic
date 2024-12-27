@@ -1,8 +1,9 @@
+import { toSignal } from '@angular/core/rxjs-interop';
 import { Component, inject, Input, output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
-import { RouterModule, UrlTree } from '@angular/router';
+import { Router, RouterModule, UrlTree } from '@angular/router';
 import { MenuItemComponent } from "../menu-item/menu-item.component";
 import { ResponsiveService } from '../../services/responsive.service';
 import { MasterDataService } from 'src/app/services/master-data.service';
@@ -31,13 +32,19 @@ export class CustomSidenavComponent {
   responseService = inject(ResponsiveService);
   masterService = inject(MasterDataService);
   isBigScreen = this.responseService.isLargeScreen;
-  user = this.masterService.userSubject.asObservable();
+  user = toSignal(this.masterService.userSubject);
+  private router = inject(Router);
 
   @Input() set collapsed(val: boolean) {
     this.sideNavCollapsed.set(val);
   }
 
   menuItems = signal<MenuItem[]>([
+    {
+      icon: 'dashboard',
+      label: 'Dashboard',
+      route: 'dashboard'
+    },
     {
       icon: 'event_available',
       label: 'Available',
@@ -80,15 +87,26 @@ export class CustomSidenavComponent {
       icon: 'vaccines',
       label: 'Inpatient',
       route: 'inpatient'
-    },
+    }
+
+  ]);
+
+  loginItemForSmallScreen = signal<MenuItem>(
     {
       icon: 'login',
       label: 'Login',
       route: 'login'
-    }
-  ]);
+    });
 
   toggleSidenav() {
+    this.toggleDrawer.emit();
+  }
+
+  logout() {
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('email');
+    this.masterService.userSubject.next(null);
+    this.router.navigate(['/dashboard']);
     this.toggleDrawer.emit();
   }
 

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { MatCardModule } from '@angular/material/card';
@@ -9,7 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 
 
 import { AuthService } from '@libs/api-client';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MasterDataService } from 'src/app/services/master-data.service';
 
@@ -21,12 +21,14 @@ import { MasterDataService } from 'src/app/services/master-data.service';
   styleUrl: './login.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   errorMessage = signal<string | null>(null);
+  returnUrl: string = '';
 
   constructor(private fb: FormBuilder,
     private router: Router,
+    private route: ActivatedRoute,
     private authService: AuthService,
     private masterService: MasterDataService
   ) {
@@ -34,6 +36,10 @@ export class LoginComponent {
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]],
     });
+  }
+
+  ngOnInit() {
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/dashboard';
   }
 
   onSubmit() {
@@ -46,8 +52,7 @@ export class LoginComponent {
           localStorage.setItem('email', loginData['email']);
           this.masterService.userSubject.next(response.user);
           this.errorMessage.set(null);
-          this.router.navigate(['/dashboard']);
-          console.log('Login successful:', response);
+          this.router.navigateByUrl(this.returnUrl);
         },
         error: (errResponse: HttpErrorResponse) => {
           localStorage.removeItem('accessToken');

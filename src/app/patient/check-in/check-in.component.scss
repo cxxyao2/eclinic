@@ -10,7 +10,7 @@
   flex-direction: row;
   justify-content: flex-start;
   flex-wrap: wrap;
-  align-items: center;
+  align-items: baseline;
   gap: 1rem;
 }
 
@@ -22,9 +22,7 @@ table {
   width: 100%;
 }
 
-/* Media query for smaller screens */
 @media (max-width: 1000px) {
-  /* Adjust 768px to your preferred breakpoint */
   .container {
     grid-template-columns: 1fr; /* Switch to a single column on smaller screens */
   }

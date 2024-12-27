@@ -73,7 +73,7 @@ export class PractitionerScheduleComponent implements AfterViewInit {
   };
   changedData: GetPractitionerScheduleDTO[] = []; // added, updated
   deletedData: GetPractitionerScheduleDTO[] = []; // deleted
-
+  imagePath = signal('assets/images/smiling-doctor.jpg');
 
   dataSource = new MatTableDataSource<GetPractitionerScheduleDTO>([]);
   displayedColumns: string[] = ['day', 'fromTime', 'endTime'];

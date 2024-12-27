@@ -19,7 +19,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 @Component({
   selector: 'app-inpatient-bed-assign',
   standalone: true,
-  imports: [CdkDropListGroup, CdkDropList, CdkDrag, CommonModule, MatIconModule, MatButtonModule, MatCardModule, RouterModule],
+  imports: [CdkDropList, CdkDrag, CommonModule, MatIconModule, MatButtonModule, MatCardModule, RouterModule],
   templateUrl: './inpatient-bed-assign.component.html',
   styleUrl: './inpatient-bed-assign.component.scss'
 })
