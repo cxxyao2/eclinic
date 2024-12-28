@@ -20,8 +20,9 @@
                 <div class="role-select-container">
                     <mat-form-field>
                         <mat-select [(value)]="element.role">
-                            <mat-option *ngFor="let role of userRoles" [value]="role.value">{{role.text}}</mat-option>
-                        </mat-select>
+                            @for (role of userRoles; track role) {
+                            <mat-option [value]="role.value">{{role.text}}</mat-option>
+                            }</mat-select>
                     </mat-form-field>
                 </div>
             </td>
@@ -33,8 +34,8 @@
 
     <div class="button-container">
         <button mat-stroked-button (click)="save()">
-          <mat-icon>save</mat-icon>
-          Save
+            <mat-icon>save</mat-icon>
+            Save
         </button>
-      </div>
+    </div>
 </div>

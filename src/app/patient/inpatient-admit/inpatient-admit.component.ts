@@ -1,4 +1,4 @@
-import { GetBedDTO } from './../../../../libs/api-client/model/getBedDTO';
+import { GetBedDTO } from '@libs/api-client/model/getBedDTO';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit, signal } from '@angular/core';

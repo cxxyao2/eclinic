@@ -7,29 +7,39 @@
                 <mat-form-field class="full-width">
                     <mat-label>Email Address</mat-label>
                     <input matInput formControlName="email" type="email" placeholder="Enter your email" />
-                    <mat-error *ngIf="loginForm.get('email')?.hasError('required')">
+                    @if(loginForm.get('email')?.hasError('required')){
+                    <mat-error>
                         Email is required.
                     </mat-error>
-                    <mat-error *ngIf="loginForm.get('email')?.hasError('email')">
+                    }
+
+                    @if(loginForm.get('email')?.hasError('email')){
+                    <mat-error>
                         Please enter a valid email address.
                     </mat-error>
+                    }
+
                 </mat-form-field>
 
                 <!-- Password Input -->
                 <mat-form-field class="full-width">
                     <mat-label>Password</mat-label>
                     <input matInput formControlName="password" type="password" placeholder="Enter your password" />
-                    <mat-error *ngIf="loginForm.get('password')?.hasError('required')">
+                    @if(loginForm.get('password')?.hasError('required')){
+                    <mat-error>
                         Password is required.
                     </mat-error>
+                    }
                 </mat-form-field>
 
-                <div *ngIf="errorMessage()" class="error-message">
+                @if(errorMessage()){
+                <div class="error-message">
                     {{ errorMessage() }}
                 </div>
+                }
+
             </mat-card-content>
             <mat-card-actions>
-                <!-- Submit Button -->
                 <button mat-raised-button type="submit" class="full-width login" [disabled]="loginForm.invalid">
                     Login
                 </button>
