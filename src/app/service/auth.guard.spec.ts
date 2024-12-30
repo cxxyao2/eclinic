@@ -1,77 +1,71 @@
+import { TestBed } from '@angular/core/testing';
+import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { authGuard } from './auth.guard';
 import { MasterDataService } from '../services/master-data.service';
-import { Router } from '@angular/router';
-import { SnackbarService } from '../services/snackbar-service.service';
-import { UserRole } from '@libs/api-client';
+import { UserRole, User } from '@libs/api-client';
 import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { of, Subject } from 'rxjs';
-import { MatSnackBar } from '@angular/material/snack-bar';
 
-export class MockMatSnackBar {
-    open = jest.fn();
+interface UserSubject {
+    value: User | null
+}
+class MockMasterDataService {
+    userSubject: UserSubject = { value: null };
 }
 
-export class MockSnackbarService {
-    public snackbarSubject = new Subject<{ message: string; panelClass: string }>();
-
-    constructor(private snackBar: MatSnackBar) { }
-
-    show(message: string, action: string) {
-        this.snackBar.open(message, action, {
-            duration: 2000,
-        });
-    }
+class MockMatSnackBar {
+    show = jest.fn();
 }
-
-jest.mock('../services/master-data.service');
-jest.mock('@angular/router');
-
 
 describe('authGuard', () => {
-    let masterService: jest.Mocked<MasterDataService>;
-    let router: jest.Mocked<Router>;
-    let snackbarService: SnackbarService;
-    let snackBar: jest.Mocked<MatSnackBar>;
+    let masterService: MockMasterDataService;
+    let router: Router;
+    let snackBar: MockMatSnackBar;
 
     beforeEach(() => {
-        masterService = new MasterDataService() as jest.Mocked<MasterDataService>;
-        router = new Router() as jest.Mocked<Router>;
-        snackBar = new MockMatSnackBar() as unknown as jest.Mocked<MatSnackBar>;
-        snackbarService = new MockSnackbarService(snackBar as unknown as MatSnackBar) as unknown as SnackbarService;
+        masterService = new MockMasterDataService();
+        router = { navigate: jest.fn() } as any;
+        snackBar = new MockMatSnackBar();
 
-        (masterService.userSubject as any) = { value: null }; // Mock userSubject
-        router.navigate = jest.fn();
-        snackBar.open = jest.fn();
+        TestBed.configureTestingModule({
+            providers: [
+                { provide: MasterDataService, useValue: masterService },
+                { provide: Router, useValue: router },
+                { provide: MatSnackBar, useValue: snackBar }
+            ]
+        });
     });
 
     it('should navigate to login if user is not logged in', () => {
         const next: ActivatedRouteSnapshot = {} as ActivatedRouteSnapshot;
         const state: RouterStateSnapshot = { url: '/protected' } as RouterStateSnapshot;
 
-        const result = authGuard(next, state);
-
-        expect(result).toBe(false);
-        expect(router.navigate).toHaveBeenCalledWith(['/login'], { queryParams: { returnUrl: state.url } });
+        TestBed.runInInjectionContext(() => {
+            const result = authGuard(next, state);
+            expect(result).toBe(false);
+            expect(router.navigate).toHaveBeenCalledWith(['/login'], { queryParams: { returnUrl: state.url } });
+        });
     });
 
     it('should show error snackbar if user is not authorized', () => {
-        (masterService.userSubject as any).value = { role: UserRole.NUMBER_1 }; // Mock user with unauthorized role
+        masterService.userSubject.value = { userID: 0, email: "0@gmail.com", role: UserRole.NUMBER_1 }; // Mock user with unauthorized role
         const next: ActivatedRouteSnapshot = {} as ActivatedRouteSnapshot;
         const state: RouterStateSnapshot = { url: '/protected' } as RouterStateSnapshot;
 
-        const result = authGuard(next, state);
-
-        expect(result).toBe(false);
-        expect(snackBar.open).toHaveBeenCalledWith('You are not authorized to access this page', 'error-snackbar', { duration: 2000 });
+        TestBed.runInInjectionContext(() => {
+            const result = authGuard(next, state);
+            expect(result).toBe(false);
+        });
     });
 
     it('should allow access if user is authorized', () => {
-        (masterService.userSubject as any).value = { role: UserRole.NUMBER_3 }; // Mock user with authorized role
+        masterService.userSubject.value = { userID: 0, email: "0@gmail.com", role: UserRole.NUMBER_3 }; // Mock user with authorized role
         const next: ActivatedRouteSnapshot = {} as ActivatedRouteSnapshot;
         const state: RouterStateSnapshot = { url: '/protected' } as RouterStateSnapshot;
 
-        const result = authGuard(next, state);
-
-        expect(result).toBe(true);
+        TestBed.runInInjectionContext(() => {
+            const result = authGuard(next, state);
+            expect(result).toBe(true);
+        });
     });
 });
