@@ -15,10 +15,10 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 
 class MockAuthService {
-  apiAuthLoginPost = jest.fn().mockReturnValue({
+  apiAuthLoginPost = jest.fn().mockReturnValue(of({
     accessToken: 'accessToken',
     user: { userID: 1, email: '' } as User,
-  });
+  }));
   login: any;
 }
 
@@ -86,33 +86,56 @@ describe('LoginComponent', () => {
     expect(masterService.userSubject.value).toEqual(user);
   });
 
+
+
   it('should display error message when email is empty', () => {
     const emailInput = fixture.nativeElement.querySelector('input[formControlName="email"]');
     emailInput.value = '';
     emailInput.dispatchEvent(new Event('input'));
-    fixture.detectChanges(); // Trigger change detection to update the DOM
+    emailInput.focus();
+    const passwordInput = fixture.nativeElement.querySelector('input[formControlName="password"]');
+    passwordInput.value = '1';
+    passwordInput.focus();
 
-    const errorMessage = fixture.nativeElement.querySelector('.error-message');
-    expect(errorMessage.textContent).toContain('Email is required.');
+    fixture.detectChanges();
+
+    const emailDiv = fixture.nativeElement.querySelector('mat-form-field.full-width.email');
+    expect(emailDiv).toBeTruthy();
+    expect(emailDiv.textContent).toContain('Email is required.');
   });
 
-  it('should display error message when email is invalid', () => {
-    const emailInput = fixture.nativeElement.querySelector('input[formControlName="email"]');
+  it('should display error message when email is invalid',  () => {
+    const emailInput: HTMLInputElement = fixture.nativeElement.querySelector('input[formControlName="email"]');
     emailInput.value = 'invalid-email';
     emailInput.dispatchEvent(new Event('input'));
-    fixture.detectChanges(); // Trigger change detection to update the DOM
 
-    const errorMessage = fixture.nativeElement.querySelector('.error-message');
+    emailInput.focus();
+    const passwordInput = fixture.nativeElement.querySelector('input[formControlName="password"]');
+    passwordInput.value = '1';
+    passwordInput.focus();
+    fixture.detectChanges();
+
+
+    const errorMessage = fixture.nativeElement.querySelector('mat-error');
+    expect(errorMessage).toBeTruthy();
     expect(errorMessage.textContent).toContain('Please enter a valid email address.');
   });
 
-  it('should display error message when password is empty', () => {
+  it('should display error message when password is empty',  () => {
     const passwordInput = fixture.nativeElement.querySelector('input[formControlName="password"]');
     passwordInput.value = '';
     passwordInput.dispatchEvent(new Event('input'));
-    fixture.detectChanges(); // Trigger change detection to update the DOM
+    passwordInput.focus();
 
-    const errorMessage = fixture.nativeElement.querySelector('.error-message');
+    const emailInput: HTMLInputElement = fixture.nativeElement.querySelector('input[formControlName="email"]');
+    emailInput.value = 'i';
+    emailInput.dispatchEvent(new Event('input'));
+    emailInput.focus();
+
+
+    fixture.detectChanges();
+
+    const errorMessage = fixture.nativeElement.querySelector('mat-error');
     expect(errorMessage.textContent).toContain('Password is required.');
   });
 

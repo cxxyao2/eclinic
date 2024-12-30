@@ -1,8 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit, signal, AfterViewInit, ViewChild, DestroyRef } from '@angular/core';
+import { Component, inject, OnInit, signal, AfterViewInit, ViewChild } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { TranslocoDirective } from '@jsverse/transloco';
 
 // Angular Material Imports
 import { MatButtonModule } from '@angular/material/button';
@@ -11,18 +10,15 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
-import { MatSelectChange, MatSelectModule } from '@angular/material/select';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 
-import { ConsultationFormComponent } from "../consultation-form/consultation-form.component";
-import { LabResultsComponent } from "../lab-results/lab-results.component";
-import { MriImagesComponent } from "../mri-images/mri-images.component";
 import { AddVisitRecordDTO, GetPatientDTO, GetPractitionerScheduleDTO, GetPractitionerScheduleDTOListServiceResponse, GetVisitRecordDTO, GetVisitRecordDTOListServiceResponse, GetVisitRecordDTOServiceResponse, PractitionerSchedulesService, UpdatePractitionerScheduleDTO } from '@libs/api-client';
 import { VisitRecordsService } from '@libs/api-client';
-import { toSignal, takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MasterDataService } from 'src/app/services/master-data.service';
 import { CheckInWaitingListComponent } from '../check-in-waiting-list/check-in-waiting-list.component';
 
@@ -56,7 +52,6 @@ export class CheckInComponent implements AfterViewInit, OnInit {
   private masterService = inject(MasterDataService);
   private visitService = inject(VisitRecordsService);
   private scheduleService = inject(PractitionerSchedulesService);
-  private destroyRef = inject(DestroyRef);
 
   displayedColumns: string[] = ['practitionerName', 'startDateTime', 'endDateTime', 'action'];
   // business logic. Receptionist: 
@@ -89,7 +84,7 @@ export class CheckInComponent implements AfterViewInit, OnInit {
 
   getAppointmentByDate(bookedDate: Date) {
     this.scheduleService.apiPractitionerSchedulesGet(undefined, bookedDate)
-      .pipe(takeUntilDestroyed(this.destroyRef))
+      .pipe(takeUntilDestroyed())
       .subscribe({
         next: (res: GetPractitionerScheduleDTOListServiceResponse) => {
           const result = res.data ?? [];

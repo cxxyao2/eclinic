@@ -1,7 +1,7 @@
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
-import { Component, DestroyRef, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatSelectModule } from '@angular/material/select';
 import { User, UserRole, UsersService } from '@libs/api-client';
@@ -22,7 +22,6 @@ export class AuthorizationComponent {
   displayedColumns: string[] = ['userID', 'userName', 'role'];
   dataSource = new MatTableDataSource<User>([]);
   originalData: User[] = [];
-  destroyRef = inject(DestroyRef)
 
 
   userRoles: { value: UserRole, text: string }[] = [
@@ -48,7 +47,7 @@ export class AuthorizationComponent {
 
     from(updatedData)
       .pipe(
-        takeUntilDestroyed(this.destroyRef),
+        takeUntilDestroyed(),
         concatMap((user) =>
           this.userService.apiUsersPut(user)),
         finalize(() => {

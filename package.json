@@ -52,7 +52,13 @@
     ],
     "moduleNameMapper": {
       "src/(.*)": "<rootDir>/src/$1",
-      "@libs/(.*)": "<rootDir>/src/libs/$1"
+      "@libs/(.*)": "<rootDir>/src/libs/$1",
+      "@models/*": [
+        "<rootDir>/src/app/models/*"
+      ],
+      "@constants/*": [
+        "<rootDir>/src/app/constants/*"
+      ]
     },
     "testEnvironment": "jsdom",
     "testPathIgnorePatterns": [

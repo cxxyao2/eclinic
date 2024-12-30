@@ -4,7 +4,7 @@
             <mat-card-content>
                 <div class="full-width title">Login</div>
                 <!-- Email Input -->
-                <mat-form-field class="full-width">
+                <mat-form-field class="full-width email">
                     <mat-label>Email Address</mat-label>
                     <input matInput formControlName="email" type="email" placeholder="Enter your email" />
                     @if(loginForm.get('email')?.hasError('required')){

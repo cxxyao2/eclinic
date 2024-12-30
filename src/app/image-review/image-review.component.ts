@@ -1,11 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient, HttpEvent, HttpEventType, HttpHeaders } from '@angular/common/http';
-import { Component, DestroyRef, EventEmitter, inject, Input, OnChanges, Output, signal, SimpleChanges } from '@angular/core';
+import { HttpClient, HttpEventType, HttpHeaders } from '@angular/common/http';
+import { Component, EventEmitter, inject, Input, OnChanges, Output, signal, SimpleChanges } from '@angular/core';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 import { BASE_PATH, ImageRecordsService } from '@libs/api-client';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { catchError, map, Observable, throwError } from 'rxjs';
 
 @Component({
   selector: 'app-image-review',
@@ -20,7 +18,6 @@ export class ImageReviewComponent implements OnChanges {
   progress = signal<number>(0);
   imageSrc: string | null = null;
   private imageService = inject(ImageRecordsService);
-  private destroyRef = inject(DestroyRef);
   private http = inject(HttpClient);
   private basePath = inject(BASE_PATH);
 
@@ -43,7 +40,7 @@ export class ImageReviewComponent implements OnChanges {
     this.downloadFile(this.fileName);
 
     // this.imageService.apiImageRecordsImagesFileNameGet(this.fileName, 'events', true )
-    //   .pipe(takeUntilDestroyed(this.destroyRef),
+    //   .pipe(takeUntilDestroyed(),
     //     catchError(err => {
     //       return throwError(err)
     //     }))
@@ -75,15 +72,15 @@ export class ImageReviewComponent implements OnChanges {
       headers: headers,
       observe: 'events',
       reportProgress: true,
-      responseType: 'blob', 
+      responseType: 'blob',
     }).subscribe({
       next: (event) => {
         if (event.type === HttpEventType.DownloadProgress && event.total) {
           this.progress.set(Math.round((100 * event.loaded) / event.total));
         } else if (event.type === HttpEventType.Response) {
           const blob = new Blob([event.body!], { type: 'image/jpeg' });
-          this.imageSrc = URL.createObjectURL(blob); 
-          this.downloadBlob(fileName,blob);
+          this.imageSrc = URL.createObjectURL(blob);
+          this.downloadBlob(fileName, blob);
         }
 
       },

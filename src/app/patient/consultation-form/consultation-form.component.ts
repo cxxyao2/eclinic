@@ -1,6 +1,6 @@
 import { InpatientsService } from '@libs/api-client/api/inpatients.service';
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, DestroyRef, inject, OnInit, signal, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -95,7 +95,6 @@ export class ConsultationFormComponent implements OnInit {
   private inpatientService = inject(InpatientsService);
   private prescriptionService = inject(PrescriptionsService);
   private snackbarService = inject(SnackbarService);
-  private destroyRef = inject(DestroyRef);
   private signatureFilePath = signal<string>("");
   readonly dialog = inject(MatDialog);
 
@@ -120,7 +119,7 @@ export class ConsultationFormComponent implements OnInit {
     const userEmail = localStorage.getItem('email');
     if (userEmail) {
       this.userService.apiUsersGet(userEmail)
-        .pipe(takeUntilDestroyed(this.destroyRef))
+        .pipe(takeUntilDestroyed())
         .pipe(
           switchMap((res) => {
             if (res && res.length > 0) {
@@ -156,7 +155,7 @@ export class ConsultationFormComponent implements OnInit {
 
   fetchVistRecord() {
     this.visitService.apiVisitRecordsGet(this.practitioner().practitionerId, this.visitDate)
-      .pipe(takeUntilDestroyed(this.destroyRef))
+      .pipe(takeUntilDestroyed())
       .subscribe({
         next: (res) => {
           const data = (res.data ?? []).filter(ele => ele.diagnosis === "");
@@ -176,7 +175,7 @@ export class ConsultationFormComponent implements OnInit {
       notes: "Processing"
     }
     this.visitService.apiVisitRecordsPut(newVisit)
-      .pipe(takeUntilDestroyed(this.destroyRef))
+      .pipe(takeUntilDestroyed())
       .subscribe(
         {
           next: (res) => {
@@ -206,7 +205,7 @@ export class ConsultationFormComponent implements OnInit {
       });
 
       dialogRef.afterClosed()
-        .pipe(takeUntilDestroyed(this.destroyRef))
+        .pipe(takeUntilDestroyed())
         .subscribe(result => {
           if (!result) return;
         });
@@ -227,7 +226,7 @@ export class ConsultationFormComponent implements OnInit {
       notes: `Process ended. ${reason}`
     }
     this.visitService.apiVisitRecordsPut(newVisit)
-      .pipe(takeUntilDestroyed(this.destroyRef))
+      .pipe(takeUntilDestroyed())
       .subscribe(
         {
           next: (res) => {
@@ -250,7 +249,7 @@ export class ConsultationFormComponent implements OnInit {
         reasonForAdmission: diagnosis
       };
       this.inpatientService.apiInpatientsPost(addInpatient)
-        .pipe(takeUntilDestroyed(this.destroyRef))
+        .pipe(takeUntilDestroyed())
         .subscribe();
     }
 
