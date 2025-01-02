@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { AfterViewInit, Component, inject, OnInit, signal, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, DestroyRef, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -42,6 +42,7 @@ export class ConsulationFormMedicComponent implements OnInit, AfterViewInit {
   selectedMedication = signal<GetMedicationDTO>({});
   readonly medicationControl = new FormControl<string | GetMedicationDTO>('');
   private medicationService = inject(MedicationsService);
+  destroyRef = inject(DestroyRef);
 
 
   constructor() {
@@ -56,7 +57,7 @@ export class ConsulationFormMedicComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.medicationService.apiMedicationsGet()
-      .pipe(takeUntilDestroyed())
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (res) => { if (res && res.data) this.allMedications = res.data; },
         error: (err) => console.error(err)
@@ -110,7 +111,7 @@ export class ConsulationFormMedicComponent implements OnInit, AfterViewInit {
     return this.dataSource.data;
   }
 
-  resetMedication():void {
+  resetMedication(): void {
     this.dataSource.data = [];
   }
 }

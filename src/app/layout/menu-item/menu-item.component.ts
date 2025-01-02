@@ -1,6 +1,6 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { MenuItem } from './../custom-sidenav/custom-sidenav.component';
-import { Component, HostBinding, Input, input, OnInit, signal } from '@angular/core';
+import { Component, DestroyRef, HostBinding, inject, Input, input, OnInit, signal } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -29,6 +29,7 @@ export class MenuItemComponent implements OnInit {
   item = input.required<MenuItem>();
   @Input() depth?: number;
   collapsed = input<boolean>(true);
+  destroyRef = inject(DestroyRef);
 
   constructor(public navService: NavService, public router: Router) {
     if (this.depth === undefined) {
@@ -38,7 +39,7 @@ export class MenuItemComponent implements OnInit {
 
   ngOnInit(): void {
     this.navService.currentUrl
-      .pipe(takeUntilDestroyed())
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((url) => {
         if (this.item().route && url) {
           this.expanded.set(url.indexOf(`/${this.item().route}`) === 0);
@@ -54,7 +55,7 @@ export class MenuItemComponent implements OnInit {
       return;
     }
 
-   
+
     if (this.navService.appDrawer.mode === 'over') {
       this.router.navigate([item.route]);
       this.navService.closeNav();

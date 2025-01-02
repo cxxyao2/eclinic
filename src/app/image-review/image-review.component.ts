@@ -39,23 +39,6 @@ export class ImageReviewComponent implements OnChanges {
 
     this.downloadFile(this.fileName);
 
-    // this.imageService.apiImageRecordsImagesFileNameGet(this.fileName, 'events', true )
-    //   .pipe(takeUntilDestroyed(),
-    //     catchError(err => {
-    //       return throwError(err)
-    //     }))
-    //   .subscribe(
-    //     (event) => {
-    //       if (event.type === HttpEventType.DownloadProgress && event.total) {
-    //         this.progress.set(Math.round((100 * event.loaded) / event.total));
-    //       } else if (event.type === HttpEventType.Response) {
-    //         // FileSaver.saveAs(new Blob([buffer], { type: 'application/octet-stream' })  todo 
-    //         const blob = new Blob([event.body], { type: 'image/jpeg' });
-    //         this.imageSrc = URL.createObjectURL(blob); // Convert to image URL
-    //       }
-    //     }
-    //   );
-
 
   }
 

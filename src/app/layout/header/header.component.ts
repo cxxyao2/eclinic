@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { GetInpatientDTO, User } from '@libs/api-client';
-import { ChangeDetectionStrategy, Component, effect, inject, input, model, OnInit, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, effect, inject, input, model, OnInit, output, signal } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
@@ -56,11 +56,12 @@ export class HeaderComponent implements OnInit {
     document.body.classList.toggle('dark', this.darkMode());
     document.body.classList.toggle('light', !this.darkMode());
   });
+  destroyRef = inject(DestroyRef);
 
   ngOnInit() {
     this.currentLanguage.set(this.translocoService.getActiveLang());
     this.translocoService.langChanges$
-      .pipe(takeUntilDestroyed())
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(lang => {
         this.currentLanguage.set(languageMap[lang]);
       });
@@ -94,7 +95,7 @@ export class HeaderComponent implements OnInit {
 
     const dialogRef = this.dialog.open(DialogSimpleDialog, dialogConfig);
     dialogRef.afterClosed()
-      .pipe(takeUntilDestroyed())
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(result => {
         if (typeof result === 'object' && result) {
           // navigate to assign

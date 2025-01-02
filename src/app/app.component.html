@@ -6,6 +6,12 @@
     <app-custom-sidenav [collapsed]="collapsed()" (toggleDrawer)="drawer.toggle()"></app-custom-sidenav>
   </mat-sidenav>
   <mat-sidenav-content class="content">
+    @if(errorMessage()){
+    <div class="error-message">
+      <span>{{ errorMessage() }}</span>
+      <button class="close-btn" (click)="closeErrorMessage()">Close</button>
+    </div>
+    }
     <router-outlet></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>

@@ -19,3 +19,33 @@ mat-sidenav,
 mat-sidenav-container {
   transition: all 500ms ease-in-out;
 }
+
+.error-message {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--mat-app-error-container);
+  color: var(--mat-app-on-error-container);
+  border: 1px solid #f5c6cb;
+  border-radius: 8px;
+  padding: 10px 15px;
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+
+.error-message span {
+  flex-grow: 1;
+}
+
+.close-btn {
+  background-color: transparent;
+  border: none;
+  color: var(--mat-app-on-error-container);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.close-btn:hover {
+  color: var(--mat-app-on-error-container);
+  text-decoration: underline;
+}

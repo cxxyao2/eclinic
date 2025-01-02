@@ -1,0 +1,12 @@
+.article {
+    width: 100%; /* Take 100% width of the parent */
+    padding: 0.5rem; /* Padding of 1rem */
+    margin: 0.5rem auto; /* Vertical margin of 0.5rem, horizontal auto to center */
+    word-wrap: break-word; /* Ensure words break when they exceed the width */
+    white-space: normal; /* Allow text to wrap and respect whitespace */
+    box-sizing: border-box;
+    border-radius: 8px;
+    border: 1px solid var(--mat-app-outline); /* Use the outline color for the border */
+    line-height: 1.5; /* Line height of 1.5 */
+  }
+  

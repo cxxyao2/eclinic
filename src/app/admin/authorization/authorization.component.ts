@@ -1,7 +1,7 @@
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, DestroyRef, inject } from '@angular/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatSelectModule } from '@angular/material/select';
 import { User, UserRole, UsersService } from '@libs/api-client';
@@ -31,6 +31,7 @@ export class AuthorizationComponent {
     { value: UserRole.NUMBER_3, text: 'Admin' }];
   private userService = inject(UsersService);
   private router = inject(Router);
+  destroyRef = inject(DestroyRef);
 
   ngOnInit(): void {
     this.userService.apiUsersGet().subscribe(data => {
@@ -47,7 +48,7 @@ export class AuthorizationComponent {
 
     from(updatedData)
       .pipe(
-        takeUntilDestroyed(),
+        takeUntilDestroyed(this.destroyRef),
         concatMap((user) =>
           this.userService.apiUsersPut(user)),
         finalize(() => {

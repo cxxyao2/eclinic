@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit, signal, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, inject, OnInit, signal, AfterViewInit, ViewChild, DestroyRef } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
@@ -69,6 +69,7 @@ export class CheckInComponent implements AfterViewInit, OnInit {
   todayAllShedules: GetPractitionerScheduleDTO[] = [];
   waitingList = signal<GetVisitRecordDTO[]>([]);
   patients = signal<GetPatientDTO[]>([]);
+  destroyRef = inject(DestroyRef);
 
   ngOnInit(): void {
     this.getAppointmentByDate(this.today);
@@ -84,7 +85,7 @@ export class CheckInComponent implements AfterViewInit, OnInit {
 
   getAppointmentByDate(bookedDate: Date) {
     this.scheduleService.apiPractitionerSchedulesGet(undefined, bookedDate)
-      .pipe(takeUntilDestroyed())
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (res: GetPractitionerScheduleDTOListServiceResponse) => {
           const result = res.data ?? [];

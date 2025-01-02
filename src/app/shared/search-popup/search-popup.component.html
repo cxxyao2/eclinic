@@ -1,1 +1,21 @@
-<p>Search feature is under construction. Exciting updates are on the way!</p>
+<div class="overlay" (click)="closePopup()">
+    <div class="popup" (click)="$event.stopPropagation()">
+        <button class="close-button" (click)="closePopup()">X</button>
+        <mat-card>
+            <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Search</mat-label>
+                <input matInput type="text" [formControl]="searchControl" [placeholder]="placeholderText" />
+            </mat-form-field>
+            <button mat-flat-button (click)="onSearch()">Search</button>
+        </mat-card>
+        <mat-divider></mat-divider>
+        <div class="search-results">
+            @for(articleTitle of searchResults; track articleTitle){
+            <app-search-popup-item [articleTitle]="articleTitle"></app-search-popup-item>
+
+            }
+        </div>
+
+
+    </div>
+</div>

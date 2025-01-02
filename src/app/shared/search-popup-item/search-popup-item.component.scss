@@ -1,0 +1,14 @@
+.truncated-text {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+@media (max-width: 600px) {
+  .truncated-text {
+    font-size: 14px;
+    max-width: 80%;
+  }
+}

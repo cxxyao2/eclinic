@@ -15,10 +15,12 @@ import { BarChart } from 'echarts/charts';
 import { GridComponent } from 'echarts/components';
 import { CanvasRenderer } from 'echarts/renderers';
 
-import {LineChart} from 'echarts/charts';
-import { TitleComponent, TooltipComponent, LegendComponent} from 'echarts/components';
+import { LineChart } from 'echarts/charts';
+import { TitleComponent, TooltipComponent, LegendComponent } from 'echarts/components';
+import { MasterDataService } from './services/master-data.service';
+import { toSignal } from '@angular/core/rxjs-interop';
 
-echarts.use([BarChart, GridComponent,LineChart, TitleComponent, TooltipComponent, LegendComponent, CanvasRenderer]);
+echarts.use([BarChart, GridComponent, LineChart, TitleComponent, TooltipComponent, LegendComponent, CanvasRenderer]);
 
 
 @Component({
@@ -35,8 +37,12 @@ export class AppComponent implements AfterViewInit {
   @ViewChild('drawer') appDrawer!: MatSidenav;
 
   title = 'eclinic';
+
   responseService = inject(ResponsiveService);
   private navService = inject(NavService)
+  private masterService = inject(MasterDataService);
+  errorMessage = toSignal(this.masterService.messageSubject);
+
 
   collapsed = signal(false);
   sidenavOpend = true;
@@ -51,6 +57,10 @@ export class AppComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.navService.appDrawer = this.appDrawer;
+  }
+
+  closeErrorMessage() {
+    this.masterService.messageSubject.next('');
   }
 
 }
