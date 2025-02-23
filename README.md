@@ -18,6 +18,8 @@ Set the appropriate `BaseURL` value in `env.js`.
 window.__env.BaseURL = "http://localhost:5215";
 ```
 
+The backend code for this project is located at:[Here](https://github.com/cxxyao2/HealthCenterBackend.git).
+
 ## Sharing Models between Frontend and Backend
 
 Share services and models through `openapicli` tools. This significantly reduces conflicts and errors. Execute the `generate-client-sdk` command in `package.json`:
@@ -34,7 +36,11 @@ import { AuthService } from '@libs/api-client';
 
 ## Internationalization (i18n)
 
-Use the Transloco package for a simple and elegant approach to implement internationalization.
+Use the `@jsverse/transloco` package for a simple and elegant approach to implement internationalization.
+
+## Notifications
+
+Use Server-Side Events to receive notifications from the backend.
 
 ## Screenshots of Main Features
 
