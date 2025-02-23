@@ -13,7 +13,7 @@ Tested:
 
 ## Running End-to-End Tests
 
-Run `ng e2e` to perform end-to-end tests using Cypress.
+Run `npx cypress open` to perform end-to-end tests using Cypress.
 
 ## Supporting Multiple Backends
 
