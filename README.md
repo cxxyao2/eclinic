@@ -1,27 +1,42 @@
 # Eclinic
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.0.
+This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 18.2.0.
 
-## Development server
+## Running Unit Tests
 
-Run `npx ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+Execute `ng test` to run unit tests via Jest.
 
-## Code scaffolding
+## Running End-to-End Tests
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Run `ng e2e` to perform end-to-end tests using Cypress.
 
-## Build
+## Supporting Multiple Backends
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+Set the appropriate `BaseURL` value in `env.js`.
 
-## Running unit tests
+```javascript
+window.__env.BaseURL = "http://localhost:5215";
+```
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## Sharing Models between Frontend and Backend
 
-## Running end-to-end tests
+Share services and models through `openapicli` tools. This significantly reduces conflicts and errors. Execute the `generate-client-sdk` command in `package.json`:
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+```bash
+"generate-client-sdk": "openapi-generator-cli generate -i http://localhost:5215/swagger/v1/swagger.json -g typescript-angular -o src/libs/api-client --skip-validate-spec --type-mappings DateTime=Date,object=any"
+```
 
-## Further help
+Then , importing the elements from `src/libs/api-clients' like this:
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+```
+import { AuthService } from '@libs/api-client';
+```
+
+## Internationalization (i18n)
+
+Use the Transloco package for a simple and elegant approach to implement internationalization.
+
+## Screenshots of Main Features
+
+- Screenshot 1
+- Screenshot 2

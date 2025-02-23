@@ -18,7 +18,7 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideAnimationsAsync(),
-    { provide: BASE_PATH, useValue: envWindow.__env.BaseWS },
+    { provide: BASE_PATH, useValue: envWindow.__env.BaseURL },
     {
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
       useValue: { appearance: 'outline', SubscriptSizing: 'dynamic' }
