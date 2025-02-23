@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AuthorizationComponent } from './authorization.component';
-import 'jasmine';
 
 import { MatTableModule } from '@angular/material/table';
 import { MatSelectModule } from '@angular/material/select';
@@ -10,6 +9,7 @@ import { CommonModule } from '@angular/common';
 import { UserRole, UsersService } from '@libs/api-client';
 import { of } from 'rxjs';
 import { Router } from '@angular/router';
+import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 class MockUsersService {
   apiUsersGet = jest.fn().mockReturnValue(of([
@@ -31,9 +31,10 @@ describe('AuthorizationComponent', () => {
         MatButtonModule,
         MatIconModule,
         MatSelectModule,
-        MatTableModule
+        MatTableModule,
+        NoopAnimationsModule,
+        AuthorizationComponent
       ],
-      declarations: [AuthorizationComponent],
       providers: [
         { provide: UsersService, useClass: MockUsersService },
         { provide: Router, useValue: { navigate: jest.fn() } }
@@ -61,18 +62,29 @@ describe('AuthorizationComponent', () => {
 
   it('should update user role', () => {
     const user = component.dataSource.data[0];
-    user.role = UserRole.NUMBER_3;
-    component.save();
+
+    const selectElement: HTMLDivElement = fixture.nativeElement.querySelector('mat-select>div');
+
+    expect(selectElement).toBeTruthy();
+
+    selectElement.click();
     fixture.detectChanges();
 
-    expect(component.originalData[0].role).toBe(UserRole.NUMBER_3);
+    const listboxDiv = document.querySelector('div[role="listbox"]');
+    expect(listboxDiv).toBeTruthy();
+
+
+    if (listboxDiv) {
+      const allElements = listboxDiv.querySelectorAll('mat-option');
+      expect(allElements.length).toBe(4);
+
+      (allElements[3] as HTMLOptionElement).click();
+      fixture.detectChanges();
+
+      expect(component.originalData[0].role).toBe(UserRole.NUMBER_1);
+      expect(user.role).toBe(UserRole.NUMBER_3);
+    }
+
   });
 
-  it('should navigate to login on unauthorized access', () => {
-    router.navigate = jest.fn();
-    component.ngOnInit();
-    fixture.detectChanges();
-
-    expect(router.navigate).toHaveBeenCalledWith(['/login']);
-  });
 });

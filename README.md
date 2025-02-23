@@ -4,7 +4,12 @@ This project was generated using [Angular CLI](https://github.com/angular/angula
 
 ## Running Unit Tests
 
-Execute `ng test` to run unit tests via Jest.
+Execute `npm run test` to run unit tests via Jest.
+Tested:
+
+- Login component
+- Authorizaiton component
+- Auth guard
 
 ## Running End-to-End Tests
 
