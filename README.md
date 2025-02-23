@@ -42,6 +42,10 @@ Use the `@jsverse/transloco` package for a simple and elegant approach to implem
 
 Use Server-Side Events to receive notifications from the backend.
 
+## Authorization and Authentication
+
+Role-based authorization. Only administrators can create schedules for practitioners. Authentication is based on JWT using an access token and a refresh token.
+
 ## Screenshots of Main Features
 
 - Screenshot 1
