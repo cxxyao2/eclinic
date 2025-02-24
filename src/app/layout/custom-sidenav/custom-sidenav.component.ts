@@ -7,6 +7,7 @@ import { Router, RouterModule, UrlTree } from '@angular/router';
 import { MenuItemComponent } from "../menu-item/menu-item.component";
 import { ResponsiveService } from '../../services/responsive.service';
 import { MasterDataService } from 'src/app/services/master-data.service';
+import { TranslocoDirective } from '@jsverse/transloco';
 
 export type MenuItem = {
   icon: string;
@@ -20,7 +21,7 @@ export type MenuItem = {
 @Component({
   selector: 'app-custom-sidenav',
   standalone: true,
-  imports: [CommonModule, MatListModule, MatIconModule, RouterModule, MenuItemComponent],
+  imports: [CommonModule, TranslocoDirective, MatListModule, MatIconModule, RouterModule, MenuItemComponent],
   templateUrl: './custom-sidenav.component.html',
   styleUrl: './custom-sidenav.component.scss'
 })

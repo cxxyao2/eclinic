@@ -1,9 +1,13 @@
 {
-    "foo": "Foo",
-    "bar": "Bar",
-    "dashboard": {
-      "title": "Dashboard Title",
-      "desc": "Dashboard Desc"
-    },
-    "checkin":"Check In"
-  }
+  "foo": "Foo",
+  "bar": "Bar",
+  "checkin": "Check In",
+  "logout": "Logout",
+  "dashboard": "Dashboard",
+  "available": "Available",
+  "consultation": "Consultation",
+  "admin": "Admin",
+  "booking": "Booking",
+  "check in": "Check in",
+  "inpatient": "Inpatient"
+}

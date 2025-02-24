@@ -1,4 +1,4 @@
-<mat-nav-list>
+<mat-nav-list  *transloco="let t">
     @if(!isBigScreen()){
     <a mat-list-item (click)="toggleSidenav()">
         <mat-icon matListItemIcon>arrow_back</mat-icon>

@@ -1,4 +1,4 @@
-<mat-toolbar>
+<mat-toolbar *transloco="let t">
     <mat-toolbar-row class="first-row">
         @if(isLargeScreen()) {
         <button mat-icon-button aria-label="Toggle menu" (click)="collapsed.set(!collapsed())">
@@ -37,7 +37,7 @@
             } @else {
             <button mat-flat-button [routerLink]="'/login'">
                 <mat-icon>account_circle</mat-icon>
-                Login
+                {{t('logout') }}
             </button>
             }
         </div>

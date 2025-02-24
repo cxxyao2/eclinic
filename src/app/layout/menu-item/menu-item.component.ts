@@ -1,3 +1,4 @@
+import { TranslocoDirective } from '@jsverse/transloco';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { MenuItem } from './../custom-sidenav/custom-sidenav.component';
 import { Component, DestroyRef, HostBinding, inject, Input, input, OnInit, signal } from '@angular/core';
@@ -12,7 +13,7 @@ import { NgClass, NgStyle } from '@angular/common';
 @Component({
   selector: 'app-menu-item',
   standalone: true,
-  imports: [MatListModule, RouterModule, MatIconModule, MatTooltipModule, NgStyle, NgClass],
+  imports: [MatListModule, TranslocoDirective,RouterModule, MatIconModule, MatTooltipModule, NgStyle, NgClass],
   templateUrl: './menu-item.component.html',
   styleUrl: './menu-item.component.scss',
   animations: [

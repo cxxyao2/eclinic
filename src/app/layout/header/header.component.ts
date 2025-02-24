@@ -6,7 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { TranslocoService } from '@jsverse/transloco';
+import { TranslocoService, TranslocoDirective } from '@jsverse/transloco';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { SseClientService } from 'src/app/services/sse.service';
 import { MatBadgeModule } from '@angular/material/badge';
@@ -27,7 +27,7 @@ const languageMap: { [key: string]: string } = {
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, MatListModule, RouterModule, MatBadgeModule, MatToolbarModule, MatButtonModule, MatIconModule, MatMenuModule, MatTooltipModule],
+  imports: [CommonModule, MatListModule,TranslocoDirective, RouterModule, MatBadgeModule, MatToolbarModule, MatButtonModule, MatIconModule, MatMenuModule, MatTooltipModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
   providers: [SseClientService],
@@ -41,7 +41,7 @@ export class HeaderComponent implements OnInit {
   darkMode = signal(false);
   currentLanguage = signal('English');
   isNotificationVisible = signal(false);
-  private translocoService = inject(TranslocoService);
+  transloco = inject(TranslocoService);
   private masterService = inject(MasterDataService);
   private navigationService = inject(NavService);
   readonly dialog = inject(MatDialog);
@@ -59,8 +59,8 @@ export class HeaderComponent implements OnInit {
   destroyRef = inject(DestroyRef);
 
   ngOnInit() {
-    this.currentLanguage.set(this.translocoService.getActiveLang());
-    this.translocoService.langChanges$
+    this.currentLanguage.set(this.transloco.getActiveLang());
+    this.transloco.langChanges$
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(lang => {
         this.currentLanguage.set(languageMap[lang]);
@@ -68,7 +68,7 @@ export class HeaderComponent implements OnInit {
   }
 
   toggleLanguage(newLanguage: string) {
-    this.translocoService.setActiveLang(newLanguage);
+    this.transloco.setActiveLang(newLanguage);
   }
 
   showNotifications() {

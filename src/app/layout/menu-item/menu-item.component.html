@@ -1,4 +1,4 @@
-
+<ng-container *transloco="let t">
 <a class="menu-item" mat-list-item [ngStyle]="{ 'padding-left': ((depth === undefined || collapsed() ) ? 0 : depth) * 12 + 'px' }"
   (click)="onItemSelected(item())" [ngClass]="{
     active: item().route ? router.isActive(item().route??'', true) : false,
@@ -7,7 +7,7 @@
   [attr.aria-label]="collapsed()?item().label:''">
   <mat-icon matListItemIcon>{{ item().icon }}</mat-icon>
   @if (!collapsed()) {
-  <span matListItemTitle>{{ item().label }}
+  <span matListItemTitle>{{ t(item().label.toLowerCase()) }}
   </span>
   }
   @if (item().subItems?.length??0 > 0)
@@ -25,3 +25,4 @@
   }
 </ng-container>
 }
+</ng-container>

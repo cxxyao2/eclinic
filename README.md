@@ -43,6 +43,24 @@ import { AuthService } from '@libs/api-client';
 
 Use the `@jsverse/transloco` package for a simple and elegant approach to implement internationalization.
 
+In component.ts file,
+
+```
+import {translocoDirective} from '...'
+...
+@Component({
+    imports:[{...,translocoDirective,...}]
+)}
+```
+
+In template file, wrap the content with transloco directive
+
+```
+<div *transloco="let t">
+       <div>{t('your-translate-key')}
+</div>
+```
+
 ## Notifications
 
 Use Server-Side Events to receive notifications from the backend.

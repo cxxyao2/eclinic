@@ -1,9 +1,13 @@
 {
   "foo": "Foo",
   "bar": "Bar",
-  "dashboard": {
-    "title": "Titre du tableau",
-    "desc": "Description du tableau"
-  },
-  "checkin": "Enregistrer"
+  "checkin": "Enregistrer",
+  "logout": "s'déconnecter",
+  "dashboard": "Tableau de bord",
+  "available": "Disponible",
+  "consultation": "Consultation",
+  "admin": "Admin",
+  "booking": "RDV",
+  "check in": "Arrivée",
+  "inpatient": "Hospitalisé"
 }
