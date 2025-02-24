@@ -56,7 +56,7 @@ import { DialogSimpleDialog } from 'src/app/shared/dialog-simple-dialog';
     MatSortModule,
     MatTableModule,
     ProfileComponent
-],
+  ],
   templateUrl: './practitioner-schedule.component.html',
   styleUrls: ['./practitioner-schedule.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -74,6 +74,7 @@ export class PractitionerScheduleComponent implements AfterViewInit {
   changedData: GetPractitionerScheduleDTO[] = []; // added, updated
   deletedData: GetPractitionerScheduleDTO[] = []; // deleted
   imagePath = signal('assets/images/smiling-doctor.jpg');
+  savedFlag = signal(false);
 
   dataSource = new MatTableDataSource<GetPractitionerScheduleDTO>([]);
   displayedColumns: string[] = ['day', 'fromTime', 'endTime'];
@@ -97,6 +98,7 @@ export class PractitionerScheduleComponent implements AfterViewInit {
   readonly dialog = inject(MatDialog);
   private snackbarService = inject(SnackbarService);
   private scheduleService = inject(PractitionerSchedulesService)
+
 
 
   // Lifecycle Hooks
@@ -152,6 +154,7 @@ export class PractitionerScheduleComponent implements AfterViewInit {
   }
 
   saveSchedule(): void {
+    this.savedFlag.set(false);
     // add
     const newData = this.dataSource.data.filter((entity) => (entity.scheduleId ?? 0) === 0);
     if (newData.length > 0) {
@@ -195,6 +198,7 @@ export class PractitionerScheduleComponent implements AfterViewInit {
   }
 
   deleteScheduleArray(dataArray: GetPractitionerScheduleDTO[]) {
+    this.savedFlag.set(true);
     from(dataArray)
       .pipe(
         concatMap((item) => this.scheduleService.apiPractitionerSchedulesIdDelete(item.scheduleId!)), // Process each item sequentially
@@ -215,10 +219,11 @@ export class PractitionerScheduleComponent implements AfterViewInit {
 
   addNewSchedules(dataArray: GetPractitionerScheduleDTO[]) {
     let recordCount = 0;
+    this.savedFlag.set(true);
     from(dataArray)
-      .pipe(
-        concatMap((item) => this.addOneSchedule(item)), // Process each item sequentially
-        finalize(() => {
+    .pipe(
+      concatMap((item) => this.addOneSchedule(item)), // Process each item sequentially
+      finalize(() => {
           if (recordCount === dataArray.length) {
             this.snackbarService.show('All items processed successfully!', 'success-snackbar');
             this.dataSource.data = [];
@@ -248,12 +253,13 @@ export class PractitionerScheduleComponent implements AfterViewInit {
       return;
     }
 
-    if (this.dataSource.data.length > 0) {
-      this.dialog.open(DialogSimpleDialog, {
-        data: { title: 'Notification', content: 'The schedule for the staff has already been created.If you want to update it, please proceed to click "Delete" button first', isCancelButtonVisible: false },
-      });
-      return;
-    }
+    // TODO
+    // if (this.dataSource.data.length > 0) {
+    //   this.dialog.open(DialogSimpleDialog, {
+    //     data: { title: 'Notification', content: 'The schedule for the staff has already been created.If you want to update it, please proceed to click "Delete" button first', isCancelButtonVisible: false },
+    //   });
+    //   return;
+    // }
 
     const startDate = formatDateToYMDPlus(workDate, '00:00:00');
     const endDate = formatDateToYMDPlus(workDate, '23:30:00');

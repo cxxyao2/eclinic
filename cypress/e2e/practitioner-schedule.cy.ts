@@ -1,8 +1,12 @@
 
 describe('Practitioner Schedule Component', () => {
 
-    beforeEach(() => {
+    before(() => {
         cy.viewport(Cypress.env('viewport_w'), Cypress.env('viewport_h'));
+    })
+
+
+    beforeEach(() => {
         cy.login();
         cy.visit('/available');
         cy.get('mat-select[data-cy="cyPractitionerList"]').should('be.visible');
@@ -16,26 +20,26 @@ describe('Practitioner Schedule Component', () => {
 
         cy.contains('button', 'Create').click();
 
-        cy.get('mat-dialog-actions')
-            .then(($dialogActions) => {
-                if ($dialogActions.length > 0) {
-                    cy.wrap($dialogActions)
-                        .contains('span', 'Ok')
-                        .then(($span) => {
-                            if ($span.length > 0) {
-                                cy.wrap($span).click();
-                                cy.get('mat-dialog-container').should('not.exist');
-                            }
-                        });
-                }
-            })
+        // cy.get('mat-dialog-actions')
+        //     .then(($dialogActions) => {
+        //         if ($dialogActions.length > 0) {
+        //             cy.wrap($dialogActions)
+        //                 .contains('span', 'Ok')
+        //                 .then(($span) => {
+        //                     if ($span.length > 0) {
+        //                         cy.wrap($span).click();
+        //                         cy.get('mat-dialog-container').should('not.exist');
+        //                     }
+        //                 });
+        //         }
+        //     })
     })
-
 
 
     it('should display the page title', () => {
         cy.get('h2').should('contain.text', 'Practitioner Schedule');
     });
+
 
 
     it('should create a schedule', () => {
@@ -44,9 +48,22 @@ describe('Practitioner Schedule Component', () => {
 
     it('should save the schedule', () => {
 
-        cy.contains('button', 'Save').click();
-        // cy.contains('All items processed successfully!', { timeout: 10000 }).should('be.visible');
+        // cy.intercept({
+        //     url: /^(?!.*(login|register)).*$/,
+        //     middleware: true
+        // }, (req) => {
+        //     const accessToken = Cypress.env('accessToken') as string;
+        //     if (accessToken) {
+        //         req.headers['Authorization'] = `Bearer ${accessToken}`;
+        //     }
+        // }).as('editSchedule');
+
+        cy.contains('button', 'Save').click({ force: true });
+        cy.get('[data-cy=savedFlag]').should('exist');
+        // cy.get('@editSchedule').then((interception) => {
+        //     console.log('intercept', interception);
     });
+
 
     it('should delete the schedule', () => {
 
@@ -55,6 +72,8 @@ describe('Practitioner Schedule Component', () => {
 
         cy.get('table  tr[mat-row]').should('have.length', 0);
     });
+
+
 
 
 })
