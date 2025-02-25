@@ -20,19 +20,7 @@ describe('Practitioner Schedule Component', () => {
 
         cy.contains('button', 'Create').click();
 
-        // cy.get('mat-dialog-actions')
-        //     .then(($dialogActions) => {
-        //         if ($dialogActions.length > 0) {
-        //             cy.wrap($dialogActions)
-        //                 .contains('span', 'Ok')
-        //                 .then(($span) => {
-        //                     if ($span.length > 0) {
-        //                         cy.wrap($span).click();
-        //                         cy.get('mat-dialog-container').should('not.exist');
-        //                     }
-        //                 });
-        //         }
-        //     })
+
     })
 
 
@@ -46,22 +34,38 @@ describe('Practitioner Schedule Component', () => {
         cy.get('table tr[mat-row]').should('have.length.greaterThan', 0);
     });
 
-    it('should save the schedule', () => {
+    it('should save the schedule successfully', () => {
 
-        // cy.intercept({
-        //     url: /^(?!.*(login|register)).*$/,
-        //     middleware: true
-        // }, (req) => {
-        //     const accessToken = Cypress.env('accessToken') as string;
-        //     if (accessToken) {
-        //         req.headers['Authorization'] = `Bearer ${accessToken}`;
-        //     }
-        // }).as('editSchedule');
+        const backendURL = Cypress.env('backendURL')
+        cy.spy(console, 'log').as('log');
+      
+        cy.intercept('POST', `${backendURL}/api/PractitionerSchedules`, (req) => {
+            req.reply((res) => {
+                console.log('Response body:', res.body);
+                return res;
+            });
+        }).as('postApiCall');
+
 
         cy.contains('button', 'Save').click({ force: true });
-        cy.get('[data-cy=savedFlag]').should('exist');
-        // cy.get('@editSchedule').then((interception) => {
-        //     console.log('intercept', interception);
+        cy.wait('@postApiCall').then((interception) => {
+            // 验证响应状态码是否为 200
+            expect(interception.response.statusCode).to.equal(200);
+        });
+
+        cy.wait(10000);
+
+        cy.get('@log').its('callCount').should('equal', 57)
+
+        // cy.wait('@postApiCall', { multiple: true }).then((interceptions) => {
+        //     // 遍历所有拦截到的请求
+        //     interceptions.forEach((interception) => {
+        //         // 验证每个请求的响应状态码是否为 200
+        //         expect(interception.response.statusCode).to.equal(200);
+        //     });
+        // });
+
+
     });
 
 
