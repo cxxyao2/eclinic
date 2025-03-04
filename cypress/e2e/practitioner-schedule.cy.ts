@@ -38,7 +38,7 @@ describe('Practitioner Schedule Component', () => {
 
         const backendURL = Cypress.env('backendURL')
         cy.spy(console, 'log').as('log');
-      
+
         cy.intercept('POST', `${backendURL}/api/PractitionerSchedules`, (req) => {
             req.reply((res) => {
                 console.log('Response body:', res.body);
@@ -57,13 +57,6 @@ describe('Practitioner Schedule Component', () => {
 
         cy.get('@log').its('callCount').should('equal', 57)
 
-        // cy.wait('@postApiCall', { multiple: true }).then((interceptions) => {
-        //     // 遍历所有拦截到的请求
-        //     interceptions.forEach((interception) => {
-        //         // 验证每个请求的响应状态码是否为 200
-        //         expect(interception.response.statusCode).to.equal(200);
-        //     });
-        // });
 
 
     });
