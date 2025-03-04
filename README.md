@@ -69,9 +69,11 @@ Use Server-Side Events to receive notifications from the backend.
 
 Role-based authorization. Only administrators can create schedules for practitioners. Authentication is based on JWT using an access token and a refresh token.
 
-## From desktop to coloud-native
+## From desktop to cloud-native
 
 Years ago, I developed numerous management systems using VB, PowerBuilder, and VB.NET. Now, I have replicated a small hospital management system using Angular and C#. However, I did not implement the billing module, as it involves complex scenarios related to self-payment and medical insurance.
+
+Compared to desktop applications, cloud applications are scalable, accessible, and resilient—enabling better flexibility, remote access, and high availability.
 
 The Hospital Management System (HMS) is a comprehensive software solution designed to simulate the operations of a small hospital, providing efficient workflow management for administrators, doctors, nurses, and patients. The system includes the following core functionalities:
 
