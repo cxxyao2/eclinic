@@ -25,7 +25,7 @@
                 <mat-icon>dark_mode</mat-icon>
                 }
             </button>
-            @if(user()){
+            @if(user()?.userName){
             @if(user()?.role === 0) {
             <button mat-icon-button (click)="showNotifications()" aria-label="Show Notifications">
                 <mat-icon role="alert" class="notification-icon"
@@ -37,7 +37,7 @@
             } @else {
             <button mat-flat-button [routerLink]="'/login'">
                 <mat-icon>account_circle</mat-icon>
-                {{t('logout') }}
+                {{t('login') }}
             </button>
             }
         </div>

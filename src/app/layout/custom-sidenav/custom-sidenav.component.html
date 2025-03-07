@@ -1,13 +1,13 @@
-<mat-nav-list  *transloco="let t">
+<mat-nav-list *transloco="let t">
     @if(!isBigScreen()){
     <a mat-list-item (click)="toggleSidenav()">
         <mat-icon matListItemIcon>arrow_back</mat-icon>
         <span matListItemTitle>Hello {{user()?.userName | titlecase}}</span>
     </a>
     <mat-divider> </mat-divider>
-    @if(user()){
+    @if(user()?.userName){
     <a mat-list-item (click)="logout()">
-        <mat-icon matListItemIcon>logout</mat-icon>
+        <mat-icon matListItemIcon>logout </mat-icon>
         <span matListItemTitle>Logout</span>
     </a>
     }@else{

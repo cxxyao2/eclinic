@@ -2,6 +2,7 @@
   "foo": "Foo",
   "bar": "Bar",
   "checkin": "Check In",
+  "login": "Login",
   "logout": "Logout",
   "dashboard": "Dashboard",
   "available": "Available",

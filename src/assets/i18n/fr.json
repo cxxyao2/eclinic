@@ -2,6 +2,7 @@
   "foo": "Foo",
   "bar": "Bar",
   "checkin": "Enregistrer",
+  "login": "s'connecter",
   "logout": "s'déconnecter",
   "dashboard": "Tableau de bord",
   "available": "Disponible",

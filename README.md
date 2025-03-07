@@ -103,6 +103,7 @@ The HMS is built to enhance hospital efficiency, streamline patient care workflo
   ![Consulation](./screenshots/7-consulation.png)
 - Inpatient Admission && Bed management
   ![admission](./screenshots/8-need-admission.png)
+  ![bedWaiting](./screenshots/14-bed-wainting.png)
   ![bed](./screenshots/11-bed-assign1.png)
 - Internationization ( English <=> Frenh)
   ![language](./screenshots/13-internationalization.png)
