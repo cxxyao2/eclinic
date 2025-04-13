@@ -27,15 +27,15 @@
             </button>
             @if(user()?.userName){
             @if(user()?.role === 0) {
-            <button mat-icon-button (click)="showNotifications()" aria-label="Show Notifications">
+            <button id="notifications" mat-icon-button (click)="showNotifications()" aria-label="Show Notifications">
                 <mat-icon role="alert" class="notification-icon"
                     [matBadge]="sseService.message().length">notifications</mat-icon>
             </button>
             }
-            <button mat-flat-button (click)="logout()">
+            <button id="logout" mat-flat-button (click)="logout()">
                 {{ user()?.userName | titlecase }} &nbsp;Logout</button>
             } @else {
-            <button mat-flat-button [routerLink]="'/login'">
+            <button id="login" mat-flat-button [routerLink]="'/login'">
                 <mat-icon>account_circle</mat-icon>
                 {{t('login') }}
             </button>

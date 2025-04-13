@@ -77,7 +77,7 @@ export class SearchPopupComponent implements OnInit {
     }
     console.log('Performing search for:', query);
     // Simulate an API response
-    const filteredArray = this.articleTitles.filter(item => 
+    const filteredArray = this.articleTitles.filter(item =>
       item.toLowerCase().includes(query.trim().toLowerCase())
     );
     return of([...filteredArray]).pipe(debounceTime(500)); // Simulate network delay
@@ -85,6 +85,7 @@ export class SearchPopupComponent implements OnInit {
 
   // For explicit search button clicks (optional)
   onSearch() {
+    alert('You are visiting knowledge base.');
     const currentValue = this.searchControl.value;
     if (currentValue) {
       this.mockSearchRequest(currentValue).subscribe((results) => {

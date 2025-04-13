@@ -61,7 +61,7 @@
         "<rootDir>/src/app/constants/*"
       ]
     },
-    "testEnvironment": "jsdom",
+    "testEnvironmennpm install ngx-toastr --savet": "jsdom",
     "testPathIgnorePatterns": [
       "<rootDir>/node_modules/",
       "<rootDir>/dist/"

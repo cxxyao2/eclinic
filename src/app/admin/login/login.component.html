@@ -6,7 +6,7 @@
                 <!-- Email Input -->
                 <mat-form-field class="full-width email">
                     <mat-label>Email Address</mat-label>
-                    <input matInput formControlName="email" type="email" placeholder="Enter your email" />
+                    <input matInput id="email" formControlName="email" type="email" placeholder="Enter your email" />
                     @if(loginForm.get('email')?.hasError('required')){
                     <mat-error>
                         Email is required.
@@ -24,7 +24,8 @@
                 <!-- Password Input -->
                 <mat-form-field class="full-width">
                     <mat-label>Password</mat-label>
-                    <input matInput formControlName="password" type="password" placeholder="Enter your password" />
+                    <input matInput id="password" formControlName="password" type="password"
+                        placeholder="Enter your password" />
                     @if(loginForm.get('password')?.hasError('required')){
                     <mat-error>
                         Password is required.

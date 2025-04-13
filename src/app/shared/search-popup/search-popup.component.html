@@ -6,7 +6,7 @@
                 <mat-label>Search</mat-label>
                 <input matInput type="text" [formControl]="searchControl" [placeholder]="placeholderText" />
             </mat-form-field>
-            <button mat-flat-button (click)="onSearch()">Search</button>
+            <button mat-flat-button id="search" (click)="onSearch()">Search</button>
         </mat-card>
         <mat-divider></mat-divider>
         <div class="search-results">
