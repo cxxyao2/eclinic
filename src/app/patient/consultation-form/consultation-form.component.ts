@@ -30,32 +30,31 @@ import { MasterDataService } from 'src/app/services/master-data.service';
 
 
 @Component({
-  selector: 'app-consultation-form',
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatButtonModule,
-    MatCheckboxModule,
-    MatRadioModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    MatTabsModule,
-    MatIconModule,
-    CanvasComponent,
-    FormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatAutocompleteModule,
-    ReactiveFormsModule,
-    ConsulationFormMedicComponent,
-    ImageReviewComponent
-  ],
-  templateUrl: './consultation-form.component.html',
-  styleUrl: './consultation-form.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-consultation-form',
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatButtonModule,
+        MatCheckboxModule,
+        MatRadioModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatSelectModule,
+        MatTabsModule,
+        MatIconModule,
+        CanvasComponent,
+        FormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatAutocompleteModule,
+        ReactiveFormsModule,
+        ConsulationFormMedicComponent,
+        ImageReviewComponent
+    ],
+    templateUrl: './consultation-form.component.html',
+    styleUrl: './consultation-form.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ConsultationFormComponent implements OnInit {
 

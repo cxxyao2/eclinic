@@ -15,16 +15,15 @@ export interface DialogData {
 
 
 @Component({
-  selector: 'dialog-simple-dialog',
-  templateUrl: 'dialog-simple-dialog.html',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatButtonModule,
-    MatDialogModule,
-    MatListModule,
-    ReactiveFormsModule,
-  ],
+    selector: 'dialog-simple-dialog',
+    templateUrl: 'dialog-simple-dialog.html',
+    imports: [
+        CommonModule,
+        MatButtonModule,
+        MatDialogModule,
+        MatListModule,
+        ReactiveFormsModule,
+    ]
 })
 export class DialogSimpleDialog implements OnInit {
   itemsControl: FormControl = new FormControl(null);

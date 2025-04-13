@@ -14,7 +14,7 @@ export const authGuard: CanActivateFn = (next: ActivatedRouteSnapshot,
     router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
     return false;
   }
-  if (user.role === UserRole.NUMBER_3) {
+  if (user.role === UserRole.Admin) {
     return true;
   }
   snackbar.show('You are not authorized to access this page', 'error-snackbar');

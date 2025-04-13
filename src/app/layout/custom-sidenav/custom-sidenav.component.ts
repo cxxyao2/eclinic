@@ -19,11 +19,10 @@ export type MenuItem = {
 
 
 @Component({
-  selector: 'app-custom-sidenav',
-  standalone: true,
-  imports: [CommonModule, TranslocoDirective, MatListModule, MatIconModule, RouterModule, MenuItemComponent],
-  templateUrl: './custom-sidenav.component.html',
-  styleUrl: './custom-sidenav.component.scss'
+    selector: 'app-custom-sidenav',
+    imports: [CommonModule, TranslocoDirective, MatListModule, MatIconModule, RouterModule, MenuItemComponent],
+    templateUrl: './custom-sidenav.component.html',
+    styleUrl: './custom-sidenav.component.scss'
 })
 export class CustomSidenavComponent {
 

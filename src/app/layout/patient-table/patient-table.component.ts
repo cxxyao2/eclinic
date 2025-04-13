@@ -2,11 +2,10 @@ import { Component } from '@angular/core';
 import { MatTableModule } from '@angular/material/table';
 
 @Component({
-  selector: 'app-patient-table',
-  standalone: true,
-  imports: [MatTableModule],
-  templateUrl: './patient-table.component.html',
-  styleUrl: './patient-table.component.scss'
+    selector: 'app-patient-table',
+    imports: [MatTableModule],
+    templateUrl: './patient-table.component.html',
+    styleUrl: './patient-table.component.scss'
 })
 export class PatientTableComponent {
 

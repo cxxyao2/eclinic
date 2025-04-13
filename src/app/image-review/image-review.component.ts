@@ -6,11 +6,10 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { BASE_PATH, ImageRecordsService } from '@libs/api-client';
 
 @Component({
-  selector: 'app-image-review',
-  standalone: true,
-  imports: [CommonModule, MatProgressBarModule],
-  templateUrl: './image-review.component.html',
-  styleUrl: './image-review.component.scss'
+    selector: 'app-image-review',
+    imports: [CommonModule, MatProgressBarModule],
+    templateUrl: './image-review.component.html',
+    styleUrl: './image-review.component.scss'
 })
 export class ImageReviewComponent implements OnChanges {
   @Input() fileName!: string;

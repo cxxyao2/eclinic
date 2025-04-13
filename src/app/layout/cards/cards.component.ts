@@ -5,11 +5,10 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
 
 @Component({
-  selector: 'app-cards',
-  standalone: true,
-  imports: [CommonModule, MatGridListModule, MatIconModule,MatCardModule],
-  templateUrl: './cards.component.html',
-  styleUrl: './cards.component.scss'
+    selector: 'app-cards',
+    imports: [CommonModule, MatGridListModule, MatIconModule, MatCardModule],
+    templateUrl: './cards.component.html',
+    styleUrl: './cards.component.scss'
 })
 export class CardsComponent {
   cards = [

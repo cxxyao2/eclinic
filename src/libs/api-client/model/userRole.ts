@@ -9,12 +9,12 @@
  */
 
 
-export type UserRole = 0 | 1 | 2 | 3;
+export type UserRole = 'Nurse' | 'Practitioner' | 'Patient' | 'Admin';
 
 export const UserRole = {
-    NUMBER_0: 0 as UserRole,
-    NUMBER_1: 1 as UserRole,
-    NUMBER_2: 2 as UserRole,
-    NUMBER_3: 3 as UserRole
+    Nurse: 'Nurse' as UserRole,
+    Practitioner: 'Practitioner' as UserRole,
+    Patient: 'Patient' as UserRole,
+    Admin: 'Admin' as UserRole
 };
 

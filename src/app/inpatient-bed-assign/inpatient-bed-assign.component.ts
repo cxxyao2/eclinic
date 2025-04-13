@@ -17,11 +17,10 @@ import { CommonModule } from '@angular/common';
 import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
-  selector: 'app-inpatient-bed-assign',
-  standalone: true,
-  imports: [CdkDropList, CdkDrag, CommonModule, MatIconModule, MatButtonModule, MatCardModule, RouterModule],
-  templateUrl: './inpatient-bed-assign.component.html',
-  styleUrl: './inpatient-bed-assign.component.scss'
+    selector: 'app-inpatient-bed-assign',
+    imports: [CdkDropList, CdkDrag, CommonModule, MatIconModule, MatButtonModule, MatCardModule, RouterModule],
+    templateUrl: './inpatient-bed-assign.component.html',
+    styleUrl: './inpatient-bed-assign.component.scss'
 })
 export class InpatientBedAssignComponent implements OnInit {
   roomNumber: string | null = null;

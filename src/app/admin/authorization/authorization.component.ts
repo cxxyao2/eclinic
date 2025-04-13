@@ -11,11 +11,10 @@ import { Router } from '@angular/router';
 
 
 @Component({
-  selector: 'app-authorization',
-  standalone: true,
-  imports: [CommonModule, MatButtonModule, MatIconModule, MatSelectModule, MatTableModule],
-  templateUrl: './authorization.component.html',
-  styleUrl: './authorization.component.scss'
+    selector: 'app-authorization',
+    imports: [CommonModule, MatButtonModule, MatIconModule, MatSelectModule, MatTableModule],
+    templateUrl: './authorization.component.html',
+    styleUrl: './authorization.component.scss'
 })
 export class AuthorizationComponent {
 

@@ -13,22 +13,21 @@ import { GetMedicationDTO, MedicationsService } from '@libs/api-client';
 import { map, Observable, startWith } from 'rxjs';
 
 @Component({
-  selector: 'app-consulation-form-medic',
-  standalone: true,
-  imports: [
-    FormsModule,
-    ReactiveFormsModule,
-    MatButtonModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatTableModule,
-    MatSortModule,
-    MatPaginatorModule,
-    MatAutocompleteModule,
-    AsyncPipe
-  ],
-  templateUrl: './consulation-form-medic.component.html',
-  styleUrl: './consulation-form-medic.component.scss'
+    selector: 'app-consulation-form-medic',
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        MatButtonModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatTableModule,
+        MatSortModule,
+        MatPaginatorModule,
+        MatAutocompleteModule,
+        AsyncPipe
+    ],
+    templateUrl: './consulation-form-medic.component.html',
+    styleUrl: './consulation-form-medic.component.scss'
 })
 export class ConsulationFormMedicComponent implements OnInit, AfterViewInit {
   dataSource = new MatTableDataSource<GetMedicationDTO>([]);

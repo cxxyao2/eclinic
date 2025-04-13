@@ -16,6 +16,7 @@ import { NavService } from 'src/app/services/nav.service';
 import { MatListModule } from '@angular/material/list';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogSimpleDialog } from 'src/app/shared/dialog-simple-dialog';
+import { UserRole} from '@libs/api-client/model/userRole'
 
 const languageMap: { [key: string]: string } = {
   fr: 'French',
@@ -25,18 +26,19 @@ const languageMap: { [key: string]: string } = {
 };
 
 @Component({
-  selector: 'app-header',
-  standalone: true,
-  imports: [CommonModule, MatListModule,TranslocoDirective, RouterModule, MatBadgeModule, MatToolbarModule, MatButtonModule, MatIconModule, MatMenuModule, MatTooltipModule],
-  templateUrl: './header.component.html',
-  styleUrl: './header.component.scss',
-  providers: [SseClientService],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-header',
+    imports: [CommonModule, MatListModule, TranslocoDirective, RouterModule, MatBadgeModule, MatToolbarModule, MatButtonModule, MatIconModule, MatMenuModule, MatTooltipModule],
+    templateUrl: './header.component.html',
+    styleUrl: './header.component.scss',
+    providers: [SseClientService],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HeaderComponent implements OnInit {
   isLargeScreen = input<boolean | undefined | null>(false);
   toggleDrawer = output();
   collapsed = model.required<boolean>();
+
+  UserRole = UserRole;
 
   darkMode = signal(false);
   currentLanguage = signal('English');
@@ -94,16 +96,15 @@ export class HeaderComponent implements OnInit {
     };
 
     const dialogRef = this.dialog.open(DialogSimpleDialog, dialogConfig);
-    dialogRef.afterClosed()
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(result => {
-        if (typeof result === 'object' && result) {
-          // navigate to assign
-          this.masterService.selectedPatientSubject.next(result);
-          this.router.navigate(['/inpatient']);
-        }
-
-      });
+    dialogRef.afterClosed().pipe(
+      takeUntilDestroyed(this.destroyRef),
+      filter((result): result is object => typeof result === 'object' && !!result),
+      tap(result => {
+        this.masterService.selectedPatientSubject.next(result);
+        this.router.navigate(['/inpatient']);
+      })
+    ).subscribe();
+    
   }
 
   logout() {

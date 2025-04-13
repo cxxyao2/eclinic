@@ -14,12 +14,11 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { MasterDataService } from 'src/app/services/master-data.service';
 
 @Component({
-  selector: 'app-login',
-  standalone: true,
-  imports: [MatButtonModule, MatCardModule, MatInputModule, MatFormFieldModule, ReactiveFormsModule],
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-login',
+    imports: [MatButtonModule, MatCardModule, MatInputModule, MatFormFieldModule, ReactiveFormsModule],
+    templateUrl: './login.component.html',
+    styleUrl: './login.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;

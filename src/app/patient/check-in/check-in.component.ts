@@ -23,28 +23,27 @@ import { MasterDataService } from 'src/app/services/master-data.service';
 import { CheckInWaitingListComponent } from '../check-in-waiting-list/check-in-waiting-list.component';
 
 @Component({
-  selector: 'app-check-in',
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatButtonModule,
-    MatCheckboxModule,
-    MatDatepickerModule,
-    MatFormFieldModule,
-    MatIconModule,
-    MatInputModule,
-    MatPaginatorModule,
-    MatSelectModule,
-    MatProgressSpinnerModule,
-    MatSortModule,
-    MatTableModule,
-    MatSortModule,
-    CheckInWaitingListComponent
-  ],
-  templateUrl: './check-in.component.html',
-  styleUrl: './check-in.component.scss'
+    selector: 'app-check-in',
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatButtonModule,
+        MatCheckboxModule,
+        MatDatepickerModule,
+        MatFormFieldModule,
+        MatIconModule,
+        MatInputModule,
+        MatPaginatorModule,
+        MatSelectModule,
+        MatProgressSpinnerModule,
+        MatSortModule,
+        MatTableModule,
+        MatSortModule,
+        CheckInWaitingListComponent
+    ],
+    templateUrl: './check-in.component.html',
+    styleUrl: './check-in.component.scss'
 })
 export class CheckInComponent implements AfterViewInit, OnInit {
   @ViewChild(MatSort) sort!: MatSort;

@@ -8,12 +8,11 @@ import { MatDialog } from '@angular/material/dialog';
 import { SnackbarService } from 'src/app/services/snackbar-service.service';
 
 @Component({
-  selector: 'app-canvas',
-  standalone: true,
-  imports: [CommonModule, MatButtonModule],
-  templateUrl: './canvas.component.html',
-  styleUrl: './canvas.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-canvas',
+    imports: [CommonModule, MatButtonModule],
+    templateUrl: './canvas.component.html',
+    styleUrl: './canvas.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CanvasComponent implements AfterViewInit {
   @ViewChild('canvasElement', { static: true }) canvasElement!: ElementRef<HTMLCanvasElement>;

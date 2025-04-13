@@ -10,10 +10,12 @@
 
 
 export interface Practitioner { 
-    createdBy?: number;
     createdAt?: Date;
-    updatedBy?: number;
     updatedAt?: Date;
+    createdBy?: number;
+    createdDate?: Date;
+    lastModifiedBy?: number;
+    lastModifiedDate?: Date | null;
     practitionerId?: number;
     firstName: string;
     lastName: string;

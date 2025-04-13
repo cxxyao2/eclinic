@@ -11,18 +11,17 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NgClass, NgStyle } from '@angular/common';
 
 @Component({
-  selector: 'app-menu-item',
-  standalone: true,
-  imports: [MatListModule, TranslocoDirective,RouterModule, MatIconModule, MatTooltipModule, NgStyle, NgClass],
-  templateUrl: './menu-item.component.html',
-  styleUrl: './menu-item.component.scss',
-  animations: [
-    trigger('expandCollapseMenu', [
-      state('collapsed', style({ transform: 'rotate(0deg)' })),
-      state('expanded', style({ transform: 'rotate(180deg' })),
-      transition('expanded <=> collapsed', animate('225ms')),
-    ]),
-  ]
+    selector: 'app-menu-item',
+    imports: [MatListModule, TranslocoDirective, RouterModule, MatIconModule, MatTooltipModule, NgStyle, NgClass],
+    templateUrl: './menu-item.component.html',
+    styleUrl: './menu-item.component.scss',
+    animations: [
+        trigger('expandCollapseMenu', [
+            state('collapsed', style({ transform: 'rotate(0deg)' })),
+            state('expanded', style({ transform: 'rotate(180deg' })),
+            transition('expanded <=> collapsed', animate('225ms')),
+        ]),
+    ]
 })
 export class MenuItemComponent implements OnInit {
   expanded = signal(false);

@@ -5,11 +5,10 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { GetVisitRecordDTO } from '@libs/api-client';
 
 @Component({
-  selector: 'app-check-in-waiting-list',
-  standalone: true,
-  imports: [CommonModule, MatTableModule, MatPaginatorModule],
-  templateUrl: './check-in-waiting-list.component.html',
-  styleUrl: './check-in-waiting-list.component.scss'
+    selector: 'app-check-in-waiting-list',
+    imports: [CommonModule, MatTableModule, MatPaginatorModule],
+    templateUrl: './check-in-waiting-list.component.html',
+    styleUrl: './check-in-waiting-list.component.scss'
 })
 export class CheckInWaitingListComponent implements AfterViewInit {
   displayedColumns: string[] = ['visitId', 'patientName', 'practitionerName', 'visitDate'];

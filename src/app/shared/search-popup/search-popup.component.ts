@@ -13,11 +13,10 @@ import { MatDividerModule } from '@angular/material/divider';
 
 
 @Component({
-  selector: 'app-search-popup',
-  standalone: true,
-  imports: [CommonModule, MatCardModule, MatDividerModule, MatFormFieldModule, MatInputModule, MatButtonModule, ReactiveFormsModule, SearchPopupItemComponent],
-  templateUrl: './search-popup.component.html',
-  styleUrl: './search-popup.component.scss'
+    selector: 'app-search-popup',
+    imports: [CommonModule, MatCardModule, MatDividerModule, MatFormFieldModule, MatInputModule, MatButtonModule, ReactiveFormsModule, SearchPopupItemComponent],
+    templateUrl: './search-popup.component.html',
+    styleUrl: './search-popup.component.scss'
 })
 export class SearchPopupComponent implements OnInit {
   searchControl = new FormControl('');

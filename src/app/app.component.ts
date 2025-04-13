@@ -24,14 +24,13 @@ echarts.use([BarChart, GridComponent, LineChart, TitleComponent, TooltipComponen
 
 
 @Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [CommonModule, RouterOutlet, MatToolbarModule, MatSidenavModule, HeaderComponent, CustomSidenavComponent, PractitionerScheduleComponent],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.scss',
-  providers: [
-    provideEchartsCore({ echarts }),
-  ]
+    selector: 'app-root',
+    imports: [CommonModule, RouterOutlet, MatToolbarModule, MatSidenavModule, HeaderComponent, CustomSidenavComponent, PractitionerScheduleComponent],
+    templateUrl: './app.component.html',
+    styleUrl: './app.component.scss',
+    providers: [
+        provideEchartsCore({ echarts }),
+    ]
 })
 export class AppComponent implements AfterViewInit {
   @ViewChild('drawer') appDrawer!: MatSidenav;

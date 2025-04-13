@@ -30,29 +30,28 @@ import { SnackbarService } from 'src/app/services/snackbar-service.service';
 
 
 @Component({
-  selector: 'app-book-appointment',
-  standalone: true,
-  providers: [provideNativeDateAdapter()],
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatButtonModule,
-    MatCheckboxModule,
-    MatDatepickerModule,
-    MatFormFieldModule,
-    MatIconModule,
-    MatInputModule,
-    MatPaginatorModule,
-    MatSelectModule,
-    MatProgressSpinnerModule,
-    MatSortModule,
-    MatTableModule,
-    ProfileComponent
-  ],
-  templateUrl: './book-appointment.component.html',
-  styleUrl: './book-appointment.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-book-appointment',
+    providers: [provideNativeDateAdapter()],
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatButtonModule,
+        MatCheckboxModule,
+        MatDatepickerModule,
+        MatFormFieldModule,
+        MatIconModule,
+        MatInputModule,
+        MatPaginatorModule,
+        MatSelectModule,
+        MatProgressSpinnerModule,
+        MatSortModule,
+        MatTableModule,
+        ProfileComponent
+    ],
+    templateUrl: './book-appointment.component.html',
+    styleUrl: './book-appointment.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BookAppointmentComponent implements AfterViewInit {
 

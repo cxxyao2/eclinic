@@ -3,12 +3,11 @@ import { EChartsOption } from 'echarts';
 import { NgxEchartsDirective } from 'ngx-echarts';
 
 @Component({
-  standalone: true,
-  selector: 'app-line-chart',
-  templateUrl: './line-chart.component.html',
-  styleUrls: ['./line-chart.component.scss'],
-  imports: [NgxEchartsDirective],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-line-chart',
+    templateUrl: './line-chart.component.html',
+    styleUrls: ['./line-chart.component.scss'],
+    imports: [NgxEchartsDirective],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LineChartComponent implements OnInit {
 

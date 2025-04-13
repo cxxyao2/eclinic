@@ -26,7 +26,7 @@
                 }
             </button>
             @if(user()?.userName){
-            @if(user()?.role === 0) {
+            @if(user()?.role === UserRole.Nurse) {
             <button id="notifications" mat-icon-button (click)="showNotifications()" aria-label="Show Notifications">
                 <mat-icon role="alert" class="notification-icon"
                     [matBadge]="sseService.message().length">notifications</mat-icon>

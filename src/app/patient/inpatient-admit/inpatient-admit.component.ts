@@ -18,11 +18,10 @@ export interface Room {
 }
 
 @Component({
-  selector: 'app-inpatient-admit',
-  standalone: true,
-  imports: [CommonModule, RouterModule, MatCardModule, MatIconModule],
-  templateUrl: './inpatient-admit.component.html',
-  styleUrl: './inpatient-admit.component.scss'
+    selector: 'app-inpatient-admit',
+    imports: [CommonModule, RouterModule, MatCardModule, MatIconModule],
+    templateUrl: './inpatient-admit.component.html',
+    styleUrl: './inpatient-admit.component.scss'
 })
 export class InpatientAdmitComponent implements OnInit {
 

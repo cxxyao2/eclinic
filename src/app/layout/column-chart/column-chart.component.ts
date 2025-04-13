@@ -3,12 +3,11 @@ import { EChartsOption } from 'echarts';
 import { NgxEchartsDirective } from 'ngx-echarts';
 
 @Component({
-  standalone: true,
-  selector: 'app-column-chart',
-  templateUrl: './column-chart.component.html',
-  styleUrls: ['./column-chart.component.scss'],
-  imports: [NgxEchartsDirective],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-column-chart',
+    templateUrl: './column-chart.component.html',
+    styleUrls: ['./column-chart.component.scss'],
+    imports: [NgxEchartsDirective],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ColumnChartComponent {
   options: EChartsOption = {

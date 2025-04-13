@@ -4,11 +4,10 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { GetVisitRecordDTO, GetVisitRecordDTOListServiceResponse, VisitRecordsService } from '@libs/api-client';
 
 @Component({
-  selector: 'app-waiting-list',
-  standalone: true,
-  imports: [CommonModule, MatTabsModule],
-  templateUrl: './waiting-list.component.html',
-  styleUrl: './waiting-list.component.scss'
+    selector: 'app-waiting-list',
+    imports: [CommonModule, MatTabsModule],
+    templateUrl: './waiting-list.component.html',
+    styleUrl: './waiting-list.component.scss'
 })
 export class WaitingListComponent implements AfterViewInit, OnInit, OnDestroy {
   currentIndex = 0; 

@@ -9,12 +9,12 @@
  */
 
 
-export type AppointmentStatusEnum = 0 | 1 | 2 | 3;
+export type AppointmentStatusEnum = 'Scheduled' | 'CheckedIn' | 'Completed' | 'Cancelled';
 
 export const AppointmentStatusEnum = {
-    NUMBER_0: 0 as AppointmentStatusEnum,
-    NUMBER_1: 1 as AppointmentStatusEnum,
-    NUMBER_2: 2 as AppointmentStatusEnum,
-    NUMBER_3: 3 as AppointmentStatusEnum
+    Scheduled: 'Scheduled' as AppointmentStatusEnum,
+    CheckedIn: 'CheckedIn' as AppointmentStatusEnum,
+    Completed: 'Completed' as AppointmentStatusEnum,
+    Cancelled: 'Cancelled' as AppointmentStatusEnum
 };
 

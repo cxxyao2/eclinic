@@ -37,29 +37,28 @@ import { DialogSimpleDialog } from 'src/app/shared/dialog-simple-dialog';
 
 
 @Component({
-  selector: 'app-practitioner-schedule',
-  standalone: true,
-  providers: [provideNativeDateAdapter()],
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatButtonModule,
-    MatCheckboxModule,
-    MatDatepickerModule,
-    MatFormFieldModule,
-    MatIconModule,
-    MatInputModule,
-    MatPaginatorModule,
-    MatSelectModule,
-    MatProgressSpinnerModule,
-    MatSortModule,
-    MatTableModule,
-    ProfileComponent
-  ],
-  templateUrl: './practitioner-schedule.component.html',
-  styleUrls: ['./practitioner-schedule.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-practitioner-schedule',
+    providers: [provideNativeDateAdapter()],
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatButtonModule,
+        MatCheckboxModule,
+        MatDatepickerModule,
+        MatFormFieldModule,
+        MatIconModule,
+        MatInputModule,
+        MatPaginatorModule,
+        MatSelectModule,
+        MatProgressSpinnerModule,
+        MatSortModule,
+        MatTableModule,
+        ProfileComponent
+    ],
+    templateUrl: './practitioner-schedule.component.html',
+    styleUrls: ['./practitioner-schedule.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PractitionerScheduleComponent implements AfterViewInit {
   // Constants
