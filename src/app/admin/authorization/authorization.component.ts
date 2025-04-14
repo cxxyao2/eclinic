@@ -11,23 +11,17 @@ import { Router } from '@angular/router';
 
 
 @Component({
-    selector: 'app-authorization',
-    imports: [CommonModule, MatButtonModule, MatIconModule, MatSelectModule, MatTableModule],
-    templateUrl: './authorization.component.html',
-    styleUrl: './authorization.component.scss'
+  selector: 'app-authorization',
+  imports: [CommonModule, MatButtonModule, MatIconModule, MatSelectModule, MatTableModule],
+  templateUrl: './authorization.component.html',
+  styleUrl: './authorization.component.scss'
 })
 export class AuthorizationComponent {
 
   displayedColumns: string[] = ['userID', 'userName', 'role'];
   dataSource = new MatTableDataSource<User>([]);
   originalData: User[] = [];
-
-
-  userRoles: { value: UserRole, text: string }[] = [
-    { value: UserRole.NUMBER_0, text: 'Nurse' },
-    { value: UserRole.NUMBER_1, text: 'Practitioner' },
-    { value: UserRole.NUMBER_2, text: 'Patient' },
-    { value: UserRole.NUMBER_3, text: 'Admin' }];
+  userRoles = Object.entries(UserRole).map(([text, value]) => ({ text, value }));
   private userService = inject(UsersService);
   private router = inject(Router);
   destroyRef = inject(DestroyRef);
@@ -35,7 +29,7 @@ export class AuthorizationComponent {
   ngOnInit(): void {
     this.userService.apiUsersGet().subscribe(data => {
       this.dataSource.data = data;
-      this.originalData = JSON.parse(JSON.stringify(data)); // Deep copy of the original data
+      this.originalData = JSON.parse(JSON.stringify(data)); 
     });
   }
 

@@ -1,5 +1,5 @@
-@import "bootstrap/dist/css/bootstrap.min.css";
 @use "@angular/material" as mat;
+@import "bootstrap/dist/css/bootstrap.min.css";
 
 @include mat.core();
 

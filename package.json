@@ -24,6 +24,7 @@
     "@angular/platform-browser-dynamic": "^19.2.2",
     "@angular/router": "^19.2.2",
     "@jsverse/transloco": "^7.5.0",
+    "@microsoft/signalr": "^8.0.7",
     "@openapitools/openapi-generator-cli": "^2.15.3",
     "angular-code-input": "^2.0.0",
     "bootstrap": "^5.3.5",

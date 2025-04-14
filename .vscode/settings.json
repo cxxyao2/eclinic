@@ -1,4 +1,10 @@
 {
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.formatOnSave": true
+  "editor.defaultFormatter": "ms-dotnettools.csharp",
+  "csharp.suppressHiddenDiagnostics": false,
+  "dotnet.completion.showCompletionItemsFromUnimportedNamespaces": true,
+  "csharp.referencesCodeLens.enabled": true,
+  "omnisharp.enableRoslynAnalyzers": true,
+  "omnisharp.enableImportCompletion": true,
+  "omnisharp.organizeImports": true
 }
+

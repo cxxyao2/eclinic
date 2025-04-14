@@ -27,6 +27,9 @@ export interface User {
     tokenExpires?: Date;
     practitionerId?: number | null;
     practitioner?: Practitioner;
+    activationCode?: string | null;
+    isActivated?: boolean;
+    activationCodeExpires?: Date | null;
 }
 export namespace User {
 }

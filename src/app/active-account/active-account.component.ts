@@ -1,7 +1,8 @@
-import {Component, inject, signal} from '@angular/core';
-import {Router} from '@angular/router';
-import {AuthenticationService} from '../../services/services';
-import {CodeInputModule} from 'angular-code-input';
+import { Component, inject, signal } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from '@libs/api-client';
+
+import { CodeInputModule } from 'angular-code-input';
 
 @Component({
   selector: 'app-active-account',
@@ -16,7 +17,7 @@ export class ActiveAccountComponent {
   submitted = signal(false);
 
   private router = inject(Router);
-  private authService = inject(AuthenticationService);
+  private authService = inject(AuthService);
 
   onCodeCompleted(token: string) {
     this.confirmAccount(token);
@@ -27,19 +28,19 @@ export class ActiveAccountComponent {
   }
 
   private confirmAccount(token: string) {
-    this.authService.confirm({
-      token
+    this.authService.apiAuthActivatePost({
+      code: token
     }).subscribe({
-      next:()=>{
-        this.message.set( "Your account has been successfully activated. \nNow you can proceed to login");
+      next: () => {
+        this.message.set("Your account has been successfully activated. \nNow you can proceed to login");
         this.submitted.set(true);
-        this.isOkay.set( true);
+        this.isOkay.set(true);
       },
-      error:()=>{
+      error: () => {
         console.log('eror is www');
         this.message.set("Token has been expired or invalid");
         this.submitted.set(true);
-        this.isOkay.set( false);
+        this.isOkay.set(false);
       }
     });
   }

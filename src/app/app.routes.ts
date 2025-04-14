@@ -28,6 +28,10 @@ export const routes: Routes = [
         loadComponent: () => import('./patient/consultation-form/consultation-form.component').then(c => c.ConsultationFormComponent)
     },
     {
+        path: 'chat',
+        loadChildren: () => import('./features/chat/chat.routes').then(c => c.chatRoutes), canActivate: [authGuard]
+    },
+    {
         path: 'admin',
         loadComponent: () => import('./admin/admin/admin.component').then(c => c.AdminComponent),
         children: [

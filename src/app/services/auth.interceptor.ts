@@ -1,17 +1,10 @@
-import { Inject, Injectable } from '@angular/core';
-import {
-  HttpEvent,
-  HttpHandler,
-  HttpInterceptor,
-  HttpRequest,
-  HttpErrorResponse
-} from '@angular/common/http';
+import { Injectable, Inject } from '@angular/core';
+import { HttpInterceptor, HttpRequest, HttpHandler, HttpErrorResponse, HttpEvent, HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
-import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { jwtDecode } from 'jwt-decode';
 import { BASE_PATH } from '@libs/api-client/variables';
-
+import { Router } from '@angular/router';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -20,33 +13,43 @@ export class AuthInterceptor implements HttpInterceptor {
   constructor(private http: HttpClient, private router: Router, @Inject(BASE_PATH) private baseURL: string) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    let authReq = req;
-
     const token = localStorage.getItem('accessToken');
+
     if (token) {
-      authReq = this.addTokenHeader(req, token);
+      // Check if token is expired
+      const decodedToken: any = jwtDecode(token);
+      const isExpired = decodedToken.exp * 1000 < Date.now();
+
+      if (isExpired && !this.isRefreshing) {
+        return this.handleExpiredToken(req, next);
+      }
+
+      req = this.addTokenHeader(req, token);
     }
 
-    return next.handle(authReq).pipe(
+    return next.handle(req).pipe(
       catchError((error: HttpErrorResponse) => {
         if (error.status === 401 && !this.isRefreshing) {
-          this.isRefreshing = true;
-
-          return this.refreshToken().pipe(
-            switchMap((newToken) => {
-              this.isRefreshing = false;
-              localStorage.setItem('accessToken', newToken);
-              return next.handle(this.addTokenHeader(req, newToken));
-            }),
-            catchError((refreshError) => {
-              this.isRefreshing = false;
-              this.handleAuthError();
-              return throwError(() => refreshError);
-            })
-          );
-        } else {
-          return throwError(() => error);
+          return this.handleExpiredToken(req, next);
         }
+        return throwError(() => error);
+      })
+    );
+  }
+
+  private handleExpiredToken(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    this.isRefreshing = true;
+
+    return this.refreshToken().pipe(
+      switchMap((newToken) => {
+        this.isRefreshing = false;
+        localStorage.setItem('accessToken', newToken);
+        return next.handle(this.addTokenHeader(req, newToken));
+      }),
+      catchError((error) => {
+        this.isRefreshing = false;
+        this.handleAuthError();
+        return throwError(() => error);
       })
     );
   }

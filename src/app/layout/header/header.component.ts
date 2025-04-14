@@ -40,7 +40,7 @@ const LANGUAGE_MAP: Readonly<Record<string, string>> = {
     // Angular modules
     CommonModule,
     RouterModule,
-    
+
     // Material modules
     MatBadgeModule,
     MatButtonModule,
@@ -49,7 +49,7 @@ const LANGUAGE_MAP: Readonly<Record<string, string>> = {
     MatMenuModule,
     MatToolbarModule,
     MatTooltipModule,
-    
+
     // Other modules
     TranslocoDirective,
   ],
@@ -70,17 +70,17 @@ export class HeaderComponent {
   // Signals and Computed values
   protected readonly darkMode = signal(false);
   protected readonly isNotificationVisible = signal(false);
-  protected readonly currentLanguage = computed(() => 
+  protected readonly currentLanguage = computed(() =>
     LANGUAGE_MAP[this.transloco.getActiveLang()] || 'English'
   );
 
   // Injected services
+  public readonly sseService = inject(SseClientService);
   private readonly transloco = inject(TranslocoService);
   private readonly masterService = inject(MasterDataService);
   private readonly navigationService = inject(NavService);
   private readonly dialog = inject(MatDialog);
   private readonly router = inject(Router);
-  private readonly sseService = inject(SseClientService);
   private readonly destroyRef = inject(DestroyRef);
 
   // Converted observables to signals

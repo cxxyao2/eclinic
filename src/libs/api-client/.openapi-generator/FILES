@@ -24,6 +24,7 @@ configuration.ts
 encoder.ts
 git_push.sh
 index.ts
+model/activateAccountDTO.ts
 model/addAppointmentDTO.ts
 model/addInpatientDTO.ts
 model/addParticipantDTO.ts
@@ -79,6 +80,7 @@ model/getVisitRecordDTOListServiceResponse.ts
 model/getVisitRecordDTOServiceResponse.ts
 model/models.ts
 model/practitioner.ts
+model/resendActivationCodeDTO.ts
 model/signatureDTO.ts
 model/stringServiceResponse.ts
 model/updateBedDTO.ts
