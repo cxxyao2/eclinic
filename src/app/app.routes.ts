@@ -8,15 +8,12 @@ import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { ForgetPasswordComponent } from './auth/forget-password/forget-password.component';
 import { ResetPasswordComponent } from './auth/reset-password/reset-password.component';
+import { medicalStaffGuard } from '@services/medical-staff.guard';
 
 export const routes: Routes = [
     {
         path: 'dashboard',
         component: DashboardComponent,
-    },
-    {
-        path: 'auth',
-        loadChildren: () => import('./auth/auth.routes').then(c => c.authRoutes)
     },
     {
         path: 'available',
@@ -37,7 +34,7 @@ export const routes: Routes = [
     {
         path: 'chat',
         loadChildren: () => import('./features/chat/chat.routes').then(c => c.chatRoutes),
-        canActivate: [authGuard]
+        canActivate: [medicalStaffGuard]
     },
     {
         path: 'login',

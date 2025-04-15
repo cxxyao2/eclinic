@@ -1,9 +1,11 @@
-import { DestroyRef, inject, Injectable } from '@angular/core';
-import { GetBedDTO, GetImageRecordDTO, GetInpatientDTO, GetMedicationDTO, GetPatientDTO, GetPractitionerDTO, ImageRecordsService, User } from '@libs/api-client';
+import { DestroyRef, PLATFORM_ID, inject, Injectable } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { GetBedDTO, GetImageRecordDTO, GetInpatientDTO, GetMedicationDTO, GetPatientDTO, GetPractitionerDTO, ImageRecordsService, User, UsersService } from '@libs/api-client';
 import { BehaviorSubject } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { PractitionersService, PatientsService, MedicationsService } from '@libs/api-client';
+import { jwtDecode } from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root'
@@ -25,6 +27,8 @@ export class MasterDataService {
   private readonly medicationService = inject(MedicationsService);
   private readonly imageService = inject(ImageRecordsService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly platformId = inject(PLATFORM_ID);
+  private readonly usersService = inject(UsersService);
 
   constructor() {
     this.initializeData();
@@ -35,6 +39,56 @@ export class MasterDataService {
     this.fetchPractitioners();
     this.fetchMedications();
     this.fetchImageRecords();
+  }
+
+
+  fetchUserFromLocalStorage(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      const accessToken = localStorage.getItem('accessToken');
+
+      if (accessToken) {
+        try {
+          const decodedToken: any = jwtDecode(accessToken);
+          // Get userId from the nameidentifier claim
+          const userId = decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
+          
+          if (!userId) {
+            throw new Error('User ID not found in token');
+          }
+
+          this.usersService.apiUsersIdGet(Number(userId))
+            .pipe(
+              map((response:any) => response.data ?? null),
+              takeUntilDestroyed(this.destroyRef),
+              catchError(error => {
+                console.error('Error fetching user:', error);
+                localStorage.removeItem('accessToken');
+                return [];
+              })
+            )
+            .subscribe({
+              next: (user) => {
+                if (user) {
+                  this.userSubject.next(user);
+                } else {
+                  localStorage.removeItem('accessToken');
+                  this.userSubject.next(null);
+                }
+              },
+              error: () => {
+                localStorage.removeItem('accessToken');
+                this.userSubject.next(null);
+              }
+            });
+        } catch (error) {
+          console.error('Error decoding token:', error);
+          localStorage.removeItem('accessToken');
+          this.userSubject.next(null);
+        }
+      } else {
+        this.userSubject.next(null);
+      }
+    }
   }
 
 

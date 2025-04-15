@@ -17,29 +17,6 @@ import { ResponsiveService } from './services/responsive.service';
 import { NavService } from './services/nav.service';
 import { MasterDataService } from './services/master-data.service';
 
-// Chart imports
-import { provideEchartsCore } from 'ngx-echarts';
-import * as echarts from 'echarts/core';
-import { BarChart, LineChart } from 'echarts/charts';
-import { 
-  GridComponent,
-  TitleComponent, 
-  TooltipComponent, 
-  LegendComponent 
-} from 'echarts/components';
-import { CanvasRenderer } from 'echarts/renderers';
-
-// Initialize echarts components
-echarts.use([
-  BarChart, 
-  GridComponent, 
-  LineChart, 
-  TitleComponent, 
-  TooltipComponent, 
-  LegendComponent, 
-  CanvasRenderer
-]);
-
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -51,14 +28,10 @@ echarts.use([
     HeaderComponent, 
     CustomSidenavComponent
   ],
-  providers: [
-    provideEchartsCore({ echarts }),
-  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
 export class AppComponent implements AfterViewInit {
-  // ViewChild decorators
   @ViewChild('drawer') appDrawer!: MatSidenav;
 
   // Service injections
@@ -74,6 +47,14 @@ export class AppComponent implements AfterViewInit {
   collapsed = signal(false);
   errorMessage = toSignal(this.masterService.messageSubject);
 
+  constructor() {
+    // MasterDataService will be initialized here automatically
+    // Its constructor will run initializeData() and fetchUserFromLocalStorage()
+    if (!this.masterService.userSubject.value) {
+      this.masterService.fetchUserFromLocalStorage();
+    }
+  }
+
   // Computed values
   sidenavMode = computed(() => 
     this.responseService.isLargeScreen() ? 'side' : 'over'
@@ -83,7 +64,6 @@ export class AppComponent implements AfterViewInit {
     this.responseService.isLargeScreen() && this.collapsed() ? '65px' : '250px'
   );
 
-  // Lifecycle hooks
   ngAfterViewInit(): void {
     this.navService.appDrawer = this.appDrawer;
   }

@@ -65,7 +65,6 @@ export class LoginComponent {
 
   private handleLoginSuccess(response: any, email: string): void {
     localStorage.setItem('accessToken', response.accessToken);
-    localStorage.setItem('email', email);
     this.masterService.userSubject.next(response.user);
     this.errorMessage.set(null);
     this.router.navigateByUrl(this.returnUrl);
@@ -73,7 +72,6 @@ export class LoginComponent {
 
   private handleLoginError(error: HttpErrorResponse): void {
     localStorage.removeItem('accessToken');
-    localStorage.removeItem('email');
     const message = error.error?.message || error.message || "Something went wrong.";
     this.errorMessage.set(message);
     console.error('Login failed:', error);

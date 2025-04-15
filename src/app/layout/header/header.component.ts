@@ -127,7 +127,6 @@ export class HeaderComponent {
 
   protected logout(): void {
     localStorage.removeItem('accessToken');
-    localStorage.removeItem('email');
     this.masterService.userSubject.next(null);
     this.router.navigate(['/dashboard']);
   }

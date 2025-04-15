@@ -4,7 +4,6 @@ describe('Login Component', () => {
   beforeEach(() => {
     cy.window().then((win) => {
       win.localStorage.setItem('accessToken', '');
-      win.localStorage.setItem('email', '');
     });
     cy.visit('/login');
   });
@@ -55,7 +54,7 @@ describe('Login Component', () => {
 
     cy.window().then((win) => {
       expect(win.localStorage.getItem('accessToken')).to.equal('testAccessToken');
-      expect(win.localStorage.getItem('email')).to.contain(data.email);
+   
     });
   });
 

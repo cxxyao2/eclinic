@@ -4,6 +4,7 @@ import { RegisterComponent } from './register/register.component';
 import { ForgetPasswordComponent } from './forget-password/forget-password.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
+// todo. is this feature route really needed?
 export const authRoutes: Routes = [
   {
     path: '',

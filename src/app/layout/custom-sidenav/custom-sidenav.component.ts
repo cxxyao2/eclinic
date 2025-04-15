@@ -104,7 +104,6 @@ export class CustomSidenavComponent {
 
   logout() {
     localStorage.removeItem('accessToken');
-    localStorage.removeItem('email');
     this.masterService.userSubject.next(null);
     this.router.navigate(['/dashboard']);
     this.toggleDrawer.emit();
