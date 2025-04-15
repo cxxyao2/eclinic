@@ -25,7 +25,7 @@
                 <mat-icon>dark_mode</mat-icon>
                 }
             </button>
-            @if(user()?.userName){
+            @if(user()?.email){
             @if(user()?.role === UserRole.Nurse) {
             <button id="notifications" mat-icon-button (click)="showNotifications()" aria-label="Show Notifications">
                 <mat-icon role="alert" class="notification-icon"
@@ -33,7 +33,7 @@
             </button>
             }
             <button id="logout" mat-flat-button (click)="logout()">
-                {{ user()?.userName| titlecase }} &nbsp;Logout</button>
+                {{ (user()?.userName || user()?.email)| titlecase }} &nbsp;Logout</button>
             } @else {
             <button id="login" mat-flat-button [routerLink]="'/login'">
                 <mat-icon>account_circle</mat-icon>

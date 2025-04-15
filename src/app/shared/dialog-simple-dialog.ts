@@ -15,24 +15,27 @@ export interface DialogData {
 
 
 @Component({
-    selector: 'dialog-simple-dialog',
-    templateUrl: 'dialog-simple-dialog.html',
-    imports: [
-        CommonModule,
-        MatButtonModule,
-        MatDialogModule,
-        MatListModule,
-        ReactiveFormsModule,
-    ]
+  selector: 'dialog-simple-dialog',
+  templateUrl: 'dialog-simple-dialog.html',
+  imports: [
+    CommonModule,
+    MatButtonModule,
+    MatDialogModule,
+    MatListModule,
+    ReactiveFormsModule,
+  ]
 })
 export class DialogSimpleDialog implements OnInit {
+  private readonly dialogRef = inject(MatDialogRef<DialogSimpleDialog>);
+  protected readonly data = inject<DialogData>(MAT_DIALOG_DATA);
+
+  // todo 
   itemsControl: FormControl = new FormControl(null);
   form: FormGroup = new FormGroup({
     items: this.itemsControl,
   });
 
-  readonly dialogRef = inject(MatDialogRef<DialogSimpleDialog>);
-  readonly data = inject<DialogData>(MAT_DIALOG_DATA);
+ 
   isArray = signal<boolean>(false);
   listData = signal<Array<any>>([]);
 
@@ -43,11 +46,11 @@ export class DialogSimpleDialog implements OnInit {
     }
   }
 
-  onNoClick(): void {
+  protected onCancel(): void {
     this.dialogRef.close();
   }
 
-  getSelectedOption(): any {
+  protected onSelectionChange(): any {
     const selectedId = this.itemsControl.value;
     let returnObj: Record<string, any> | null | undefined = null;
     if (Array.isArray(this.data.content) && this.data.optionId && this.data.optionValue && selectedId && selectedId.length > 0) {

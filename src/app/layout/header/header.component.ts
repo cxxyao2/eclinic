@@ -1,81 +1,58 @@
 // Angular Core imports
-import { ChangeDetectionStrategy, Component, DestroyRef, computed, effect, inject, input, model, output, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Router, RouterModule } from '@angular/router';
+import { Component, computed, DestroyRef, effect, inject, input, model, output, signal } from '@angular/core';
+import { Router } from '@angular/router';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { filter, tap } from 'rxjs';
 
 // Angular Material imports
-import { MatBadgeModule } from '@angular/material/badge';
-import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { MatIconModule } from '@angular/material/icon';
-import { MatListModule } from '@angular/material/list';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatTooltipModule } from '@angular/material/tooltip';
 
 // Third-party imports
-import { TranslocoService, TranslocoDirective } from '@jsverse/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 
-// Application imports
-import { GetInpatientDTO, User, UserRole } from '@libs/api-client';
-import { DialogSimpleDialog } from 'src/app/shared/dialog-simple-dialog';
-import { MasterDataService } from 'src/app/services/master-data.service';
-import { NavService } from 'src/app/services/nav.service';
-import { SseClientService } from 'src/app/services/sse.service';
+// Application imports - Components
 
-// Constants
-const LANGUAGE_MAP: Readonly<Record<string, string>> = {
-  fr: 'French',
+// Application imports - Services
+
+import { MasterDataService } from '@services/master-data.service';
+import { NavService } from '@services/nav.service';
+import { UserRole } from '@libs/api-client';
+import { SseClientService } from '@services/sse.service';
+import { DialogSimpleDialog } from '@shared/dialog-simple-dialog';
+
+// Application imports - Models
+const LANGUAGE_MAP: Record<string, string> = {
   en: 'English',
+  fr: 'French',
   ch: 'Chinese',
   jp: 'Japanese'
 } as const;
 
 @Component({
   selector: 'app-header',
-  standalone: true,
-  imports: [
-    // Angular modules
-    CommonModule,
-    RouterModule,
-
-    // Material modules
-    MatBadgeModule,
-    MatButtonModule,
-    MatIconModule,
-    MatListModule,
-    MatMenuModule,
-    MatToolbarModule,
-    MatTooltipModule,
-
-    // Other modules
-    TranslocoDirective,
-  ],
   templateUrl: './header.component.html',
-  styleUrl: './header.component.scss',
-  providers: [SseClientService],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrl: './header.component.scss'
 })
 export class HeaderComponent {
   // Input/Output properties
-  isLargeScreen = input<boolean | undefined | null>(false);
-  toggleDrawer = output<void>();
-  collapsed = model.required<boolean>();
+  public readonly isLargeScreen = input<boolean | undefined | null>(false);
+  public readonly toggleDrawer = output<void>();
+  public readonly collapsed = model.required<boolean>();
 
-  // Enum exports
+  // Protected constants
   protected readonly UserRole = UserRole;
 
-  // Signals and Computed values
+  // Protected signals
   protected readonly darkMode = signal(false);
   protected readonly isNotificationVisible = signal(false);
   protected readonly currentLanguage = computed(() =>
     LANGUAGE_MAP[this.transloco.getActiveLang()] || 'English'
   );
 
-  // Injected services
+  // Protected services (used in template)
   public readonly sseService = inject(SseClientService);
+
+  // Private services
   private readonly transloco = inject(TranslocoService);
   private readonly masterService = inject(MasterDataService);
   private readonly navigationService = inject(NavService);
@@ -83,7 +60,7 @@ export class HeaderComponent {
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
 
-  // Converted observables to signals
+  // Protected signals (from observables)
   protected readonly user = toSignal(this.masterService.userSubject);
   protected readonly currentFullRoute = toSignal(this.navigationService.currentUrl);
 
@@ -93,11 +70,7 @@ export class HeaderComponent {
     document.body.classList.toggle('light', !this.darkMode());
   });
 
-  // Public methods
-  protected toggleLanguage(newLanguage: string): void {
-    this.transloco.setActiveLang(newLanguage);
-  }
-
+  // Protected methods (used in template)
   protected showNotifications(): void {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.position = {
@@ -125,9 +98,7 @@ export class HeaderComponent {
     ).subscribe();
   }
 
-  protected logout(): void {
-    localStorage.removeItem('accessToken');
-    this.masterService.userSubject.next(null);
-    this.router.navigate(['/dashboard']);
+  protected toggleLanguage(lang: string): void {
+    this.transloco.setActiveLang(lang);
   }
 }

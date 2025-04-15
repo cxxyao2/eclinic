@@ -18,6 +18,6 @@
 </mat-dialog-content>
 
 <mat-dialog-actions>
-    <button mat-stroked-button [hidden]="!data.isCancelButtonVisible" (click)="onNoClick()">Cancel</button>
-    <button mat-flat-button [mat-dialog-close]="getSelectedOption()" cdkFocusInitial>Ok</button>
+    <button mat-stroked-button [hidden]="!data.isCancelButtonVisible" (click)="onCancel()">Cancel</button>
+    <button mat-flat-button [mat-dialog-close]="onSelectionChange()" cdkFocusInitial>Ok</button>
 </mat-dialog-actions>

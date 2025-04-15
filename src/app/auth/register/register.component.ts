@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
@@ -9,9 +9,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 
-import { AuthService } from '@libs/api-client';
+import { AuthService, UserCreateDTO } from '@libs/api-client';
 
-interface RegisterForm {
+private interface RegisterForm {
   firstName: FormControl<string>;
   lastName: FormControl<string>;
   email: FormControl<string>;
@@ -37,38 +37,35 @@ interface RegisterForm {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RegisterComponent {
-  private fb = inject(NonNullableFormBuilder);
-  private router = inject(Router);
-  private authService = inject(AuthService);
+  // Private properties
+  private readonly fb = inject(NonNullableFormBuilder);
+  private readonly router = inject(Router);
+  private readonly authService = inject(AuthService);
 
-  registerForm = this.fb.group({
-    firstName: ['', [Validators.required, Validators.minLength(2)]],
-    lastName: ['', [Validators.required, Validators.minLength(2)]],
-    email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(6)]],
-    confirmPassword: ['', [Validators.required]]
+  // Public properties
+  public readonly registerForm: FormGroup<RegisterForm> = this.fb.group<RegisterForm>({
+    firstName: this.fb.control('', [Validators.required, Validators.minLength(2)]),
+    lastName: this.fb.control('', [Validators.required, Validators.minLength(2)]),
+    email: this.fb.control('', [Validators.required, Validators.email]),
+    password: this.fb.control('', [Validators.required, Validators.minLength(6)]),
+    confirmPassword: this.fb.control('', [Validators.required])
   }, { validators: (g: AbstractControl) => this.passwordMatchValidator(g as FormGroup) });
 
-  errorMessage: string | null = null;
-  hidePassword = true;
+  public errorMessage: string | null = null;
+  public hidePassword = true;
 
-  passwordMatchValidator(g: FormGroup) {
-    return g.get('password')?.value === g.get('confirmPassword')?.value
-      ? null : { 'mismatch': true };
-  }
-
-  onSubmit() {
+  // Public methods
+  public onSubmit(): void {
     if (this.registerForm.valid) {
-      const registerData = {
-        firstName: this.registerForm.value.firstName!,
-        lastName: this.registerForm.value.lastName!,
+      const registerData: UserCreateDTO = {
+        name: `${this.registerForm.value.firstName!} ${this.registerForm.value.lastName!}`,
         email: this.registerForm.value.email!,
         password: this.registerForm.value.password!
       };
 
       this.authService.apiAuthRegisterPost(registerData).subscribe({
         next: () => {
-          this.router.navigate(['/login'], { 
+          this.router.navigate(['/login'], {
             queryParams: { registered: 'true' }
           });
         },
@@ -78,4 +75,13 @@ export class RegisterComponent {
       });
     }
   }
+
+  // Private methods
+  private passwordMatchValidator(g: FormGroup): { [key: string]: boolean } | null {
+    return g.get('password')?.value === g.get('confirmPassword')?.value
+      ? null
+      : { 'mismatch': true };
+  }
 }
+
+

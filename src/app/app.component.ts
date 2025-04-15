@@ -1,5 +1,5 @@
 // Angular Core imports
-import { Component, computed, AfterViewInit, ViewChild, inject, signal } from '@angular/core';
+import { Component, computed, AfterViewInit, ViewChild, inject, signal, DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -8,14 +8,14 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 
-// Component imports
+// Application imports - Components
 import { HeaderComponent } from "./layout/header/header.component";
 import { CustomSidenavComponent } from "./layout/custom-sidenav/custom-sidenav.component";
 
-// Service imports
-import { ResponsiveService } from './services/responsive.service';
-import { NavService } from './services/nav.service';
-import { MasterDataService } from './services/master-data.service';
+// Application imports - Services
+import { ResponsiveService } from '@services/responsive.service';
+import { NavService } from '@services/nav.service';
+import { MasterDataService } from '@services/master-data.service';
 
 @Component({
   selector: 'app-root',
@@ -32,20 +32,21 @@ import { MasterDataService } from './services/master-data.service';
   styleUrl: './app.component.scss'
 })
 export class AppComponent implements AfterViewInit {
-  @ViewChild('drawer') appDrawer!: MatSidenav;
+  // ViewChild references
+  @ViewChild('drawer') private readonly appDrawer!: MatSidenav;
 
-  // Service injections
-  public readonly responseService = inject(ResponsiveService);
+  // Private properties
   private readonly navService = inject(NavService);
   private readonly masterService = inject(MasterDataService);
 
   // Public properties
-  title = 'eclinic';
-  sidenavOpend = true;
+  public readonly responseService = inject(ResponsiveService);
+  public readonly title = 'eclinic';
+  public readonly sidenavOpened = true;
 
   // Signals
-  collapsed = signal(false);
-  errorMessage = toSignal(this.masterService.messageSubject);
+  public readonly collapsed = signal(false);
+  public readonly errorMessage = toSignal(this.masterService.messageSubject);
 
   constructor() {
     if (!this.masterService.userSubject.value) {
@@ -54,20 +55,21 @@ export class AppComponent implements AfterViewInit {
   }
 
   // Computed values
-  sidenavMode = computed(() =>
+  public readonly sidenavMode = computed(() =>
     this.responseService.isLargeScreen() ? 'side' : 'over'
   );
 
-  sidenavWidth = computed(() =>
+  public readonly sidenavWidth = computed(() =>
     this.responseService.isLargeScreen() && this.collapsed() ? '65px' : '250px'
   );
 
-  ngAfterViewInit(): void {
+  // Lifecycle hooks
+  public ngAfterViewInit(): void {
     this.navService.appDrawer = this.appDrawer;
   }
 
   // Public methods
-  closeErrorMessage(): void {
+  public closeErrorMessage(): void {
     this.masterService.messageSubject.next('');
   }
 }
