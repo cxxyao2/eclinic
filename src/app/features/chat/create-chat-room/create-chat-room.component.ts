@@ -1,4 +1,5 @@
-import { Component, inject } from '@angular/core';
+
+import { Component, DestroyRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -6,11 +7,12 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { Router } from '@angular/router';
-import { map, Observable, startWith } from 'rxjs';
+import { map, Observable, startWith, switchMap } from 'rxjs';
 
 import { ChatService } from '@libs/api-client/api/chat.service';
 import { MasterDataService } from '@services/master-data.service';
 import { GetPatientDTO, GetPatientDTO as Patient } from '@libs/api-client';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 interface ChatRoomForm {
   patientId: number;
@@ -55,7 +57,7 @@ interface ChatRoomForm {
             </mat-form-field>
 
             <div class="d-grid">
-              <button mat-raised-button color="primary" type="submit" 
+              <button mat-raised-button  type="submit" 
                       [disabled]="!roomForm.valid" 
                       class="w-100">
                 Create Room
@@ -73,6 +75,7 @@ export class CreateChatRoomComponent {
   private chatService = inject(ChatService);
   private router = inject(Router);
   private masterDataService = inject(MasterDataService);
+  private destroyRef = inject(DestroyRef);
 
   protected roomForm = this.fb.nonNullable.group({
     patientId: [0, Validators.required],
@@ -99,13 +102,14 @@ export class CreateChatRoomComponent {
 
   private _filter(name: string): Patient[] {
     const filterValue = name.toLowerCase();
-    return this.patients.filter(patient => 
+    return this.patients.filter(patient =>
       (patient.firstName + ' ' + patient.lastName)
-      .toLowerCase()
-      .includes(filterValue)
+        .toLowerCase()
+        .includes(filterValue)
     );
   }
 
+  // todo: selected patient is not correctly displayed
   protected displayFn(patient: Patient): string {
     return patient ? `${patient.firstName} ${patient.lastName} (ID: ${patient.patientId})` : '';
   }
@@ -119,26 +123,39 @@ export class CreateChatRoomComponent {
   }
 
   protected onSubmit(): void {
-    if (this.roomForm.valid) {
-      const formValue = this.roomForm.getRawValue();
-      const request = {
-        patientId: formValue.patientId,
-        topic: formValue.topic
-      };
+    if (!this.roomForm.valid) return;
 
-      this.chatService.apiChatRoomsPost(request).subscribe({
-        next: (response) => {
-          if (response?.data) {
-            this.router.navigate(['/chat', response.data.chatRoomId]);
-          }
-        },
-        error: (error) => {
-          console.error('Error creating chat room:', error);
+    const formValue = this.roomForm.getRawValue();
+    const request = {
+      patientId: formValue.patientId,
+      topic: formValue.topic
+    };
+
+    this.chatService.apiChatRoomsPost(request).pipe(
+      switchMap(response => {
+        if (!response?.data?.chatRoomId) {
+          throw new Error('Failed to create chat room');
         }
-      });
-    }
+
+        return this.chatService.apiChatRoomsRoomIdParticipantsPost(
+          response.data.chatRoomId,
+          { userId: request.patientId }
+        ).pipe(
+          map(() => response?.data?.chatRoomId)
+        );
+      }),
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
+      next: (chatRoomId) => {
+        this.router.navigate(['/chat', chatRoomId]);
+      },
+      error: (error) => {
+        console.error('Error creating chat room:', error);
+      }
+    });
   }
 }
+
 
 
 

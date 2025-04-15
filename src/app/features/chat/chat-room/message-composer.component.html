@@ -5,7 +5,7 @@
     <mat-hint align="end">{{ messageControl.value.length }}/2000</mat-hint>
   </mat-form-field>
 
-  <button mat-mini-fab color="primary" [disabled]="!messageControl.value.trim()" (click)="sendMessage()"
+  <button mat-mini-fab  [disabled]="!messageControl.value.trim()" (click)="sendMessage()"
     class="align-self-end mb-3">
     <mat-icon>send</mat-icon>
   </button>

@@ -15,7 +15,7 @@ import { ChatRoomDTO } from '@libs/api-client';
   imports: [CommonModule, RouterModule, MatListModule, MatIconModule, MatButtonModule],
   template: `
     <div class="chat-list-container">
-      <button mat-raised-button color="primary" [routerLink]="['/chat/create']">
+      <button mat-raised-button  [routerLink]="['/chat/create']">
         Create New Room
       </button>
 

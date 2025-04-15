@@ -21,11 +21,11 @@ import { MasterDataService } from './services/master-data.service';
   selector: 'app-root',
   standalone: true,
   imports: [
-    CommonModule, 
-    RouterOutlet, 
-    MatToolbarModule, 
-    MatSidenavModule, 
-    HeaderComponent, 
+    CommonModule,
+    RouterOutlet,
+    MatToolbarModule,
+    MatSidenavModule,
+    HeaderComponent,
     CustomSidenavComponent
   ],
   templateUrl: './app.component.html',
@@ -48,19 +48,17 @@ export class AppComponent implements AfterViewInit {
   errorMessage = toSignal(this.masterService.messageSubject);
 
   constructor() {
-    // MasterDataService will be initialized here automatically
-    // Its constructor will run initializeData() and fetchUserFromLocalStorage()
     if (!this.masterService.userSubject.value) {
       this.masterService.fetchUserFromLocalStorage();
     }
   }
 
   // Computed values
-  sidenavMode = computed(() => 
+  sidenavMode = computed(() =>
     this.responseService.isLargeScreen() ? 'side' : 'over'
   );
 
-  sidenavWidth = computed(() => 
+  sidenavWidth = computed(() =>
     this.responseService.isLargeScreen() && this.collapsed() ? '65px' : '250px'
   );
 
