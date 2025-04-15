@@ -30,6 +30,8 @@ export interface User {
     activationCode?: string | null;
     isActivated?: boolean;
     activationCodeExpires?: Date | null;
+    passwordResetToken?: string | null;
+    passwordResetTokenExpires?: Date | null;
 }
 export namespace User {
 }

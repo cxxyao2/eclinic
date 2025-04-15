@@ -7,7 +7,9 @@
     "paths": {
       "@libs/*": ["./src/libs/*"],
       "@models/*": ["./src/app/models/*"],
-      "@constants/*": ["./src/app/constants/*"]
+      "@constants/*": ["./src/app/constants/*"],
+      "@shared/*": ["./src/app/shared/*"],
+      "@services/*": ["./src/app/services/*"]
     },
     "forceConsistentCasingInFileNames": true,
     "outDir": "./dist/out-tsc",

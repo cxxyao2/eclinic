@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { authGuard } from './auth.guard';
-import { MasterDataService } from '../services/master-data.service';
+import { MasterDataService } from './master-data.service';
 import { UserRole, User } from '@libs/api-client';
 import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 

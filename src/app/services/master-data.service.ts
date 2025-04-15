@@ -1,35 +1,36 @@
 import { DestroyRef, inject, Injectable } from '@angular/core';
 import { GetBedDTO, GetImageRecordDTO, GetInpatientDTO, GetMedicationDTO, GetPatientDTO, GetPractitionerDTO, ImageRecordsService, User } from '@libs/api-client';
 import { BehaviorSubject } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { map, catchError } from 'rxjs/operators';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-
-import { PractitionersService } from '@libs/api-client';
-import { PatientsService } from '@libs/api-client';
-import { MedicationsService } from '@libs/api-client';
-
+import { PractitionersService, PatientsService, MedicationsService } from '@libs/api-client';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MasterDataService {
+  // Public properties
+  public readonly messageSubject = new BehaviorSubject<string>('');
+  public readonly practitionersSubject = new BehaviorSubject<GetPractitionerDTO[]>([]);
+  public readonly medicationsSubject = new BehaviorSubject<GetMedicationDTO[]>([]);
+  public readonly patientsSubject = new BehaviorSubject<GetPatientDTO[]>([]);
+  public readonly bedsSubject = new BehaviorSubject<GetBedDTO[]>([]);
+  public readonly userSubject = new BehaviorSubject<User | null>(null);
+  public readonly imageRecordsSubjet = new BehaviorSubject<GetImageRecordDTO[]>([]);
+  public readonly selectedPatientSubject = new BehaviorSubject<GetInpatientDTO | null>(null);
 
-  private practitionerService = inject(PractitionersService);
-  private patientService = inject(PatientsService);
-  private medicationService = inject(MedicationsService);
-  private imageService = inject(ImageRecordsService);
-
-  public messageSubject = new BehaviorSubject<string>('');
-  public practitionersSubject = new BehaviorSubject<GetPractitionerDTO[]>([]);
-  public medicationsSubject = new BehaviorSubject<GetMedicationDTO[]>([]);
-  public patientsSubject = new BehaviorSubject<GetPatientDTO[]>([]);
-  public bedsSubject = new BehaviorSubject<GetBedDTO[]>([]);
-  public userSubject = new BehaviorSubject<User | null>(null);
-  public imageRecordsSubjet = new BehaviorSubject<GetImageRecordDTO[]>([]);
-  public selectedPatientSubject = new BehaviorSubject<GetInpatientDTO | null>(null);
-  destroyRef = inject(DestroyRef);
+  // Private properties
+  private readonly practitionerService = inject(PractitionersService);
+  private readonly patientService = inject(PatientsService);
+  private readonly medicationService = inject(MedicationsService);
+  private readonly imageService = inject(ImageRecordsService);
+  private readonly destroyRef = inject(DestroyRef);
 
   constructor() {
+    this.initializeData();
+  }
+
+  private initializeData() {
     this.fetchPatients();
     this.fetchPractitioners();
     this.fetchMedications();
@@ -41,62 +42,74 @@ export class MasterDataService {
   fetchImageRecords(): void {
     this.imageService.apiImageRecordsGet()
       .pipe(
-        tap((res) => this.imageRecordsSubjet.next(res.data ?? []))
+        map(response => response.data ?? []),
+        catchError(error => {
+          this.messageSubject.next(error?.message ?? JSON.stringify(error));
+          return [];
+        }),
+        takeUntilDestroyed(this.destroyRef)
       ).subscribe({
-        next:()=>{
-          this.messageSubject.next("");
-        },
-        error: (err) => {
-          this.messageSubject.next(err?.message ?? JSON.stringify(err));
+        next: (data) => {
+          this.imageRecordsSubjet.next(data);
+          this.messageSubject.next('');
         }
       });
   }
 
 
   fetchPractitioners(): void {
-    this.practitionerService.apiPractitionersGet().pipe(
-      tap((result) => this.practitionersSubject.next(result.data ?? [])),
-      takeUntilDestroyed(this.destroyRef)
-    ).subscribe({
-      next:()=>{
-        this.messageSubject.next("");
-      },
-      error: (err) => {
-        this.messageSubject.next(err?.message ?? JSON.stringify(err));
-      }
-    });
+    this.practitionerService.apiPractitionersGet()
+      .pipe(
+        map(response => response.data ?? []),
+        catchError(error => {
+          this.messageSubject.next(error?.message ?? JSON.stringify(error));
+          return [];
+        }),
+        takeUntilDestroyed(this.destroyRef)
+      ).subscribe({
+        next: (data) => {
+          this.practitionersSubject.next(data);
+          this.messageSubject.next('');
+        }
+      });
   }
 
 
 
   // Fetch and store medications
   fetchMedications(): void {
-    this.medicationService.apiMedicationsGet().pipe(
-      tap((result) => this.medicationsSubject.next(result.data ?? [])),
-      takeUntilDestroyed(this.destroyRef)
-    ).subscribe({
-      next:()=>{
-        this.messageSubject.next("");
-      },
-      error: (err) => {
-        this.messageSubject.next(err?.message ?? JSON.stringify(err));
-      }
-    });
+    this.medicationService.apiMedicationsGet()
+      .pipe(
+        map(response => response.data ?? []),
+        catchError(error => {
+          this.messageSubject.next(error?.message ?? JSON.stringify(error));
+          return [];
+        }),
+        takeUntilDestroyed(this.destroyRef)
+      ).subscribe({
+        next: (data) => {
+          this.medicationsSubject.next(data);
+          this.messageSubject.next('');
+        }
+      });
   }
 
 
   fetchPatients(): void {
-    this.patientService.apiPatientsGet().pipe(
-      tap((result) => this.patientsSubject.next(result.data ?? [])),
-      takeUntilDestroyed(this.destroyRef)
-    ).subscribe({
-      next:()=>{
-        this.messageSubject.next("");
-      },
-      error: (err) => {
-        this.messageSubject.next(err?.message ?? JSON.stringify(err));
-      }
-    });
+    this.patientService.apiPatientsGet()
+      .pipe(
+        map(response => response.data ?? []),
+        catchError(error => {
+          this.messageSubject.next(error?.message ?? JSON.stringify(error));
+          return [];
+        }),
+        takeUntilDestroyed(this.destroyRef)
+      ).subscribe({
+        next: (data) => {
+          this.patientsSubject.next(data);
+          this.messageSubject.next('');
+        }
+      });
   }
 
 }

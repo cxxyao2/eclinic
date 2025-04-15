@@ -16,7 +16,7 @@ declare global {
 // -- This is a parent command --
 Cypress.Commands.add('login', () => {
 
-    cy.visit('/login');
+    cy.visit('/auth/login');
     cy.get('input[formControlName="email"]').clear();
     cy.get('input[formControlName="password"]').clear();
 

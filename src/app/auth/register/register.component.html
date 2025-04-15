@@ -1,0 +1,103 @@
+<div class="container-fluid h-100">
+  <div class="row justify-content-center align-items-center h-100">
+    <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-4">
+      <mat-card class="p-4 shadow">
+        <div class="text-center mb-4">
+          <h2>Create Account</h2>
+        </div>
+
+        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+          <div class="mb-3">
+            <mat-form-field class="w-100">
+              <mat-label>First Name</mat-label>
+              <input matInput formControlName="firstName" placeholder="Enter your first name">
+              @if (registerForm.get('firstName')?.errors?.['required'] && registerForm.get('firstName')?.touched) {
+                <mat-error>First name is required</mat-error>
+              }
+              @if (registerForm.get('firstName')?.errors?.['minlength']) {
+                <mat-error>First name must be at least 2 characters</mat-error>
+              }
+            </mat-form-field>
+          </div>
+
+          <div class="mb-3">
+            <mat-form-field class="w-100">
+              <mat-label>Last Name</mat-label>
+              <input matInput formControlName="lastName" placeholder="Enter your last name">
+              @if (registerForm.get('lastName')?.errors?.['required'] && registerForm.get('lastName')?.touched) {
+                <mat-error>Last name is required</mat-error>
+              }
+              @if (registerForm.get('lastName')?.errors?.['minlength']) {
+                <mat-error>Last name must be at least 2 characters</mat-error>
+              }
+            </mat-form-field>
+          </div>
+
+          <div class="mb-3">
+            <mat-form-field class="w-100">
+              <mat-label>Email</mat-label>
+              <input matInput formControlName="email" placeholder="Enter your email" type="email">
+              @if (registerForm.get('email')?.errors?.['required'] && registerForm.get('email')?.touched) {
+                <mat-error>Email is required</mat-error>
+              }
+              @if (registerForm.get('email')?.errors?.['email']) {
+                <mat-error>Please enter a valid email address</mat-error>
+              }
+            </mat-form-field>
+          </div>
+
+          <div class="mb-3">
+            <mat-form-field class="w-100">
+              <mat-label>Password</mat-label>
+              <input matInput formControlName="password" [type]="hidePassword ? 'password' : 'text'" 
+                     placeholder="Enter your password">
+              <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" type="button">
+                <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+              </button>
+              @if (registerForm.get('password')?.errors?.['required'] && registerForm.get('password')?.touched) {
+                <mat-error>Password is required</mat-error>
+              }
+              @if (registerForm.get('password')?.errors?.['minlength']) {
+                <mat-error>Password must be at least 6 characters</mat-error>
+              }
+            </mat-form-field>
+          </div>
+
+          <div class="mb-4">
+            <mat-form-field class="w-100">
+              <mat-label>Confirm Password</mat-label>
+              <input matInput formControlName="confirmPassword" [type]="hidePassword ? 'password' : 'text'" 
+                     placeholder="Confirm your password">
+              @if (registerForm.get('confirmPassword')?.errors?.['required'] && registerForm.get('confirmPassword')?.touched) {
+                <mat-error>Please confirm your password</mat-error>
+              }
+              @if (registerForm.errors?.['mismatch']) {
+                <mat-error>Passwords do not match</mat-error>
+              }
+            </mat-form-field>
+          </div>
+
+          @if (errorMessage) {
+            <div class="alert alert-danger mb-3" role="alert">
+              {{ errorMessage }}
+            </div>
+          }
+
+          <div class="d-grid gap-2">
+            <button mat-raised-button color="primary" type="submit" 
+                    [disabled]="registerForm.invalid" class="w-100">
+              Register
+            </button>
+          </div>
+
+          <div class="text-center mt-3">
+            <p class="mb-0">
+              Already have an account? 
+              <a routerLink="/auth/login" class="text-primary text-decoration-none">Login here</a>
+            </p>
+          </div>
+        </form>
+      </mat-card>
+    </div>
+  </div>
+</div>

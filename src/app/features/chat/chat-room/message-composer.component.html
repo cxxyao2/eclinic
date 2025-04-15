@@ -1,0 +1,12 @@
+<div class="d-flex gap-2">
+  <mat-form-field class="flex-grow-1 mb-0" appearance="outline">
+    <textarea matInput #messageInput [formControl]="messageControl" placeholder="Type a message..."
+      (input)="autoResizeTextarea()" rows="1" maxlength="2000"></textarea>
+    <mat-hint align="end">{{ messageControl.value.length }}/2000</mat-hint>
+  </mat-form-field>
+
+  <button mat-mini-fab color="primary" [disabled]="!messageControl.value.trim()" (click)="sendMessage()"
+    class="align-self-end mb-3">
+    <mat-icon>send</mat-icon>
+  </button>
+</div>

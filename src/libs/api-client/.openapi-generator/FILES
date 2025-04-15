@@ -80,7 +80,9 @@ model/getVisitRecordDTOListServiceResponse.ts
 model/getVisitRecordDTOServiceResponse.ts
 model/models.ts
 model/practitioner.ts
+model/requestPasswordResetDTO.ts
 model/resendActivationCodeDTO.ts
+model/resetPasswordDTO.ts
 model/signatureDTO.ts
 model/stringServiceResponse.ts
 model/updateBedDTO.ts

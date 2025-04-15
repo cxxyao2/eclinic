@@ -1,15 +1,22 @@
 import { Routes } from '@angular/router';
 import { DashboardComponent } from './layout/dashboard/dashboard.component';
-import { LoginComponent } from './admin/login/login.component';
 import { WaitingListComponent } from './patient/waiting-list/waiting-list.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { SearchPopupComponent } from './shared/search-popup/search-popup.component';
-import { authGuard } from './service/auth.guard';
+import { authGuard } from './services/auth.guard';
+import { LoginComponent } from './auth/login/login.component';
+import { RegisterComponent } from './auth/register/register.component';
+import { ForgetPasswordComponent } from './auth/forget-password/forget-password.component';
+import { ResetPasswordComponent } from './auth/reset-password/reset-password.component';
 
 export const routes: Routes = [
     {
         path: 'dashboard',
         component: DashboardComponent,
+    },
+    {
+        path: 'auth',
+        loadChildren: () => import('./auth/auth.routes').then(c => c.authRoutes)
     },
     {
         path: 'available',
@@ -29,22 +36,34 @@ export const routes: Routes = [
     },
     {
         path: 'chat',
-        loadChildren: () => import('./features/chat/chat.routes').then(c => c.chatRoutes), canActivate: [authGuard]
+        loadChildren: () => import('./features/chat/chat.routes').then(c => c.chatRoutes),
+        canActivate: [authGuard]
     },
     {
-        path: 'admin',
-        loadComponent: () => import('./admin/admin/admin.component').then(c => c.AdminComponent),
-        children: [
-            {
-                path: 'waitlist',
-                loadComponent: () => import('./patient/waiting-list/waiting-list.component').then(c => c.WaitingListComponent)
-            },
-            {
-                path: 'authorize',
-                loadComponent: () => import('./admin/authorization/authorization.component').then(c => c.AuthorizationComponent),
-                canActivate: [authGuard]
-            }
-        ]
+        path: 'login',
+        component: LoginComponent
+    },
+    {
+        path: 'register',
+        component: RegisterComponent
+    },
+    {
+        path: 'forget-password',
+        component: ForgetPasswordComponent
+    },
+    {
+        path: 'reset-password',
+        component: ResetPasswordComponent
+    },
+
+    {
+        path: 'waitlist',
+        component: WaitingListComponent
+    },
+    {
+        path: 'authorize',
+        loadComponent: () => import('./admin/admin/authorization/authorization.component').then(c => c.AuthorizationComponent),
+        canActivate: [authGuard]
     },
     {
         path: 'inpatient',
@@ -53,10 +72,6 @@ export const routes: Routes = [
     {
         path: "inpatient/:roomNumber",
         loadComponent: () => import('./inpatient-bed-assign/inpatient-bed-assign.component').then(c => c.InpatientBedAssignComponent)
-    },
-    {
-        path: 'login',
-        component: LoginComponent
     },
     {
         path: 'search',

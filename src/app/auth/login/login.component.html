@@ -1,0 +1,96 @@
+<div class="min-vh-100 d-flex align-items-center bg-light">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-4">
+        <mat-card class="shadow-sm">
+          <div class="card-body p-4">
+            <!-- Header -->
+            <div class="text-center mb-4">
+              <h2 class="h3 mb-0">Login</h2>
+            </div>
+
+            <!-- Login Form -->
+            <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+              <!-- Email Field -->
+              <div class="mb-3">
+                <mat-form-field class="w-100">
+                  <mat-label>Email Address</mat-label>
+                  <input matInput
+                         formControlName="email"
+                         type="email"
+                         placeholder="Enter your email"
+                         class="form-control-lg" />
+                  @if(loginForm.get('email')?.hasError('required')){
+                    <mat-error>Email is required</mat-error>
+                  }
+                  @if(loginForm.get('email')?.hasError('email')){
+                    <mat-error>Please enter a valid email address</mat-error>
+                  }
+                </mat-form-field>
+              </div>
+
+              <!-- Password Field -->
+              <div class="mb-3">
+                <mat-form-field class="w-100">
+                  <mat-label>Password</mat-label>
+                  <input matInput
+                         formControlName="password"
+                         [type]="hidePassword ? 'password' : 'text'"
+                         placeholder="Enter your password"
+                         class="form-control-lg" />
+                  <button mat-icon-button
+                          matSuffix
+                          type="button"
+                          class="text-muted"
+                          (click)="hidePassword = !hidePassword">
+                    <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+                  </button>
+                  @if(loginForm.get('password')?.hasError('required')){
+                    <mat-error>Password is required</mat-error>
+                  }
+                </mat-form-field>
+              </div>
+
+              <!-- Forgot Password Link -->
+              <div class="text-end mb-3">
+                <a routerLink="/auth/forget-password"
+                   class="text-decoration-none small">
+                  Forgot Password?
+                </a>
+              </div>
+
+              <!-- Error Message -->
+              @if(errorMessage()){
+                <div class="alert alert-danger mb-3" role="alert">
+                  {{ errorMessage() }}
+                </div>
+              }
+
+              <!-- Submit Button -->
+              <div class="d-grid gap-2 mb-4">
+                <button mat-raised-button
+                        color="primary"
+                        type="submit"
+                        [disabled]="loginForm.invalid"
+                        class="btn-lg">
+                  Login
+                </button>
+              </div>
+
+              <!-- Register Link -->
+              <div class="text-center">
+                <p class="text-muted mb-0 small">
+                  Don't have an account? 
+                  <a routerLink="/auth/register"
+                     class="text-decoration-none">
+                    Register here
+                  </a>
+                </p>
+              </div>
+            </form>
+          </div>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>
