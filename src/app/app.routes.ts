@@ -49,13 +49,16 @@ export const routes: Routes = [
     },
     {
         path: 'forget-password',
-        component: ForgetPasswordComponent
+        loadComponent: () => import('./auth/forget-password/forget-password.component').then(c => c.ForgetPasswordComponent)
     },
     {
         path: 'reset-password',
-        component: ResetPasswordComponent
+        loadComponent: () => import('./auth/reset-password/reset-password.component').then(c => c.ResetPasswordComponent)
     },
-
+    {
+        path: 'activate-account',
+        loadComponent: () => import('./auth/active-account/active-account.component').then(c => c.ActiveAccountComponent)
+    },
     {
         path: 'waitlist',
         component: WaitingListComponent
