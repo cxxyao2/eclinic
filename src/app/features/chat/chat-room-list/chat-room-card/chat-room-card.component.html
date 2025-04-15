@@ -1,0 +1,22 @@
+<mat-card class="chat-room-card" [routerLink]="['/chat', room.chatRoomId]">
+  <div class="thumbnail">
+    <img [src]="placeholderImage" alt="Chat room thumbnail">
+  </div>
+  <mat-card-content class="content">
+    <h3 class="topic">{{ room.topic }}</h3>
+    <div class="metadata">
+      <div class="info-item">
+        <mat-icon>group</mat-icon>
+        <span>{{ participantsCount }}</span>
+      </div>
+      <div class="info-item">
+        <mat-icon>chat</mat-icon>
+        <span>{{ messagesCount }}</span>
+      </div>
+      <div class="info-item">
+        <mat-icon>schedule</mat-icon>
+        <span>{{ room.createdAt | timeAgo }}</span>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

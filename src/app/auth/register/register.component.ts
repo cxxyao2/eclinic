@@ -68,7 +68,7 @@ export class RegisterComponent {
 
       this.authService.apiAuthRegisterPost(registerData).subscribe({
         next: () => {
-          this.router.navigate(['/auth/login'], { 
+          this.router.navigate(['/login'], { 
             queryParams: { registered: 'true' }
           });
         },

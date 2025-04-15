@@ -13,11 +13,9 @@ import { UserRole } from './userRole';
 
 export interface User { 
     createdAt?: Date;
-    updatedAt?: Date;
     createdBy?: number;
-    createdDate?: Date;
-    lastModifiedBy?: number;
-    lastModifiedDate?: Date | null;
+    updatedAt?: Date;
+    updatedBy?: number;
     userID?: number;
     email: string;
     userName?: string | null;

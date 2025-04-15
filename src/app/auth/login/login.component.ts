@@ -18,10 +18,10 @@ import { MasterDataService } from 'src/app/services/master-data.service';
   selector: 'app-login',
   standalone: true,
   imports: [
-    MatButtonModule, 
-    MatCardModule, 
-    MatInputModule, 
-    MatFormFieldModule, 
+    MatButtonModule,
+    MatCardModule,
+    MatInputModule,
+    MatFormFieldModule,
     MatIconModule,
     ReactiveFormsModule,
     RouterLink
@@ -67,7 +67,7 @@ export class LoginComponent {
     localStorage.setItem('accessToken', response.accessToken);
     this.masterService.userSubject.next(response.user);
     this.errorMessage.set(null);
-    this.router.navigateByUrl(this.returnUrl);
+    this.router.navigateByUrl(this.returnUrl || '/dashboard');
   }
 
   private handleLoginError(error: HttpErrorResponse): void {

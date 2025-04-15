@@ -9,10 +9,7 @@
  */
 
 
-export interface ChatRoomDTO { 
-    chatRoomId: number;
-    patientId: number;
-    topic?: string | null;
-    createdAt: Date;
+export interface ResponseDto { 
+    message?: string | null;
 }
 

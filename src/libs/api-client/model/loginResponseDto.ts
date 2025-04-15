@@ -7,12 +7,11 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { User } from './user';
 
 
-export interface ChatRoomDTO { 
-    chatRoomId: number;
-    patientId: number;
-    topic?: string | null;
-    createdAt: Date;
+export interface LoginResponseDto { 
+    accessToken?: string | null;
+    user?: User;
 }
 

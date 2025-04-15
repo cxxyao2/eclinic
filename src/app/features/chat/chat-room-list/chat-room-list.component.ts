@@ -8,26 +8,28 @@ import { toSignal } from '@angular/core/rxjs-interop';
 
 import { ChatService } from '../../../services/chat.service';
 import { ChatRoomDTO } from '@libs/api-client';
+import { ChatRoomCardComponent } from './chat-room-card/chat-room-card.component';
 
 @Component({
   selector: 'app-chat-room-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, MatListModule, MatIconModule, MatButtonModule],
+  imports: [
+    CommonModule, 
+    RouterModule, 
+    MatButtonModule,
+    ChatRoomCardComponent
+  ],
   template: `
     <div class="chat-list-container">
-      <button mat-raised-button  [routerLink]="['/chat/create']">
+      <button mat-raised-button [routerLink]="['/chat/create']">
         Create New Room
       </button>
 
-      <mat-nav-list>
+      <div class="chat-rooms-grid">
         @for (room of rooms(); track room.chatRoomId) {
-          <a mat-list-item [routerLink]="['/chat', room.chatRoomId]">
-            <mat-icon matListItemIcon>chat</mat-icon>
-            <span matListItemTitle>{{ room.topic }}</span>
-            <span matListItemLine>Patient ID: {{ room.patientId }}</span>
-          </a>
+          <app-chat-room-card [room]="room" />
         }
-      </mat-nav-list>
+      </div>
     </div>
   `,
   styles: [`
@@ -39,9 +41,12 @@ import { ChatRoomDTO } from '@libs/api-client';
       gap: 1rem;
     }
 
-    mat-nav-list {
+    .chat-rooms-grid {
       flex: 1;
       overflow: auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1rem;
     }
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -52,3 +57,4 @@ export class ChatRoomListComponent {
     initialValue: [] as ChatRoomDTO[]
   });
 }
+

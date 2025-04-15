@@ -78,11 +78,14 @@ model/getPrescriptionDTOServiceResponse.ts
 model/getVisitRecordDTO.ts
 model/getVisitRecordDTOListServiceResponse.ts
 model/getVisitRecordDTOServiceResponse.ts
+model/loginResponseDto.ts
 model/models.ts
 model/practitioner.ts
+model/problemDetails.ts
 model/requestPasswordResetDTO.ts
 model/resendActivationCodeDTO.ts
 model/resetPasswordDTO.ts
+model/responseDto.ts
 model/signatureDTO.ts
 model/stringServiceResponse.ts
 model/updateBedDTO.ts

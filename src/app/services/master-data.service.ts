@@ -50,7 +50,10 @@ export class MasterDataService {
         try {
           const decodedToken: any = jwtDecode(accessToken);
           // Get userId from the nameidentifier claim
-          const userId = decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
+          const userId = decodedToken['nameidentifier'] || 
+                         decodedToken['nameid'] || 
+                         decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'] ||
+                         Object.entries(decodedToken).find(([key]) => key.toLowerCase().endsWith('nameidentifier'))?.[1]; // [key,value], value index is 1
           
           if (!userId) {
             throw new Error('User ID not found in token');

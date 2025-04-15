@@ -1,5 +1,7 @@
 import { ApplicationConfig, provideZoneChangeDetection, isDevMode } from '@angular/core';
 import { provideRouter } from '@angular/router';
+import { NGX_ECHARTS_CONFIG } from 'ngx-echarts';
+import * as echarts from 'echarts';
 
 import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
@@ -18,6 +20,12 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideAnimationsAsync(),
+    {
+      provide: NGX_ECHARTS_CONFIG,
+      useValue: {
+        echarts: () => import('echarts')
+      }
+    },
     { provide: BASE_PATH, useValue: envWindow.__env.BaseURL },
     {
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
