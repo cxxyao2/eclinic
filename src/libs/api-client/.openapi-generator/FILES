@@ -58,6 +58,9 @@ model/getInpatientDTOServiceResponse.ts
 model/getLabTestDTO.ts
 model/getLabTestDTOListServiceResponse.ts
 model/getLabTestDTOServiceResponse.ts
+model/getMedicalHistoryDTO.ts
+model/getMedicalHistoryDTOPaginatedResponse.ts
+model/getMedicalHistoryDTOPaginatedResponseServiceResponse.ts
 model/getMedicationDTO.ts
 model/getMedicationDTOListServiceResponse.ts
 model/getMedicationDTOServiceResponse.ts

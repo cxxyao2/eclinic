@@ -11,7 +11,7 @@ import { MatIconModule } from '@angular/material/icon';
 
 import { AuthService, UserCreateDTO } from '@libs/api-client';
 
-private interface RegisterForm {
+export interface RegisterForm {
   firstName: FormControl<string>;
   lastName: FormControl<string>;
   email: FormControl<string>;

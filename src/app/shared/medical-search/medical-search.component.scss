@@ -1,0 +1,26 @@
+.search-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+
+  .search-field {
+    width: 100%;
+  }
+
+  .loading-spinner {
+    display: flex;
+    justify-content: center;
+    padding: 1rem;
+  }
+
+  .search-results {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  mat-paginator {
+    margin-top: 1rem;
+  }
+}

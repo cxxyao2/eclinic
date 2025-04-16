@@ -1,6 +1,8 @@
+import { MatButtonModule } from '@angular/material/button';
+import { MatTooltipModule } from '@angular/material/tooltip';
 // Angular Core imports
-import { Component, computed, DestroyRef, effect, inject, input, model, output, signal } from '@angular/core';
-import { Router } from '@angular/router';
+import { ChangeDetectionStrategy, Component, computed, DestroyRef, effect, inject, input, model, output, signal } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { filter, tap } from 'rxjs';
 
@@ -8,17 +10,20 @@ import { filter, tap } from 'rxjs';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 
 // Third-party imports
-import { TranslocoService } from '@jsverse/transloco';
+import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 
-// Application imports - Components
 
 // Application imports - Services
-
 import { MasterDataService } from '@services/master-data.service';
 import { NavService } from '@services/nav.service';
 import { UserRole } from '@libs/api-client';
 import { SseClientService } from '@services/sse.service';
 import { DialogSimpleDialog } from '@shared/dialog-simple-dialog';
+import { CommonModule } from '@angular/common';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatIcon } from '@angular/material/icon';
+import { MatBadgeModule } from '@angular/material/badge';
+import { MatMenuModule } from '@angular/material/menu';
 
 // Application imports - Models
 const LANGUAGE_MAP: Record<string, string> = {
@@ -31,7 +36,13 @@ const LANGUAGE_MAP: Record<string, string> = {
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrl: './header.component.scss'
+  styleUrl: './header.component.scss',
+  standalone: true,
+  providers: [
+    SseClientService
+  ],
+  imports: [CommonModule, MatBadgeModule, MatButtonModule,MatMenuModule, MatToolbarModule, MatIcon, MatTooltipModule, RouterLink,TranslocoModule],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HeaderComponent {
   // Input/Output properties
@@ -100,5 +111,11 @@ export class HeaderComponent {
 
   protected toggleLanguage(lang: string): void {
     this.transloco.setActiveLang(lang);
+  }
+
+  protected logout(): void {
+    localStorage.removeItem('accessToken');
+    this.masterService.userSubject.next(null);
+    this.router.navigate(['/dashboard']);
   }
 }

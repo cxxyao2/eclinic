@@ -2,13 +2,11 @@ import { Routes } from '@angular/router';
 import { DashboardComponent } from './layout/dashboard/dashboard.component';
 import { WaitingListComponent } from './patient/waiting-list/waiting-list.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
-import { SearchPopupComponent } from './shared/search-popup/search-popup.component';
 import { authGuard } from './services/auth.guard';
 import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
-import { ForgetPasswordComponent } from './auth/forget-password/forget-password.component';
-import { ResetPasswordComponent } from './auth/reset-password/reset-password.component';
 import { medicalStaffGuard } from '@services/medical-staff.guard';
+import { MedicalSearchComponent } from './shared/medical-search/medical-search.component';
 
 export const routes: Routes = [
     {
@@ -75,7 +73,8 @@ export const routes: Routes = [
     },
     {
         path: 'search',
-        component: SearchPopupComponent
+        component: MedicalSearchComponent,
+        title: 'Search Medical Cases'
     },
     {
         path: '',

@@ -1,62 +1,65 @@
-<mat-toolbar *transloco="let t">
-    <mat-toolbar-row class="first-row">
-        @if(isLargeScreen()) {
-        <button mat-icon-button aria-label="Toggle menu" (click)="collapsed.set(!collapsed())">
-            <mat-icon>menu</mat-icon>
-        </button>
-        }@else {
-        <button mat-icon-button aria-label="Toggle menu" (click)="toggleDrawer.emit()">
-            <mat-icon>menu</mat-icon>
-        </button>
-        }
-        <span>EClinic</span>
-        <span class="spacer"></span>
-
-        <div class="extended-button-container">
-            <button mat-icon-button aria-label="search" matTooltip="Search" [matTooltipPosition]="'above'"
-                routerLink="{{'/search'}}">
-                <mat-icon>search</mat-icon>
+<ng-container *transloco="let t">
+    <mat-toolbar>
+        <mat-toolbar-row class="first-row">
+            @if(isLargeScreen()) {
+            <button mat-icon-button aria-label="Toggle menu" (click)="collapsed.set(!collapsed())">
+                <mat-icon>menu</mat-icon>
             </button>
-            <button mat-icon-button (click)="darkMode.set(!darkMode())" aria-label="Toggle Theme"
-                matTooltip="Toggle Theme">
-                @if(darkMode()) {
-                <mat-icon>light_mode</mat-icon>
-                } @else {
-                <mat-icon>dark_mode</mat-icon>
+            }@else {
+            <button mat-icon-button aria-label="Toggle menu" (click)="toggleDrawer.emit()">
+                <mat-icon>menu</mat-icon>
+            </button>
+            }
+            <span>EClinic</span>
+            <span class="spacer"></span>
+
+            <div class="extended-button-container">
+                <button mat-icon-button aria-label="search" matTooltip="Search" [matTooltipPosition]="'above'"
+                    [routerLink]="['/search']">
+                    <mat-icon>search</mat-icon>
+                </button>
+                <button mat-icon-button (click)="darkMode.set(!darkMode())" aria-label="Toggle Theme"
+                    matTooltip="Toggle Theme">
+                    @if(darkMode()) {
+                    <mat-icon>light_mode</mat-icon>
+                    } @else {
+                    <mat-icon>dark_mode</mat-icon>
+                    }
+                </button>
+                @if(user()?.email){
+                @if(user()?.role === UserRole.Nurse) {
+                <button id="notifications" mat-icon-button (click)="showNotifications()"
+                    aria-label="Show Notifications">
+                    <mat-icon role="alert" class="notification-icon"
+                        [matBadge]="sseService.message().length">notifications</mat-icon>
+                </button>
                 }
-            </button>
-            @if(user()?.email){
-            @if(user()?.role === UserRole.Nurse) {
-            <button id="notifications" mat-icon-button (click)="showNotifications()" aria-label="Show Notifications">
-                <mat-icon role="alert" class="notification-icon"
-                    [matBadge]="sseService.message().length">notifications</mat-icon>
-            </button>
-            }
-            <button id="logout" mat-flat-button (click)="logout()">
-                {{ (user()?.userName || user()?.email)| titlecase }} &nbsp;Logout</button>
-            } @else {
-            <button id="login" mat-flat-button [routerLink]="'/login'">
-                <mat-icon>account_circle</mat-icon>
-                {{t('login') }}
-            </button>
-            }
-        </div>
+                <button id="logout" mat-flat-button (click)="logout()">
+                    {{ (user()?.userName || user()?.email)| titlecase }} &nbsp;Logout</button>
+                } @else {
+                <button id="login" mat-flat-button [routerLink]="['/login']">
+                    <mat-icon>account_circle</mat-icon>
+                    {{t('login') }}
+                </button>
+                }
+            </div>
 
-    </mat-toolbar-row>
+        </mat-toolbar-row>
 
-    <mat-toolbar-row class="second-row mat-elevation-z3">
-        <span>&nbsp;{{currentFullRoute()?.substring(1)?.replace('-', ' ') | titlecase}}</span>
-        <span class="spacer"></span>
-        <button mat-flat-button [matMenuTriggerFor]="beforeMenu">
-            <mat-icon>language</mat-icon>
-            {{currentLanguage()}}
-        </button>
-        <mat-menu #beforeMenu="matMenu" xPosition="before">
-            <button mat-menu-item (click)="toggleLanguage('en')" type="button">English</button>
-            <button mat-menu-item (click)="toggleLanguage('fr')" type="button">French</button>
-            <button mat-menu-item (click)="toggleLanguage('ch')" type="button" disabled>Chinese</button>
-            <button mat-menu-item (click)="toggleLanguage('jp')" type="button" disabled>Japanese</button>
-        </mat-menu>
+        <mat-toolbar-row class="second-row mat-elevation-z3">
+            <span>&nbsp;{{currentFullRoute()?.substring(1)?.replace('-', ' ') | titlecase}}</span>
+            <span class="spacer"></span>
+            <button mat-flat-button [matMenuTriggerFor]="beforeMenu">
+                <mat-icon>language</mat-icon>
+                {{currentLanguage()}}
+            </button>
+            <mat-menu #beforeMenu="matMenu" xPosition="before">
+                <button mat-menu-item (click)="toggleLanguage('en')" type="button">English</button>
+                <button mat-menu-item (click)="toggleLanguage('fr')" type="button">French</button>
+                <button mat-menu-item (click)="toggleLanguage('ch')" type="button" disabled>Chinese</button>
+                <button mat-menu-item (click)="toggleLanguage('jp')" type="button" disabled>Japanese</button>
+            </mat-menu>
 
-    </mat-toolbar-row>
-</mat-toolbar>
+        </mat-toolbar-row>
+    </mat-toolbar>
+</ng-container>
