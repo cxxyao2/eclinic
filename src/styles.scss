@@ -164,3 +164,23 @@ body {
   background-color: #2196f3; /* Blue */
   color: white;
 }
+
+
+// Only keep Material-specific theme overrides
+mat-form-field {
+  --mdc-outlined-text-field-outline-color: var(--mat-app-outline);
+  --mdc-outlined-text-field-label-text-color: var(--mat-app-on-surface);
+  --mdc-outlined-text-field-input-text-color: var(--mat-app-on-surface);
+}
+
+mat-card {
+  background-color: var(--mat-app-surface-container);
+  color: var(--mat-app-on-surface);
+}
+
+root {
+  --mdc-protected-button-disabled-container-color: var(--mat-app-secondary);
+  --mdc-protected-button-container-color: var(--mat-app-primary);
+  --mdc-protected-button-label-text-color: var(--mat-app-on-primary);
+  --mdc-protected-button-disabled-label-text-color: var(--mat-app-on-primary);
+}

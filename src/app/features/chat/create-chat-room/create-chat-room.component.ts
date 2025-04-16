@@ -1,24 +1,17 @@
 
-import { Component, DestroyRef, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { Router } from '@angular/router';
 import { map, Observable, startWith, switchMap } from 'rxjs';
-
+import { GetPatientDTO as Patient } from '@libs/api-client';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ChatService } from '@libs/api-client/api/chat.service';
 import { MasterDataService } from '@services/master-data.service';
-import { GetPatientDTO, GetPatientDTO as Patient } from '@libs/api-client';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-
-interface ChatRoomForm {
-  patientId: number;
-  patientName: string;
-  topic: string;
-}
 
 @Component({
   selector: 'app-create-chat-room',
@@ -31,44 +24,9 @@ interface ChatRoomForm {
     MatButtonModule,
     MatAutocompleteModule
   ],
-  template: `
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-12 col-md-6 col-lg-4">
-          <form [formGroup]="roomForm" (ngSubmit)="onSubmit()" class="mt-4">
-            <mat-form-field appearance="outline" class="w-100 mb-3">
-              <mat-label>Patient Name</mat-label>
-              <input type="text" matInput formControlName="patientName" 
-                     [matAutocomplete]="auto">
-              <mat-autocomplete #auto="matAutocomplete" 
-                              [displayWith]="displayFn"
-                              (optionSelected)="onPatientSelected($event)">
-                @for (patient of filteredPatients$ | async; track patient.patientId) {
-                  <mat-option [value]="patient">
-                    {{ patient.firstName }} {{ patient.lastName }} (ID: {{ patient.patientId }})
-                  </mat-option>
-                }
-              </mat-autocomplete>
-            </mat-form-field>
-
-            <mat-form-field appearance="outline" class="w-100 mb-3">
-              <mat-label>Topic</mat-label>
-              <input matInput formControlName="topic">
-            </mat-form-field>
-
-            <div class="d-grid">
-              <button mat-raised-button  type="submit" 
-                      [disabled]="!roomForm.valid" 
-                      class="w-100">
-                Create Room
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  `,
-  styles: []
+  templateUrl: './create-chat-room.component.html',
+  styleUrls: ['./create-chat-room.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CreateChatRoomComponent {
   private fb = inject(FormBuilder);
@@ -77,57 +35,69 @@ export class CreateChatRoomComponent {
   private masterDataService = inject(MasterDataService);
   private destroyRef = inject(DestroyRef);
 
-  protected roomForm = this.fb.nonNullable.group({
-    patientId: [0, Validators.required],
-    patientName: ['', Validators.required],
-    topic: ['', Validators.required]
+  protected roomForm = this.fb.group({
+    patient: new FormControl<string | Patient>('', { nonNullable: true }),
+    topic: new FormControl('', { nonNullable: true, validators: [Validators.required] })
   });
 
-  protected patients: GetPatientDTO[] = [];
+  protected patients: Patient[] = [];
   protected filteredPatients$: Observable<Patient[]>;
+  protected errorMessage = signal<string>('');
+
 
   constructor() {
-    this.masterDataService.patientsSubject.subscribe(
-      patients => this.patients = patients || []
-    );
+    this.masterDataService.patientsSubject
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(patients => this.patients = patients || []);
 
-    this.filteredPatients$ = this.roomForm.controls.patientName.valueChanges.pipe(
+    this.filteredPatients$ = this.roomForm.controls.patient.valueChanges.pipe(
       startWith(''),
       map(value => {
-        const name = typeof value === 'string' ? value : null;
-        return name ? this._filter(name) : this.patients.slice();
+        const searchTerm = this.extractSearchTerm(value);
+        return searchTerm ? this._filter(searchTerm) : this.patients.slice();
       })
     );
   }
 
-  private _filter(name: string): Patient[] {
-    const filterValue = name.toLowerCase();
+  private extractSearchTerm(value: string | Patient): string {
+    return typeof value === 'string' ? value : value.firstName + ' ' + value.lastName;
+  }
+
+  private _filter(searchTerm: string): Patient[] {
+    const filterValue = searchTerm.toLowerCase();
     return this.patients.filter(patient =>
-      (patient.firstName + ' ' + patient.lastName)
-        .toLowerCase()
-        .includes(filterValue)
+      `${patient.firstName} ${patient.lastName}`.toLowerCase().includes(filterValue)
     );
   }
 
-  // todo: selected patient is not correctly displayed
-  protected displayFn(patient: Patient): string {
-    return patient ? `${patient.firstName} ${patient.lastName} (ID: ${patient.patientId})` : '';
+  protected displayFn(patient: Patient | string): string {
+    if (!patient) return '';
+    if (typeof patient === 'string') return patient;
+    return `${patient.firstName} ${patient.lastName} (ID: ${patient.patientId})`;
   }
 
-  protected onPatientSelected(event: any): void {
-    const patient = event.option.value as Patient;
+  protected onPatientSelected(event: { option: { value: Patient } }): void {
+    const patient = event.option.value;
     this.roomForm.patchValue({
-      patientId: patient.patientId,
-      patientName: `${patient.firstName} ${patient.lastName}`
+      patient: patient
     });
   }
 
   protected onSubmit(): void {
     if (!this.roomForm.valid) return;
 
+    this.errorMessage.set('');
+
     const formValue = this.roomForm.getRawValue();
+    const patient = formValue.patient;
+    
+    if (typeof patient === 'string' || !patient.patientId) {
+      console.error('Invalid patient selection');
+      return;
+    }
+
     const request = {
-      patientId: formValue.patientId,
+      patientId: patient.patientId,
       topic: formValue.topic
     };
 
@@ -141,7 +111,7 @@ export class CreateChatRoomComponent {
           response.data.chatRoomId,
           { userId: request.patientId }
         ).pipe(
-          map(() => response?.data?.chatRoomId)
+          map(() => response.data?.chatRoomId)
         );
       }),
       takeUntilDestroyed(this.destroyRef)
@@ -151,11 +121,9 @@ export class CreateChatRoomComponent {
       },
       error: (error) => {
         console.error('Error creating chat room:', error);
+        this.errorMessage.set('Failed to create chat room. Please try again.' + error.message);
       }
     });
   }
 }
-
-
-
 
