@@ -41,7 +41,7 @@ const LANGUAGE_MAP: Record<string, string> = {
   providers: [
     SseClientService
   ],
-  imports: [CommonModule, MatBadgeModule, MatButtonModule,MatMenuModule, MatToolbarModule, MatIcon, MatTooltipModule, RouterLink,TranslocoModule],
+  imports: [CommonModule, MatBadgeModule, MatButtonModule, MatMenuModule, MatToolbarModule, MatIcon, MatTooltipModule, RouterLink, TranslocoModule],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HeaderComponent {
